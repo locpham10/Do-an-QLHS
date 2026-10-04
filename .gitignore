@@ -1,0 +1,54 @@
+# ==========================================
+# 1. THƯ MỤC BIÊN DỊCH CỦA JAVA
+# ==========================================
+# Chặn Git theo dõi các file thực thi (chỉ cần push code gốc .java lên)
+*.class
+bin/
+out/
+build/
+
+# ==========================================
+# 2. CÁC FILE RÁC CỦA CÔNG CỤ LẬP TRÌNH (IDE)
+# ==========================================
+# Nếu nhóm dùng IntelliJ IDEA
+.idea/
+*.iml
+
+# Nếu nhóm dùng Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+
+# Nếu nhóm dùng Visual Studio Code
+.vscode/
+
+# ==========================================
+# 3. FILE HỆ ĐIỀU HÀNH PHÁT SINH
+# ==========================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ubuntu / Linux (Ngăn các file rác khi chạy dual-boot hoặc máy ảo)
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# macOS (Phòng trường hợp giảng viên hoặc thành viên nhóm xài Mac)
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ==========================================
+# 4. FILE DỮ LIỆU ĐẶC THÙ CỦA ĐỒ ÁN
+# ==========================================
+# Bỏ qua các file sao lưu tự động  để tránh làm phình dung lượng kho chứa
+Backup_*.txt
+*.bak
+*.log
+
+# Lưu ý: KHÔNG chặn thư mục data/ hay file Data_HocSinh.txt ở đây 
+# vì nhóm cần push file trắng ban đầu lên để mọi người cùng có cấu trúc test.
