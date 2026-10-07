@@ -1,3 +1,5 @@
+package models
+
 public class LopHoc 
 {
     private String tenLop;
