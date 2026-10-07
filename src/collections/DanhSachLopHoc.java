@@ -35,7 +35,7 @@ public class DanhSachLopHoc
         for(int i = 0; i < soLuong; i++)
             if(dsLop[i] != null && dsLop[i].getTenLop().equalsIgnoreCase(tenLop))
                 return dsLop[i];
-            return null;
+        return null;
     }
 
     public void hienThiDanhSachLop()
