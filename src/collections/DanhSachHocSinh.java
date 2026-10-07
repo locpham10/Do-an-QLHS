@@ -20,4 +20,9 @@ public class DanhSachHocSinh {
     public void sua(HocSinh hs){
 
     }
+
+    public HocSinh timKiem(HocSinh hs) {
+
+        return null;
+    }
 }

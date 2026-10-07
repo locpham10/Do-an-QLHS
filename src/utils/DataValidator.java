@@ -2,6 +2,8 @@ package utils;
 
 import collections.DanhSachHocSinh;
 import exceptions.TrungMaHocSinhException;
+import models.HocSinh;
+
 import java.util.Scanner;
 
 public class DataValidator {
@@ -38,13 +40,13 @@ public class DataValidator {
             if(ngaySinh.matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((19|20)\\d\\d)$")) {
                 break;
             }
-            System.out.println(System.out.println(Color.RED + "Lỗi: Ngày sinh phải theo chuẩn dd/MM/yyyy (VD: 01/05/2007)!" + Color.RESET);
+            System.out.println(Color.RED + "Lỗi: Ngày sinh phải theo chuẩn dd/MM/yyyy (VD: 01/05/2007)!" + Color.RESET);
         }
         return ngaySinh;
     }
-    public static boolean kiemTraTonTaiMa(String mshs, DanhSachHocSinh ds) throws TrungMaHocSinhException {
-        if (ds.timKiem(mshs) != null) {
-            throw new TrungMaHocSinhException("Mã số học sinh '" + mshs + "' đã có người sử dụng!");
+    public static boolean kiemTraTonTaiMa(HocSinh hs, DanhSachHocSinh ds) throws TrungMaHocSinhException {
+        if (ds.timKiem(hs) != null) {
+            throw new TrungMaHocSinhException("Học sinh này đã tồn tại");
         }
         return false; //Ko trùng mã
     }
