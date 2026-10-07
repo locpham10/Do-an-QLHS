@@ -22,6 +22,34 @@ public class DiemMonHoc
         return (this.diemTX*1.0 + this.diemGK * 2.0 + this.diemCK * 3.0) / 6.0;
     }
 
+    public static double tinhGPATongHop(DiemMonHoc[] dsDiem)
+    {
+        if(dsDiem == null || dsDiem.length == 0)
+            return 0.0;
+
+        double tongDiemNhanHeSo = 0.0;
+        double tongHeSo = 0.0;
+
+        for(DiemMonHoc diem : dsDiem)
+        {
+            if(diem != null && diem.getMonHoc() != null)
+            {
+                MonHoc mh = diem.getMonHoc();
+                if(mh.isTinhVaoGPA())
+                {
+                    double diemTBM = diem.tinhDiemTBMon();
+                    double heSo = mh.getHeSo();
+
+                    tongDiemNhanHeSo += diemTBM * heSo;
+                    tongHeSo += heSo;
+                }
+            }
+        }
+        if(tongHeSo == 0) return 0.0;
+        double gpa = tongDiemNhanHeSo / tongHeSo;
+        return Math.round(gpa * 100.0) / 100.0;
+    }
+
     public MonHoc getMonHoc() 
     {
         return monHoc;
