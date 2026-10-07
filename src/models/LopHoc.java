@@ -1,14 +1,16 @@
 public class LopHoc 
 {
     private String tenLop;
+    private String khoaHoc;
     private GiaoVienChuNhiem gvcn;
     private DanhSachHocSinh dsHocSinh;
 
     public LopHoc() {}
 
-    public LopHoc(String tenLop, GiaoVienChuNhiem gvcn, DanhSachHocSinh dsHocSinh)
+    public LopHoc(String tenLop, String khoaHoc, GiaoVienChuNhiem gvcn, DanhSachHocSinh dsHocSinh)
     {
         this.tenLop = tenLop;
+        this.khoaHoc = khoaHoc;
         this.gvcn = gvcn;
         this.dsHocSinh = dsHocSinh;
     }
@@ -20,6 +22,15 @@ public class LopHoc
     public void setTenLop(String tenLop)
     {
         this.tenLop = tenLop;
+    }
+
+    public String getKhoaHoc()
+    {
+        return khoaHoc;
+    }
+    public void setKhoaHoc(String khoaHoc)
+    {
+        this.khoaHoc = khoaHoc;
     }
 
     public GiaoVienChuNhiem getGvcn()
@@ -44,6 +55,6 @@ public class LopHoc
     public String toString()
     {
         String tenGV = (gvcn != null) ? gvcn.getHoTen() : "Chưa phân công.";
-        return "Lớp: " + tenLop + "| GVCN: " + tenGV;
+        return "Lớp: " + tenLop + "| Khóa: "+ khoaHoc + "| GVCN: " + tenGV;
     }
 }
