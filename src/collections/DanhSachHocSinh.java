@@ -12,4 +12,12 @@ public class DanhSachHocSinh {
             soLuong++;
         }
     }
+
+    public void xoa(HocSinh hs){
+
+    }
+
+    public void sua(HocSinh hs){
+
+    }
 }

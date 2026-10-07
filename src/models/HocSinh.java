@@ -5,7 +5,7 @@ public abstract class HocSinh extends Nguoi {
     protected String mshs;
     protected String tenLop;
     protected double gpa;
-    protected String diemHanhKiem; // Đã đổi thành diemHanhKiem
+    protected String diemHanhKiem;
     protected boolean daDongHocPhi;
 
     public abstract double tinhHocPhi();
