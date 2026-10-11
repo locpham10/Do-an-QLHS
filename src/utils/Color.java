@@ -9,4 +9,6 @@ public class Color {
 
     //Trả lại màu trắng
     public static final String RESET = "\u001B[0m";
+
+    public static final String CYAN = "\u001B[36m";
 }
