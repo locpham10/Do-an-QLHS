@@ -25,4 +25,12 @@ public class DanhSachHocSinh {
 
         return null;
     }
+
+    public int getSoLuong(){
+        return soLuong;
+    }
+
+    public HocSinh[] getArrHS() {
+        return arrHS;
+    }
 }

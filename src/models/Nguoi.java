@@ -1,3 +1,5 @@
+package models;
+
 public abstract class Nguoi{
     protected String hoTen;
     protected String ngaySinh;
