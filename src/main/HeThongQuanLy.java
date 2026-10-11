@@ -97,7 +97,31 @@ public class HeThongQuanLy {
     private void menuThongKe(){
         int chon = -1;
         while (chon != 0){
+            System.out.println("\n---- 4. THONG KE & XET DUYET ----");
+            System.out.println("1. Thong ke ty le len lop / o lai lop");
+            System.out.println("2. Top 5 hoc sinh xuat sac nhat");
+            System.out.println("3. Thong ke chi tiet hoc bong theo dien (dai tra / chuyen)");
+            System.out.println("0. Quay lai menu chinh");
+            chon = nhapLuaChon();
 
+            if(chon == 0) break;
+            //Code tiep o day
+        }
+    }
+
+    private void menuQuanLyDuLieu(){
+        int chon = -1;
+        while (chon != 0){
+            System.out.println("\n---- 5. QUAN LY DU LIEU ----");
+            System.out.println("1. Luu du lieu xuong file");
+            System.out.println("2. Tai du lieu tu file len he thong");
+            System.out.println("3. Tao ban sao luu du phong");
+            System.out.println("4. Xoa du lieu bo nho");
+            System.out.println("0. Quay lai menu chinh");
+            chon=nhapLuaChon();
+
+            if(chon == 0) break;
+            //Code tiep
         }
     }
 }
