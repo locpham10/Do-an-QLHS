@@ -1,3 +1,4 @@
+package models;
 public class PhuHuynh {
     private String hoTenBoMe;
     private String sdt;
