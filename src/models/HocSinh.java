@@ -4,18 +4,18 @@ public abstract class HocSinh extends Nguoi {
     protected String mshs;
     protected String tenLop;
     protected double gpa;
-    protected String HanhKiem;
+    protected String hanhKiem;
     protected boolean daDongHocPhi;
 
     public HocSinh(){
         super();
     }
-    public HocSinh(String hoten, String ngaySinh, String gioiTinh, String diaChi, String soDienThoai, String mssh, String tenLop, double gpa, String HanhKiem, boolean daoDongHocPhi){
+    public HocSinh(String hoTen, String ngaySinh, String gioiTinh, String diaChi, String soDienThoai, String mssh, String tenLop, double gpa, String hanhKiem, boolean daDongHocPhi){
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
         this.mshs = mshs;
         this.tenLop = tenLop;
         this.gpa = gpa;
-        this.HanhKiem = HanhKiem;
+        this.hanhKiem = hanhKiem;
         this.daDongHocPhi = daDongHocPhi;
 
     }
@@ -42,10 +42,10 @@ public abstract class HocSinh extends Nguoi {
     }
 
     public String getHanhKiem(){
-        return HanhKiem;
+        return hanhKiem;
     }
     public void setHanhKiem(String hanhKiem){
-        HanhKiem = hanhKiem;
+        hanhKiem = hanhKiem;
     }
 
     public boolean isDaDongHocPhi(){
@@ -57,25 +57,24 @@ public abstract class HocSinh extends Nguoi {
 
     public abstract double tinhHocPhi();
     public abstract boolean xetHocBong();
-    public void hienthiThongTin(){
-        system.out.printf("| %-10s | %-20s | %-12s| %-10s | %-5.2f | %-5d | %-15s |\n",
-        this.mshs,
-        this.hoTen,
-        this.ngaySinh,
-        this.gioiTinh,
-        this.tenLop,
-        this.gpa,
-        this.HanhKiem,
-        );
-        if(daDongHocPhi){
-            system.out.printf("Da dong hoc phi");
+    @Override
+    public void hienThiThongTin() {
+        String trangThaiHocPhi = "";
+        if(this.daDongHocPhi)
+            trangThaiHocPhi="Da dong hoc phi";
         else
-            system.out.printf("Chua dong hoc phi");
-             
-
+            trangThaiHocPhi="Chua dong hoc phi";
+        System.out.printf("| %-10s | %-20s | %-12s | %-10s | %-5.2f | %-10s | %-15s |\n",
+                this.mshs,
+                this.hoTen,
+                this.ngaySinh,
+                this.tenLop,
+                this.gpa,
+                this.hanhKiem,
+                trangThaiHocPhi
+        );
     }
     public abstract String toFileString();
-
-
 }
+
 
