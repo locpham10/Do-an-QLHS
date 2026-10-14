@@ -8,12 +8,16 @@ import java.util.Scanner;
 
 public class HeThongQuanLy {
     private DanhSachHocSinh dsHocSinh;
-    private IXuatDuLieu xuatConsole;
+    private DanhSachGiaoVien dsGiaoVien;
+    private DanhSachPhuHuynh dsPhuHuynh;
+    private DanhSachLopHoc dsLopHoc;
     private Scanner sc;
 
     public HeThongQuanLy() {
         dsHocSinh = new DanhSachHocSinh();
-        xuatConsole = new XuatDuLieuConsole();
+        dsGiaoVien = new DanhSachGiaoVien();
+        dsPhuHuynh = new DanhSachPhuHuynh();
+        dsLopHoc = new DanhSachLopHoc();
         sc = new Scanner(System.in);
     }
 
@@ -26,6 +30,7 @@ public class HeThongQuanLy {
         System.out.println("3. Quản lý tài chính");
         System.out.println("4. Thống kê & xét duyệt");
         System.out.println("5. Quản lý dữ liệu");
+        System.out.println("6. Quan ly nhan su & phu huynh");
         System.out.println("0. Thoát chương trình");
     }
 
@@ -115,13 +120,26 @@ public class HeThongQuanLy {
             System.out.println("\n---- 5. QUAN LY DU LIEU ----");
             System.out.println("1. Luu du lieu xuong file");
             System.out.println("2. Tai du lieu tu file len he thong");
-            System.out.println("3. Tao ban sao luu du phong");
+            System.out.println("3. Xem du lieu tong quan hien co");
             System.out.println("4. Xoa du lieu bo nho");
             System.out.println("0. Quay lai menu chinh");
             chon=nhapLuaChon();
 
             if(chon == 0) break;
             //Code tiep
+        }
+    }
+    private void menuQuanLyNhanSuVaPH(){
+        int chon=-1;
+        while(chon != 0) {
+            System.out.println("\n---- 6. QUAN LY NHAN SU & PHU HUYNH ----");
+            System.out.println("1. Quan ly danh sach giao vien");
+            System.out.println("2. Quan ly danh sach phu huynh");
+            System.out.println("0. Quay lai menu chinh");
+            chon=nhapLuaChon();
+
+            if(chon == 0) break;
+            //code tiếp ở đây
         }
     }
 }
