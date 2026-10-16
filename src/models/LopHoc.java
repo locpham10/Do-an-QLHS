@@ -1,6 +1,8 @@
 package models;
 
-public class LopHoc 
+import collections.DanhSachHocSinh;
+
+public class LopHoc
 {
     private String tenLop;
     private String khoaHoc;

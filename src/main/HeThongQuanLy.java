@@ -1,8 +1,11 @@
 package main;
 
 import collections.DanhSachHocSinh;
-import services.IXuatDuLieu;
-import services.XuatDuLieuConsole;
+import collections.DanhSachGiaoVien;
+import collections.DanhSachPhuHuynh;
+import collections.DanhSachLopHoc;
+import models.GiaoVien;
+import models.LopHoc;
 import utils.Color;
 import java.util.Scanner;
 
@@ -37,7 +40,34 @@ public class HeThongQuanLy {
     public void start() {
         int luaChon = -1;
         while (luaChon != 0) {
+            hienThiMenuChinh();
+            luaChon=nhapLuaChon();
 
+            switch(luaChon) {
+                case 1:
+                    menuQuanLyHoSo();
+                    break;
+                case 2:
+                    menuQuanLyHocTap();
+                    break;
+                case 3:
+                    menuQuanLyTaiChinh();
+                    break;
+                case 4:
+                    menuThongKe();
+                    break;
+                case 5:
+                    menuQuanLyDuLieu();
+                    break;
+                case 6:
+                    menuQuanLyNhanSuVaPH();
+                    break;
+                case 0:
+                    System.out.println(Color.GREEN + "Cảm ơn bạn đã sử dụng phần mềm. Tạm biệt!" + Color.RESET);
+                    break;
+                default:
+                    System.out.println(Color.RED + "Lựa chọn không hợp lệ. Vui lòng chọn từ 0 đến 6!" + Color.RESET);
+            }
         }
     }
 
@@ -55,7 +85,7 @@ public class HeThongQuanLy {
     private void menuQuanLyHoSo() {
         int chon = -1;
         while (chon != 0) {
-            System.out.println("\n---- 1. QUAN LY TAI CHINH ----");
+            System.out.println("\n---- 1. QUAN LY HO SO ----");
             System.out.println("1. Them lop hoc moi");
             System.out.println("2. Them hoc sinh vao lop hoc");
             System.out.println("3. Xem danh sach lop");
@@ -64,7 +94,22 @@ public class HeThongQuanLy {
             chon = nhapLuaChon();
 
             if (chon == 0) break;
-            //Code xử lý vào đây
+            switch (chon){
+                case 1:
+                    System.out.println("---- THEM LOP HOC MOI ----");
+                    System.out.print("Nhap ten lop: ");
+                    String tenLop = sc.nextLine().trim();
+                    System.out.print("Nhap khoa hoc: ");
+                    String khoaHoc = sc.nextLine().trim();
+                    System.out.print("Nhap phong hoc: ");
+                    String phongHoc = sc.nextLine().trim();
+                    System.out.print("Nhap ma giao vien chu nhiem: ");
+                    String maGVCN = sc.nextLine().trim();
+                    GiaoVien gvcn = dsGiaoVien.timKiem(maGVCN);
+                    DanhSachHocSinh dsHSLop = new DanhSachHocSinh();
+
+                    LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHSLop);
+            }
         }
     }
 
