@@ -5,8 +5,12 @@ import collections.DanhSachGiaoVien;
 import collections.DanhSachPhuHuynh;
 import collections.DanhSachLopHoc;
 import models.GiaoVien;
+import models.HocSinh;
+import models.HocSinhChuyen;
 import models.LopHoc;
 import utils.Color;
+
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class HeThongQuanLy {
@@ -95,8 +99,9 @@ public class HeThongQuanLy {
 
             if (chon == 0) break;
             switch (chon){
+
                 case 1:
-                    System.out.println("---- THEM LOP HOC MOI ----");
+                    System.out.println("\n[THEM LOP HOC MOI]");
                     System.out.print("Nhap ten lop: ");
                     String tenLop = sc.nextLine().trim();
                     System.out.print("Nhap khoa hoc: ");
@@ -106,12 +111,60 @@ public class HeThongQuanLy {
                     System.out.print("Nhap ma giao vien chu nhiem: ");
                     String maGVCN = sc.nextLine().trim();
                     GiaoVien gvcn = dsGiaoVien.timKiem(maGVCN);
-                    DanhSachHocSinh dsHSLop = new DanhSachHocSinh();
+                    DanhSachHocSinh dsHsLop = new DanhSachHocSinh();
 
-                    LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHSLop);
+                    System.out.print("He cua lop (0: Dai tra / 1: Chuyen): ");
+                    boolean isLopChuyen = sc.nextLine().trim().equals("1");
+                    String monChuyenLop = "";
+
+                    if (isLopChuyen) {
+                        System.out.print("Nhập môn chuyên của lớp này (VD: Toán, Văn, Anh): ");
+                        monChuyenLop = sc.nextLine().trim();
+                    }
+
+                    // Constructor mới của namtechin có thêm 2 tham số này
+                    LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen, monChuyenLop);
                     dsLopHoc.themLopHoc(lopMoi);
                     break;
+
                 case 2:
+                    System.out.println("\n[THEM HOC SINH VAO LOP HOC]");
+                    System.out.print("Nhap ten lop can them ");
+                    String lopCanThem = sc.nextLine().trim();
+
+                    LopHoc lopCanTim = dsLopHoc.timKiemLopTheoTen(lopCanThem);
+                    if(lopCanTim == null){
+                        System.out.println(Color.RED + "Khong tim thay lop nay!" + Color.RESET);
+                        break;
+                    }
+
+                    System.out.print("Nhap ho ten: ");
+                    String hoTen = sc.nextLine().trim();
+                    System.out.print("Nhap ngay sinh (dd/mm/yyyy): ");
+                    String ngaySinh = sc.nextLine().trim();
+                    System.out.print("Gioi tinh (1: Nam / 0: Nu): ");
+                    boolean gioiTinh = sc.nextLine().trim().equals("1");
+                    System.out.print("Nhap dia chi: ");
+                    String diaChi = sc.nextLine().trim();
+                    System.out.print("Nhap so dien thoai: ");
+                    String sdt = sc.nextLine().trim();
+
+                    System.out.print("Nhap ma so hoc sinh: ");
+                    String mshs = sc.nextLine().trim();
+
+                    double gpa = 0.0;
+                    int diemHanhKiem = 100;
+                    boolean daDongHocPhi = false;
+
+                    HocSinh hsMoi = null;
+
+                    if(lopCanTim.isLopChuyen()){
+                        String monChuyenHs = lopCanTim.getMonChuyenCuaLop();
+                        hsMoi = new HocSinhChuyen(hoTen, ngaySinh, gioiTinh, diaChi, sdt,
+                                mshs, lopCanThem, gpa, diemHanhKiem, daDongHocPhi, monChuyenHs);
+                    }
+
+
 
             }
         }
