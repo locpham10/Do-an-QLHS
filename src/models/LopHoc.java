@@ -10,10 +10,12 @@ public class LopHoc
     private DanhSachHocSinh dsHocSinh;
     boolean isLopChuyen;
     String monChuyenCuaLop;
+    double phuPhiChung;
 
     public LopHoc() {}
 
-    public LopHoc(String tenLop, String khoaHoc, GiaoVien gvcn, DanhSachHocSinh dsHocSinh, boolean isLopChuyen, String monChuyenCuaLop)
+    public LopHoc(String tenLop, String khoaHoc, GiaoVien gvcn, DanhSachHocSinh dsHocSinh,
+                  boolean isLopChuyen, String monChuyenCuaLop, double phuPhiChung)
     {
         this.tenLop = tenLop;
         this.khoaHoc = khoaHoc;
@@ -21,6 +23,7 @@ public class LopHoc
         this.dsHocSinh = dsHocSinh;
         this.isLopChuyen = isLopChuyen;
         this.monChuyenCuaLop = monChuyenCuaLop;
+        this.phuPhiChung = phuPhiChung;
     }
 
     public String getTenLop()
@@ -44,6 +47,8 @@ public class LopHoc
     public boolean isLopChuyen() { return isLopChuyen; }
 
     public String getMonChuyenCuaLop() { return monChuyenCuaLop; }
+
+    public double getPhuPhiChung() { return phuPhiChung; }
 
     public GiaoVien getGiaoVienChuNhiem()
     {

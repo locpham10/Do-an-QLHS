@@ -116,14 +116,29 @@ public class HeThongQuanLy {
                     System.out.print("He cua lop (0: Dai tra / 1: Chuyen): ");
                     boolean isLopChuyen = sc.nextLine().trim().equals("1");
                     String monChuyenLop = "";
+                    double phuPhiChung = 0.0;
 
                     if (isLopChuyen) {
                         System.out.print("Nhập môn chuyên của lớp này (VD: Toán, Văn, Anh): ");
                         monChuyenLop = sc.nextLine().trim();
+                        while (true) {
+                            System.out.print("Nhập phụ phí chuyên đề chung của lớp (VNĐ): ");
+                            try {
+                                phuPhiChung = Double.parseDouble(sc.nextLine().trim());
+                                if (phuPhiChung < 0) {
+                                    System.out.println(Color.RED + "Lỗi: Phụ phí không được là số âm. Vui lòng nhập lại!" + Color.RESET);
+                                    continue; // Quay lại đầu vòng lặp
+                                }
+                                break; // Nhập đúng số dương thì thoát vòng lặp
+                            } catch (NumberFormatException e) {
+                                System.out.println(Color.RED + "Lỗi: Nhập sai định dạng. Hãy nhập lại!" + Color.RESET);
+                            }
+                        }
                     }
 
                     // Constructor mới của namtechin có thêm 2 tham số này
-                    LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen, monChuyenLop);
+                    LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen,
+                            monChuyenLop, );
                     dsLopHoc.themLopHoc(lopMoi);
                     break;
 
@@ -160,8 +175,8 @@ public class HeThongQuanLy {
 
                     if(lopCanTim.isLopChuyen()){
                         String monChuyenHs = lopCanTim.getMonChuyenCuaLop();
-                        hsMoi = new HocSinhChuyen(hoTen, ngaySinh, gioiTinh, diaChi, sdt,
-                                mshs, lopCanThem, gpa, diemHanhKiem, daDongHocPhi, monChuyenHs);
+                        double phuPhi = lopCanTim.getPhuPhiChung();
+                        //hsMoi = new HocSinhChuyen();
                     }
 
 
