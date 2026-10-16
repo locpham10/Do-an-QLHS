@@ -109,6 +109,10 @@ public class HeThongQuanLy {
                     DanhSachHocSinh dsHSLop = new DanhSachHocSinh();
 
                     LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHSLop);
+                    dsLopHoc.themLopHoc(lopMoi);
+                    break;
+                case 2:
+
             }
         }
     }
