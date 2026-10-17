@@ -11,7 +11,7 @@ public class GiaoVien extends Nguoi{
         super();
     }
 
-    public GiaoVien(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, String maGV, String chucVu, double luong, MonHoc monChuyenmon, LopHoc[] dsLopDay){
+    public GiaoVien(String maGV, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, String chucVu, double luong, MonHoc monChuyenmon, LopHoc[] dsLopDay){
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
         this.maGV = maGV;
         this.chucVu = chucVu;
