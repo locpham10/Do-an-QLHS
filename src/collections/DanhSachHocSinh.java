@@ -15,15 +15,19 @@ public class DanhSachHocSinh {
         return false;
     }
 
+    public void hienThiDanhSach(){
+
+    }
+
     public void xoa(HocSinh hs){
 
     }
 
-    public void sua(HocSinh hs){
+    public void sua(String mshs){
 
     }
 
-    public HocSinh timKiem(HocSinh hs) {
+    public HocSinh timKiem(String mshs) {
 
         return null;
     }
@@ -35,4 +39,6 @@ public class DanhSachHocSinh {
     public HocSinh[] getArrHS() {
         return arrHS;
     }
+
+
 }

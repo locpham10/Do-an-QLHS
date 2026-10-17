@@ -141,8 +141,10 @@ public class HeThongQuanLy {
 
                 case 2:
                     System.out.println("\n[THEM HOC SINH VAO LOP HOC]");
-                    System.out.print("Nhap ten lop can them ");
+                    System.out.print("Nhap ten lop can them (Nhap 0 de quay lai): ");
                     String lopCanThem = sc.nextLine().trim();
+
+                    if(lopCanThem.equals("0")) break;
 
                     LopHoc lopCanTim = dsLopHoc.timKiemLopTheoTen(lopCanThem);
                     if(lopCanTim == null){
@@ -199,13 +201,14 @@ public class HeThongQuanLy {
                     System.out.println("1. Xem danh sach tat ca lop");
                     System.out.println("2. Xem danh sach hoc sinh cua mot lop");
                     System.out.println("3. Xem danh sach hoc sinh toan truong");
+                    System.out.println("0. Quay lại");
 
                     int chonXem = -1;
                     while(true) {
                         System.out.print("Nhap lua chon: ");
                         try {
                             chonXem = Integer.parseInt(sc.nextLine().trim());
-                            if(chonXem >=1 && chonXem <=3){
+                            if(chonXem >=0 && chonXem <=3){
                                 break;
                             } else {
                                 System.out.print(Color.RED +
@@ -216,9 +219,92 @@ public class HeThongQuanLy {
                                     "Loi: Nhap sai dinh dang so! Vui long nhap lai!" + Color.RESET);
                         }
                     }
-                    if(chonXem == 1){
+                    if (chonXem == 0) {
+                        break;
+                    } else if(chonXem == 1){
+                        System.out.println("\n ---- DANH SACH CAC LOP HOC ----");
+                        dsLopHoc.hienThiDanhSachLop();
+                    } else if (chonXem == 2){
+                        System.out.print("Nhap ten lop can xem: ");
+                        String tenLopCanXem = sc.nextLine().trim();
+                        LopHoc lopCanXem = dsLopHoc.timKiemLopTheoTen(tenLopCanXem);
 
+                        if(lopCanXem != null){
+                            System.out.println("\n" + Color.CYAN + "========================================");
+                            System.out.println(" THÔNG TIN LỚP: " + lopCanXem.getTenLop().toUpperCase());
+                            System.out.println("========================================" + Color.RESET);
+
+                            if(lopCanXem.isLopChuyen()){
+                                System.out.println("- He: Chuyen " + lopCanXem.getMonChuyenCuaLop());
+                            } else {
+                                System.out.println("- He: Dai tra");
+                            }
+
+                            if (lopCanXem.getGiaoVienChuNhiem() != null) {
+                                System.out.println("- Giao vien chu nhiem: " + lopCanXem.getGiaoVienChuNhiem().getHoTen());
+                            } else {
+                                System.out.println("- Giao vien chu nhiem: " + Color.YELLOW + "Chua phan cong" + Color.YELLOW);
+                            }
+
+                            System.out.println("----------------------------------------");
+                            System.out.println("DANH SÁCH HỌC SINH TRONG LỚP:");
+                            lopCanXem.getDsHocSinh().hienThiDanhSach();
+                        } else {
+                            System.out.println(Color.RED + "Loi: Lop khong ton tai trong he thong" + Color.RESET);
+                        }
+
+                    } else if (chonXem == 3){
+                        System.out.println("\n--- DANH SÁCH HỌC SINH TOÀN TRƯỜNG ---");
+                        dsHocSinh.hienThiDanhSach();
+                    } else {
+                        System.out.println(Color.RED + "Lựa chọn không hợp lệ!" + Color.RESET);
                     }
+                    break;
+
+                case 4:
+                    System.out.println("\n[SUA / XOA THONG TIN HOC SINH]");
+                    System.out.print("Nhap MSHS can xu ly (Nhap 0 de quay lai): ");
+                    String mshsCanXuLy = sc.nextLine().trim();
+
+                    if(mshsCanXuLy.equals("0")){
+                        break;
+                    }
+
+                    HocSinh hsTimThay = dsHocSinh.timKiem(mshsCanXuLy);
+
+                    if (hsTimThay == null){
+                        System.out.println(Color.RED + "Loi: Khong tim thay hoc sinh nay!" + Color.RESET);
+                        break;
+                    }
+
+                    System.out.println(Color.GREEN + "Tim thay: " + hsTimThay.getHoTen() + " - Lop: "
+                            + hsTimThay.getTenLop() + Color.RESET);
+                    System.out.println("1. Sua thong tin hoc sinh");
+                    System.out.println("2. Xoa hoc sinh khoi he thong");
+                    System.out.println("0. Huy thao tac");
+
+                    int thaoTac = -1;
+                    while (true) {
+                        System.out.println("Chon thao tac: ");
+                        try {
+                            thaoTac = Integer.parseInt(sc.nextLine().trim());
+
+                            if (thaoTac >= 0 && thaoTac <= 2) {
+                                break;
+                            } else {
+                                System.out.println(Color.RED + "Loi: Thao tac khong hop le! Vui long chon lai!" + Color.RESET);
+                            }
+                        } catch (NumberFormatException e){
+                            System.out.println(Color.RED + "Loi: Nhap sai dinh dang so! vui long nhap lai!");
+                        }
+                    }
+
+                    if(thaoTac == 0){
+                        System.out.println(Color.YELLOW + "Da huy thao tac." + Color.RESET);
+                    } else if (thaoTac == 1){
+                        dsHocSinh.sua(mshsCanXuLy);
+                        System.out.println(Color.GREEN + "Cap nhat thong tin thanh cong!" + Color.RESET);
+                    } else if (thaoTac == 2)
             }
         }
     }
