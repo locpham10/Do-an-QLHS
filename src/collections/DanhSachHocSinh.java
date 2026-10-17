@@ -23,7 +23,7 @@ public class DanhSachHocSinh {
 
     }
 
-    public void sua(String mshs){
+    public void sua(HocSinh hs){
 
     }
 

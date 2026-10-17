@@ -302,9 +302,30 @@ public class HeThongQuanLy {
                     if(thaoTac == 0){
                         System.out.println(Color.YELLOW + "Da huy thao tac." + Color.RESET);
                     } else if (thaoTac == 1){
-                        dsHocSinh.sua(mshsCanXuLy);
+                        dsHocSinh.sua(hsTimThay);
                         System.out.println(Color.GREEN + "Cap nhat thong tin thanh cong!" + Color.RESET);
-                    } else if (thaoTac == 2)
+                    } else if (thaoTac == 2) {
+                        String tenLopCuaHs = hsTimThay.getTenLop();
+
+                        System.out.print(Color.YELLOW + "Xac nhan xoa hoc sinh " + hsTimThay.getHoTen()
+                                + "? (Y/N): ");
+                        String xacNhan = sc.nextLine().trim().toUpperCase();
+
+                        if(xacNhan.equals("Y")){
+                            dsHocSinh.xoa(hsTimThay);
+
+                            LopHoc lopCuaHs = dsLopHoc.timKiemLopTheoTen(tenLopCuaHs);
+                            if (lopCuaHs != null){
+                                lopCuaHs.getDsHocSinh().xoa(hsTimThay);
+                            }
+
+                            System.out.println(Color.GREEN + "Da xoa hoc sinh " + hsTimThay.getHoTen()
+                                    + "!" + Color.RESET);
+                        } else {
+                            System.out.println(Color.YELLOW + "Da huy lenh xoa." + Color.RESET);
+                        }
+                    }
+                    break;
             }
         }
     }
