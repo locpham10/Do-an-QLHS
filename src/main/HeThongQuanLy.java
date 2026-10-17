@@ -4,10 +4,7 @@ import collections.DanhSachHocSinh;
 import collections.DanhSachGiaoVien;
 import collections.DanhSachPhuHuynh;
 import collections.DanhSachLopHoc;
-import models.GiaoVien;
-import models.HocSinh;
-import models.HocSinhChuyen;
-import models.LopHoc;
+import models.*;
 import utils.Color;
 
 import java.sql.SQLOutput;
@@ -138,7 +135,7 @@ public class HeThongQuanLy {
 
                     // Constructor mới của namtechin có thêm 2 tham số này
                     LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen,
-                            monChuyenLop, );
+                            monChuyenLop, phuPhiChung);
                     dsLopHoc.themLopHoc(lopMoi);
                     break;
 
@@ -176,11 +173,52 @@ public class HeThongQuanLy {
                     if(lopCanTim.isLopChuyen()){
                         String monChuyenHs = lopCanTim.getMonChuyenCuaLop();
                         double phuPhi = lopCanTim.getPhuPhiChung();
-                        //hsMoi = new HocSinhChuyen();
+                        double diemMonChuyen = 0.0;
+                        hsMoi = new HocSinhChuyen(hoTen, ngaySinh, gioiTinh, diaChi, sdt,
+                                mshs, lopCanThem, gpa, diemHanhKiem, daDongHocPhi,
+                                monChuyenHs, diemMonChuyen, phuPhi);
+                    } else {
+                        hsMoi = new HocSinhDaiTra(hoTen, ngaySinh, gioiTinh, diaChi,
+                                sdt, mshs, lopCanThem, gpa, diemHanhKiem, daDongHocPhi);
                     }
 
+                    boolean themVaoTruong = dsHocSinh.them(hsMoi);
+                    boolean themVaoLop = lopCanTim.getDsHocSinh().them(hsMoi);
 
+                    if(themVaoTruong && themVaoLop){
+                        System.out.println(Color.GREEN + "Da them hoc sinh " + hoTen +
+                                " vao lop " + lopCanThem + "!" + Color.RESET);
+                    } else {
+                        System.out.println(Color.RED + "Them hoc sinh that bai! " +
+                                "(danh sach hoc sinh cua lop hoac cua truong da day)" + Color.RESET);
+                    }
+                    break;
 
+                case 3:
+                    System.out.println("\n[XEM DANH SACH LOP]");
+                    System.out.println("1. Xem danh sach tat ca lop");
+                    System.out.println("2. Xem danh sach hoc sinh cua mot lop");
+                    System.out.println("3. Xem danh sach hoc sinh toan truong");
+
+                    int chonXem = -1;
+                    while(true) {
+                        System.out.print("Nhap lua chon: ");
+                        try {
+                            chonXem = Integer.parseInt(sc.nextLine().trim());
+                            if(chonXem >=1 && chonXem <=3){
+                                break;
+                            } else {
+                                System.out.print(Color.RED +
+                                        "Loi: vui long nhap cac lua chon hop le!" + Color.RESET);
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println( Color.RED +
+                                    "Loi: Nhap sai dinh dang so! Vui long nhap lai!" + Color.RESET);
+                        }
+                    }
+                    if(chonXem == 1){
+
+                    }
             }
         }
     }
