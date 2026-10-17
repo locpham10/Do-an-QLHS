@@ -6,11 +6,17 @@ public class DanhSachHocSinh {
     private HocSinh[] arrHS = new HocSinh[1000];
     private int soLuong=0;
     
-    public void them(HocSinh hs){
+    public boolean them(HocSinh hs){
         if(soLuong<1000){
             arrHS[soLuong]= hs;
             soLuong++;
+            return true;
         }
+        return false;
+    }
+
+    public void hienThiDanhSach(){
+
     }
 
     public void xoa(HocSinh hs){
@@ -21,7 +27,7 @@ public class DanhSachHocSinh {
 
     }
 
-    public HocSinh timKiem(HocSinh hs) {
+    public HocSinh timKiem(String mshs) {
 
         return null;
     }
@@ -33,4 +39,6 @@ public class DanhSachHocSinh {
     public HocSinh[] getArrHS() {
         return arrHS;
     }
+
+
 }

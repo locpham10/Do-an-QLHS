@@ -1,20 +1,29 @@
 package models;
 
-public class LopHoc 
+import collections.DanhSachHocSinh;
+
+public class LopHoc
 {
     private String tenLop;
     private String khoaHoc;
-    private GiaoVienChuNhiem gvcn;
+    private GiaoVien giaoVienChuNhiem;
     private DanhSachHocSinh dsHocSinh;
+    boolean isLopChuyen;
+    String monChuyenCuaLop;
+    double phuPhiChung;
 
     public LopHoc() {}
 
-    public LopHoc(String tenLop, String khoaHoc, GiaoVienChuNhiem gvcn, DanhSachHocSinh dsHocSinh)
+    public LopHoc(String tenLop, String khoaHoc, GiaoVien gvcn, DanhSachHocSinh dsHocSinh,
+                  boolean isLopChuyen, String monChuyenCuaLop, double phuPhiChung)
     {
         this.tenLop = tenLop;
         this.khoaHoc = khoaHoc;
-        this.gvcn = gvcn;
+        this.giaoVienChuNhiem = gvcn;
         this.dsHocSinh = dsHocSinh;
+        this.isLopChuyen = isLopChuyen;
+        this.monChuyenCuaLop = monChuyenCuaLop;
+        this.phuPhiChung = phuPhiChung;
     }
 
     public String getTenLop()
@@ -35,13 +44,19 @@ public class LopHoc
         this.khoaHoc = khoaHoc;
     }
 
-    public GiaoVienChuNhiem getGvcn()
+    public boolean isLopChuyen() { return isLopChuyen; }
+
+    public String getMonChuyenCuaLop() { return monChuyenCuaLop; }
+
+    public double getPhuPhiChung() { return phuPhiChung; }
+
+    public GiaoVien getGiaoVienChuNhiem()
     {
-        return gvcn;
+        return giaoVienChuNhiem;
     }
-    public void setGvcn(GiaoVienChuNhiem gvcn)
+    public void setGiaoVienChuNhiem( GiaoVien giaoVienChuNhiem)
     {
-        this.gvcn = gvcn;
+        this.giaoVienChuNhiem = giaoVienChuNhiem;
     }
 
     public DanhSachHocSinh getDsHocSinh()
@@ -56,7 +71,7 @@ public class LopHoc
     @Override
     public String toString()
     {
-        String tenGV = (gvcn != null) ? gvcn.getHoTen() : "Chưa phân công.";
+        String tenGV = (giaoVienChuNhiem != null) ? giaoVienChuNhiem.getHoTen() : "Chưa phân công.";
         return "Lớp: " + tenLop + "| Khóa: "+ khoaHoc + "| GVCN: " + tenGV;
     }
 }

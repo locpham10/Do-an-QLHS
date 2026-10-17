@@ -3,14 +3,14 @@ package models;
 public abstract class Nguoi{
     protected String hoTen;
     protected String ngaySinh;
-    protected String gioiTinh;
+    protected boolean gioiTinh;
     protected String diaChi;
     protected String soDienThoai;
 
     public Nguoi(){
     }
 
-    public Nguoi(String hoTen, String ngaySinh, String gioiTinh, String diaChi, String soDienThoai){
+    public Nguoi(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai){
         this.hoTen = hoTen;
         this.ngaySinh = ngaySinh;
         this.gioiTinh = gioiTinh;
@@ -32,10 +32,10 @@ public abstract class Nguoi{
         this.ngaySinh = ngaySinh;
     }
 
-    public String getGioiTinh (){
+    public boolean isGioiTinh (){
         return gioiTinh;
     } 
-    public void setGioiTinh (String gioiTinh){
+    public void setGioiTinh (boolean gioiTinh){
         this.gioiTinh = gioiTinh;
     }
 
