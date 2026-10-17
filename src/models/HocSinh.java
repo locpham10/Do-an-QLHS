@@ -4,77 +4,127 @@ public abstract class HocSinh extends Nguoi {
     protected String mshs;
     protected String tenLop;
     protected double gpa;
-    protected String hanhKiem;
+    protected int diemHanhKiem;
     protected boolean daDongHocPhi;
+    protected PhuHuynh phuHuynh;
+    protected DiemMonHoc[] danhSachDiem;
+    protected int soLuongMon;
+    protected HoatDong[] lichSuHoatDong;
 
-    public HocSinh(){
+    public HocSinh() {
         super();
     }
-    public HocSinh(String hoTen, String ngaySinh, String gioiTinh, String diaChi, String soDienThoai, String mshs, String tenLop, double gpa, String hanhKiem, boolean daDongHocPhi){
+
+    public HocSinh(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong) {
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
         this.mshs = mshs;
         this.tenLop = tenLop;
         this.gpa = gpa;
-        this.hanhKiem = hanhKiem;
+        this.diemHanhKiem = diemHanhKiem;
         this.daDongHocPhi = daDongHocPhi;
-
+        this.phuHuynh = phuHuynh;
+        this.danhSachDiem = danhSachDiem;
+        this.soLuongMon = soLuongMon;
+        this.lichSuHoatDong = lichSuHoatDong;
     }
 
-    public String getMshs(){
+    public String getMshs() {
         return mshs;
     }
-    public void setMshs(String mshs){
+
+    public void setMshs(String mshs) {
         this.mshs = mshs;
     }
 
-    public String getTenLop(){
+    public String getTenLop() {
         return tenLop;
     }
-    public void setTenLop(String tenLop){
+
+    public void setTenLop(String tenLop) {
         this.tenLop = tenLop;
     }
-    
-    public double getGpa(){
+
+    public double getGpa() {
         return gpa;
     }
-    public void setGpa(double gpa){
+
+    public void setGpa(double gpa) {
         this.gpa = gpa;
     }
 
-    public String getHanhKiem(){
-        return hanhKiem;
-    }
-    public void setHanhKiem(String hanhKiem){
-        hanhKiem = hanhKiem;
+    public int getDiemHanhKiem() {
+        return diemHanhKiem;
     }
 
-    public boolean isDaDongHocPhi(){
+    public void setDiemHanhKiem(int diemHanhKiem) {
+        this.diemHanhKiem = diemHanhKiem;
+    }
+
+    public boolean isDaDongHocPhi() {
         return daDongHocPhi;
     }
-    public void setDaDongHocPhi(boolean daDongHocPhi){
+
+    public void setDaDongHocPhi(boolean daDongHocPhi) {
         this.daDongHocPhi = daDongHocPhi;
     }
 
+    public PhuHuynh getPhuHuynh() {
+        return phuHuynh;
+    }
+
+    public void setPhuHuynh(PhuHuynh phuHuynh) {
+        this.phuHuynh = phuHuynh;
+    }
+
+    public DiemMonHoc[] getDanhSachDiem() {
+        return danhSachDiem;
+    }
+
+    public void setDanhSachDiem(DiemMonHoc[] danhSachDiem) {
+        this.danhSachDiem = danhSachDiem;
+    }
+
+    public int getSoLuongMon() {
+        return soLuongMon;
+    }
+
+    public void setSoLuongMon(int soLuongMon) {
+        this.soLuongMon = soLuongMon;
+    }
+
+    public HoatDong[] getLichSuHoatDong() {
+        return lichSuHoatDong;
+    }
+
+    public void setLichSuHoatDong(HoatDong[] lichSuHoatDong) {
+        this.lichSuHoatDong = lichSuHoatDong;
+    }
+
+    @Override
     public abstract double tinhHocPhi();
+
+    @Override
     public abstract boolean xetHocBong();
+
+    public abstract String toFileString();
+
     @Override
     public void hienThiThongTin() {
-        String trangThaiHocPhi = "";
-        if(this.daDongHocPhi)
-            trangThaiHocPhi="Da dong hoc phi";
-        else
-            trangThaiHocPhi="Chua dong hoc phi";
-        System.out.printf("| %-10s | %-20s | %-12s | %-10s | %-5.2f | %-10s | %-15s |\n",
-                this.mshs,
-                this.hoTen,
-                this.ngaySinh,
-                this.tenLop,
-                this.gpa,
-                this.hanhKiem,
-                trangThaiHocPhi
-        );
+
+        System.out.printf("Đã đóng học phí: " + (daDongHocPhi ? "Rồi" : "Chưa"));
     }
-    public abstract String toFileString();
+
+    public void ghiNhanHoatDong(HoatDong hd){}
+
+    public String xepLoaiHanhKiem() {
+        if (diemHanhKiem >= 80) {
+            return "Tốt";
+        } else if (diemHanhKiem >= 65) {
+            return "Khá";
+        } else if (diemHanhKiem >= 50) {
+            return "Trung bình";
+        } else {
+            return "Yếu";
+        }
+    }
 }
-
-
