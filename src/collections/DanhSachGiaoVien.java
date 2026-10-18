@@ -75,7 +75,7 @@ public class DanhSachGiaoVien {
         GiaoVien gv = arrGV[index];
         java.util.Scanner sc = new Scanner(System.in);
 
-        System.out.println("Cập nhât thông tin cho giáo viên có mã là " + maGV);
+        System.out.println("Cập nhật thông tin cho giáo viên có mã là " + maGV);
         
         System.out.print("Nhập họ tên mới: ");
         gv.setHoTen(sc.nextLine());
@@ -110,7 +110,7 @@ public class DanhSachGiaoVien {
         System.out.print("Bạn có muốn thay đổi danh sách lớp dạy không? (y/n): ");
         String chonLop = sc.nextLine();
         if(chonLop.equalsIgnoreCase("y")){
-            System.out.print("Nhập số lượng lóp dạy mới: ");
+            System.out.print("Nhập số lượng lớp dạy mới: ");
             int soLop = Integer.parseInt(sc.nextLine());
             models.LopHoc[] dsLopMoi = new models.LopHoc[soLop];
 
