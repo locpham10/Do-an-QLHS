@@ -122,7 +122,7 @@ public class DanhSachGiaoVien {
             }
             gv.setDsLopDay(dsLopMoi);
         }
-        System.out.println("Cập nhật  thông tin thành công!")
+        System.out.println("Cập nhật  thông tin thành công!");
         return true;
     }
 
@@ -130,8 +130,8 @@ public class DanhSachGiaoVien {
         try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("giaovien.txt"))) {
             for(int i = 0; i < soLuong; i++){
                 if(arrGV[i] != null){
-                    pw.println(arrGV[i].getMaGV() + " ; " + arrGV[i].getHoTen() + " ; " + arrGV[i].getNgaySinh() + " ; " + arrGV[i].isGioiTinh() + " ; "
-                               arrGV[i].getDiaChi() + " ; " + arrGV[i].getSoDienThoai() + " ; " + arrGV[i].getChucVu() + " ; " + arrGV[i].getLuong());
+                    pw.println(arrGV[i].getMaGV() + ";" + arrGV[i].getHoTen() + ";" + arrGV[i].getNgaySinh() + ";" + arrGV[i].isGioiTinh() + ";"
+                               arrGV[i].getDiaChi() + ";" + arrGV[i].getSoDienThoai() + ";" + arrGV[i].getChucVu() + ";" + arrGV[i].getLuong());
                 }
             }
             return true;
