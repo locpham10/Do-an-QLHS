@@ -1,6 +1,6 @@
 package interfaces;
 
-public class IThongke {
-    void inTop5XuatSac();
-    void tinhTyLeDat();
+public interface IThongKe {
+    public void inTop5XuatSac();
+    public void tinhTyLeDat();
 }

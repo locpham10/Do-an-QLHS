@@ -2,6 +2,7 @@ package collections;
 
 import java.util.Scanner;
 import models.GiaoVien;
+import interfaces.IThongKe;
 
 public class DanhSachGiaoVien implements IThongKe {
     private GiaoVien[] arrGV;
@@ -174,6 +175,18 @@ public class DanhSachGiaoVien implements IThongKe {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public void inTop5XuatSac() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'inTop5XuatSac'");
+    }
+
+    @Override
+    public void tinhTyLeDat() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'tinhTyLeDat'");
     }
 
 }
