@@ -1,10 +1,14 @@
 package models;
 
-<<<<<<< HEAD
 public class HocSinhDaiTra extends HocSinh{
     
+
+
+
+    @Override
+    public String toFileString(){
+        return String.format("DaiTra,%s,%s,%s,%b,%s,%s,%s,%.1f,%d,%b",
+            mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai,
+            tenLop, gpa, diemHanhKiem, daDongHocPhi);
+    }
 }
-=======
-public class HocSinhDaiTra {
-}
->>>>>>> d0a8a7f5f6a950fc51799a56483930d5ef747ae7
