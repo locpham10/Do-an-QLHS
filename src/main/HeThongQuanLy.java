@@ -326,6 +326,10 @@ public class HeThongQuanLy {
                         }
                     }
                     break;
+
+                default:
+                    System.out.println(Color.RED + "Loi: Lua chon khong hop le! Vui long chon lai!");
+                    break;
             }
         }
     }
