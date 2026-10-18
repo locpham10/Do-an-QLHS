@@ -1,4 +1,4 @@
 package collections;
 
-public class DanhSachPhuHuynh {
+public class DanhSachPhuHuynh implements IThongKe {
 }

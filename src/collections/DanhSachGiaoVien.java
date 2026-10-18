@@ -3,7 +3,7 @@ package collections;
 import java.util.Scanner;
 import models.GiaoVien;
 
-public class DanhSachGiaoVien {
+public class DanhSachGiaoVien implements IThongKe {
     private GiaoVien[] arrGV;
     private int soLuong;
 
