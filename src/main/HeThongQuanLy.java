@@ -338,15 +338,55 @@ public class HeThongQuanLy {
         int chon = -1;
         while (chon != 0){
             System.out.println("\n---- 2. QUAN LY HOC TAP ----");
-            System.out.println("1. Nhap diem");
-            System.out.println("2. Cap nhat hanh kiem");
-            System.out.println("3. Xem phieu diem ca nhan");
+            System.out.println("1. Nhap / cap nhat diem");
+            System.out.println("2. Danh gia diem hanh kiem");
+            System.out.println("3. Xet hoc bong toan truong");
             System.out.println("4. Bang diem lop hoc");
+            System.out.println("5. Bang diem ca nhan");
             System.out.println("0. Quay ve menu chinh");
             chon=nhapLuaChon();
 
             if(chon == 0) break;
-            //Code tiep ở đây
+            switch (chon) {
+                case 1:
+                    System.out.println("\n [NHAP / CAP NHAT DIEM] /");
+                    System.out.println("Nhap MSHS can nhap diem (nhap 0 de huy): ");
+                    String mshsCapNhat = sc.nextLine().trim();
+
+                    if (mshsCapNhat.equals("0")) break;
+                    HocSinh hsCapNhat = dsHocSinh.timKiem(mshsCapNhat);
+
+                    if (mshsCapNhat == null) {
+                        System.out.println(Color.RED + "Khong tim thay hoc sinh co ma " + mshsCapNhat + "!" + Color.RESET);
+                        break;
+                    }
+
+                    LopHoc lopCuaHs = dsLopHoc.timKiemLopTheoTen(hsCapNhat.getTenLop());
+                    MonHoc[] chuongTrinh = lopCuaHs.getChuongTrinhHoc();
+
+                    if(chuongTrinh == null || chuongTrinh.length == 0 || chuongTrinh[0] == null){
+                        System.out.println(Color.RED + "Loi: Lop " + lopCuaHs + "chua duoc thiet lap cac mon hoc!" + Color.RESET);
+                        break;
+                    }
+
+                    System.out.println(Color.CYAN + "Dang cap nhat diem hoc sinh " + hsCapNhat.getHoTen() +
+                                " - " + hsCapNhat.getTenLop() + ":" + Color.RESET);
+
+                    DiemMonHoc[] bangDiemMoi = new DiemMonHoc[chuongTrinh.length];
+                    int demSomon = 0;
+
+                    double tongDiemNhanHeSo = 0;
+                    int tongHeSo = 0;
+
+                    for(int i =0; i < chuongTrinh.length; i++){
+                        MonHoc mh = chuongTrinh[i];
+                        if (mh==null) continue;
+
+                        System.out.println("\n--- Mon: " + Color.YELLOW + mh.getTenMon() + Color.RESET);
+                    }
+
+
+            }
         }
     }
 
