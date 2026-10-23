@@ -2,6 +2,8 @@ package collections;
 
 import java.util.Scanner;
 import models.GiaoVien;
+import models.LopHoc;
+import models.MonHoc;
 import interfaces.IThongKe;
 
 public class DanhSachGiaoVien implements IThongKe {
@@ -127,12 +129,28 @@ public class DanhSachGiaoVien implements IThongKe {
         return true;
     }
 
-    public boolean ghiFile(){
+   public boolean ghiFile(){
         try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("giaovien.txt"))) {
             for(int i = 0; i < soLuong; i++){
-                if(arrGV[i] != null){
-                    pw.println(arrGV[i].getMaGV() + ";" + arrGV[i].getHoTen() + ";" + arrGV[i].getNgaySinh() + ";" + arrGV[i].isGioiTinh() + ";"
-                               arrGV[i].getDiaChi() + ";" + arrGV[i].getSoDienThoai() + ";" + arrGV[i].getChucVu() + ";" + arrGV[i].getLuong());
+                GiaoVien gv = arrGV[i];
+                if(gv != null){
+                    String tenMon = (gv.getMonChuyenMon() != null) ? gv.getMonChuyenMon().getTenMon() : "Không";
+                    LopHoc [] dsLop = gv.getDsLopDay();
+                    int soLop = (dsLop != null) ? dsLop.length : 0; 
+                    pw.print(gv.getMaGV() + "; " + gv.getHoTen() + "; " + gv.getNgaySinh() + "; " + gv.isGioiTinh() + 
+                    "; " + gv.getDiaChi() + "; " + gv.getSoDienThoai() + "; " + gv.getChucVu() + "; " + gv.getLuong() +"; "+
+                               tenMon + "; " + soLop);
+                    if(soLop > 0){
+                        for(int  j = 0; j < soLop; j++){
+                            if(dsLop[j] != null){
+                                pw.print("; " + dsLop[j].getTenLop());
+                            }
+                            else{
+                                pw.print("Không");
+                            }
+                        }
+                    }
+                    pw.println();
                 }
             }
             return true;
@@ -154,7 +172,7 @@ public class DanhSachGiaoVien implements IThongKe {
             while ((line = br.readLine()) != null) {
                 if(line.trim().isEmpty()) continue;
                 String[] parts = line.split(";");
-                if(parts.length >= 8){
+                if(parts.length >= 10){
                     String maGV = parts[0];
                     String hoTen = parts[1];
                     String ngaySinh = parts[2];
@@ -163,10 +181,24 @@ public class DanhSachGiaoVien implements IThongKe {
                     String soDienThoai = parts[5];
                     String chucVu = parts[6];
                     double luong = Double.parseDouble(parts[7]);
-                    GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, null, null);
+                    MonHoc monChuyenMon = null;
+                    if(!parts[8].equalsIgnoreCase("Không")){
+                        monChuyenMon = new MonHoc(parts[8]);
+                    }
+
+                    int soLop = Integer.parseInt(parts[9]);
+                    LopHoc[] dsLopDay = null;
+                    if(soLop > 0 && parts.length >= 10 + soLop){
+                        dsLopDay = new LopHoc[soLop];
+                        for(int k = 0; k < soLop; k++){
+                            String tenLop = parts[10+k];
+                            dsLopDay[k] = new LopHoc(tenLop);
+                        }
+                    }
+                    GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, monChuyenMon, dsLopDay);
                     if(soLuong < arrGV.length){
                         arrGV[soLuong] = gv;
-                        soLuong++;
+                        soLuong++; 
                     }
                 }
             }
@@ -175,6 +207,7 @@ public class DanhSachGiaoVien implements IThongKe {
             e.printStackTrace();
             return false;
         }
+    }
     }
 
     @Override
