@@ -208,9 +208,7 @@ public class DanhSachGiaoVien implements IThongKe {
             return false;
         }
     }
-    }
-
-public void taoDuLieuMau (){
+    public void taoDuLieuMau (){
     MonHoc monToan = new MonHoc("MH001","Toán", 2, true);
     MonHoc monVan = new MonHoc("MH002","Ngữ Văn", 2, true);
     MonHoc monAnh = new MonHoc("MH003","Anh", 1, true);
@@ -249,8 +247,9 @@ public void taoDuLieuMau (){
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'tinhTyLeDat'");
     }
+    }
 
-}
+
 
 
 
