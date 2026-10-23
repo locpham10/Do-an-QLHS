@@ -69,5 +69,5 @@ public class DanhSachLopHoc
         themLopHoc(new LopHoc ("10A2","2026-2029"));
         themLopHoc(new LopHoc ("11A1","2025-2028"));
         themLopHoc(new LopHoc ("11A2","2025-2028"));
-        themLopHoc(new LopHoc ("12A1","-2027"));
+        themLopHoc(new LopHoc ("12A1","2024-2027"));
 }
