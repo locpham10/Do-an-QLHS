@@ -64,10 +64,4 @@ public class DanhSachLopHoc
     {
         return soLuong;
     }
-    public void taoDuLieuMau(){
-        themLopHoc(new LopHoc ("10A1","2026-2029"));
-        themLopHoc(new LopHoc ("10A2","2026-2029"));
-        themLopHoc(new LopHoc ("11A1","2025-2028"));
-        themLopHoc(new LopHoc ("11A2","2025-2028"));
-        themLopHoc(new LopHoc ("12A1","2024-2027"));
 }
