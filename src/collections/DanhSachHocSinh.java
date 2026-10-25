@@ -12,8 +12,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import interfaces.IThongKe;
 
-public class DanhSachHocSinh {
+public class DanhSachHocSinh implements IThongKe {
     private HocSinh[] arrHS = new HocSinh[1000];
     private int soLuong=0;
     private final String FILE_PATH = "hocsinh.txt";
@@ -57,6 +58,10 @@ public class DanhSachHocSinh {
 
     public HocSinh[] getArrHS() {
         return arrHS;
+    }
+
+    public double getGpa() { 
+        return this.gpa; 
     }
 
     public void nhapDiemChoHocSinh(MonHoc[] dsMonHoc, int soLuongMon, Scanner sc)
@@ -176,5 +181,43 @@ public class DanhSachHocSinh {
             System.out.println("Loi khi doc file HocSinh: " + e.getMessage());
             return false;
         }
+    }
+
+@Override
+    public void inTop5XuatSac() {
+        if (soLuong == 0) return;
+
+        for (int i = 0; i < soLuong - 1; i++) {
+            for (int j = i + 1; j < soLuong; j++) {
+                if (arrHS[i].getGpa() < arrHS[j].getGpa()) {
+                    HocSinh temp = arrHS[i];
+                    arrHS[i] = arrHS[j];
+                    arrHS[j] = temp;
+                }
+            }
+        }
+
+        int soLuongIn = Math.min(soLuong, 5);
+        for (int i = 0; i < soLuongIn; i++) {
+            arrHS[i].hienThiThongTin();
+        }
+    }
+
+@Override
+    public void tinhTyLeDat() {
+        if (soLuong == 0) {
+            System.out.println("Tỷ lệ đạt: 0%");
+            return;
+        }
+
+        int soHocSinhDat = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i].getGpa() >= 5.0) {
+                soHocSinhDat++;
+            }
+        }
+
+        double tyLe = (double) soHocSinhDat / soLuong * 100;
+        System.out.println("Tỷ lệ học sinh đạt: " + tyLe + "%");
     }
 }

@@ -9,6 +9,7 @@ public class LopHoc
     private GiaoVien giaoVienChuNhiem;
     private DanhSachHocSinh dsHocSinh;
     boolean isLopChuyen;
+    private MonHoc[] chuongTrinhHoc;
     String monChuyenCuaLop;
     double phuPhiChung;
 
@@ -45,6 +46,10 @@ public class LopHoc
     }
 
     public boolean isLopChuyen() { return isLopChuyen; }
+
+    public void setChuongTrinhHoc(MonHoc[] chuongTrinhHoc) {
+        this.chuongTrinhHoc = chuongTrinhHoc;
+    }
 
     public String getMonChuyenCuaLop() { return monChuyenCuaLop; }
 
