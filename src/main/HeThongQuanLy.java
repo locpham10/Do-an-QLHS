@@ -23,11 +23,6 @@ public class HeThongQuanLy {
         dsPhuHuynh = new DanhSachPhuHuynh();
         dsLopHoc = new DanhSachLopHoc();
         sc = new Scanner(System.in);
-
-        dsGiaoVien.taoDuLieuMau();
-        dsPhuHuynh.taoDuLieuMau();
-        dsLopHoc.taoDuLieuMau();
-        System.out.println(Color.GREEN + ">>> Đã nạp thành công dữ liệu mẫu cho Giáo viên, Phụ huynh và Lớp học! <<<" + Color.RESET);
     }
 
     private void hienThiMenuChinh() {
