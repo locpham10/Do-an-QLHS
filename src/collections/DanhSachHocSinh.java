@@ -101,6 +101,8 @@ public class DanhSachHocSinh {
         System.out.println("\nDa cap nhat bang diem thanh cong!");
         System.out.println("GPA moi cua " + hsTimThay.getHoTen() + "la: " + gpaMoi);
     }
+    
+
     public boolean ghiFile() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (int i = 0; i < soLuong; i++) {
@@ -112,7 +114,7 @@ public class DanhSachHocSinh {
             System.out.println("Ghi file danh sach hoc sinh thanh cong!");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi ghi file: " + e.getMessage());
+            System.out.println("Loi khi ghi file HocSinh: " + e.getMessage());
             return false;
         }
     }
@@ -120,53 +122,58 @@ public class DanhSachHocSinh {
     public boolean docFile() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
-            this.soLuong = 0;
-            while ((line = br.readLine()) != null) 
-                {
+            this.soLuong = 0; 
+
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                String[] data = line.split(",");
-                if (data.length < 11) continue;
-
-                String loaiHS = data[0].trim();
-                String mshs = data[1].trim();
-                String hoTen = data[2].trim();
-                String ngaySinh = data[3].trim();
-                boolean gioiTinh = Boolean.parseBoolean(data[4].trim());
-                String diaChi = data[5].trim();
-                String soDienThoai = data[6].trim();
-                String tenLop = data[7].trim();
-                double gpa = Double.parseDouble(data[8].trim());
-                int diemHanhKiem = Integer.parseInt(data[9].trim());
-                boolean daDongHocPhi = Boolean.parseBoolean(data[10].trim());
-
-                HocSinh hs = null;
-
-                if (loaiHS.equalsIgnoreCase("DaiTra")) {
-                    hs = new HocSinhDaiTra(mshs, hoTen, ngaySinh, gioiTinh, diaChi, 
-                                           soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi);
-                } else if (loaiHS.equalsIgnoreCase("Chuyen") && data.length >= 14) {
-                    String monChuyen = data[11].trim();
-                    double diemMonChuyen = Double.parseDouble(data[12].trim());
-                    double phuPhiChuyenDe = Double.parseDouble(data[13].trim());
-
-                    hs = new HocSinhChuyen(mshs, hoTen, ngaySinh, gioiTinh, diaChi, 
-                                          soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, 
-                                          monChuyen, diemMonChuyen, phuPhiChuyenDe);
+                if (this.soLuong >= arrHS.length) {
+                    System.out.println("Canh bao: Mang danh sach hoc sinh da day (Toi da " + arrHS.length + ")!");
+                    break;
                 }
 
-                if (hs != null) {
-                    this.them(hs);
+                String[] data = line.split(",");
+                if (data.length < 11) continue; 
+
+                try {
+                    String loaiHS = data[0].trim();
+                    String mshs = data[1].trim();
+                    String hoTen = data[2].trim();
+                    String ngaySinh = data[3].trim();
+                    boolean gioiTinh = Boolean.parseBoolean(data[4].trim());
+                    String diaChi = data[5].trim();
+                    String soDienThoai = data[6].trim();
+                    String tenLop = data[7].trim();
+                    double gpa = Double.parseDouble(data[8].trim());
+                    int diemHanhKiem = Integer.parseInt(data[9].trim());
+                    boolean daDongHocPhi = Boolean.parseBoolean(data[10].trim());
+
+                    HocSinh hs = null;
+                    if (loaiHS.equalsIgnoreCase("DaiTra")) {
+                        hs = new HocSinhDaiTra(mshs, hoTen, ngaySinh, gioiTinh, diaChi, 
+                                               soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi);
+                    } else if (loaiHS.equalsIgnoreCase("Chuyen") && data.length >= 14) {
+                        String monChuyen = data[11].trim();
+                        double diemMonChuyen = Double.parseDouble(data[12].trim());
+                        double phuPhiChuyenDe = Double.parseDouble(data[13].trim());
+
+                        hs = new HocSinhChuyen(mshs, hoTen, ngaySinh, gioiTinh, diaChi, 
+                                              soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, 
+                                              monChuyen, diemMonChuyen, phuPhiChuyenDe);
+                    }
+
+                    if (hs != null) {
+                        this.them(hs);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Bo qua dong do loi dinh dang so: " + line);
                 }
             }
-            System.out.println("Doc file thanh cong! Tong so: " + soLuong + " hoc sinh.");
+            System.out.println("Doc file HocSinh thanh cong! Tong so: " + soLuong + " hoc sinh.");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi doc file: " + e.getMessage());
-            return false;
-        } catch (NumberFormatException e) {
-            System.out.println("Loi sai dinh dang so trong file: " + e.getMessage());
+            System.out.println("Loi khi doc file HocSinh: " + e.getMessage());
             return false;
         }
     }

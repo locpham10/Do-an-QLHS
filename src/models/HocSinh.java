@@ -1,5 +1,7 @@
 package models;
 
+import models.HoatDong;
+
 public abstract class HocSinh extends Nguoi {
     protected String mshs;
     protected String tenLop;
@@ -101,10 +103,8 @@ public abstract class HocSinh extends Nguoi {
         this.lichSuHoatDong = lichSuHoatDong;
     }
 
-    @Override
     public abstract double tinhHocPhi();
 
-    @Override
     public abstract boolean xetHocBong();
 
     public abstract String toFileString();

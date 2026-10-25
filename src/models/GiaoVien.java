@@ -7,8 +7,12 @@ public class GiaoVien extends Nguoi{
     protected MonHoc monChuyenMon;
     protected LopHoc[] dsLopDay; 
     
-    public GiaoVien (){
-        super();
+    public GiaoVien(String maGV, String hoTen, String ngaySinh, boolean gioiTinh, 
+                    String diaChi, String soDienThoai, String chucVu, double luong) {
+        super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
+        this.maGV = maGV;
+        this.chucVu = chucVu;
+        this.luong = luong;
     }
 
     public GiaoVien(String maGV, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, String chucVu, double luong, MonHoc monChuyenmon, LopHoc[] dsLopDay){
@@ -18,6 +22,11 @@ public class GiaoVien extends Nguoi{
         this.luong = luong;
         this.monChuyenMon = monChuyenMon;
         this.dsLopDay = dsLopDay;
+    }
+
+    public String toFileString() {
+        return String.format("%s,%s,%s,%b,%s,%s,%s,%.1f",
+            maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong);
     }
 
     public String getMaGV (){

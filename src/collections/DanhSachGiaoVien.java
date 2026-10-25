@@ -2,10 +2,16 @@ package collections;
 
 import java.util.Scanner;
 import models.GiaoVien;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class DanhSachGiaoVien {
     private GiaoVien[] arrGV;
     private int soLuong;
+    private final String FILE_PATH = "giaovien.txt";
 
     public DanhSachGiaoVien() {
         this.arrGV = new GiaoVien[100];
@@ -126,56 +132,62 @@ public class DanhSachGiaoVien {
         return true;
     }
 
-    public boolean ghiFile(){
-        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("giaovien.txt"))) {
-            for(int i = 0; i < soLuong; i++){
-                if(arrGV[i] != null){
-                    pw.println(arrGV[i].getMaGV() + ";" + arrGV[i].getHoTen() + ";" + arrGV[i].getNgaySinh() + ";" + arrGV[i].isGioiTinh() + ";"
-                               arrGV[i].getDiaChi() + ";" + arrGV[i].getSoDienThoai() + ";" + arrGV[i].getChucVu() + ";" + arrGV[i].getLuong());
+
+    public boolean ghiFile() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (int i = 0; i < soLuong; i++) {
+                if (arrGV[i] != null) {
+                    bw.write(arrGV[i].toFileString());
+                    bw.newLine();
                 }
             }
+            System.out.println("Ghi file GiaoVien thanh cong!");
             return true;
-        } catch (Exception e) {
-           e.printStackTrace();
-           return false;
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file GiaoVien: " + e.getMessage());
+            return false;
         }
     }
 
-    public boolean docFile(){
-        java.io.File file = new java.io.File("giaovien.txt");
-        if(!file.exists()){
-            return false;
-        }
-        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(file))) {
+    public boolean docFile() {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
-            soLuong = 0;
-            
+            this.soLuong = 0;
+
             while ((line = br.readLine()) != null) {
-                if(line.trim().isEmpty()) continue;
-                String[] parts = line.split(";");
-                if(parts.length >= 8){
-                    String maGV = parts[0];
-                    String hoTen = parts[1];
-                    String ngaySinh = parts[2];
-                    boolean gioiTinh = Boolean.parseBoolean(parts[3]);
-                    String diaChi = parts[4];
-                    String soDienThoai = parts[5];
-                    String chucVu = parts[6];
-                    double luong = Double.parseDouble(parts[7]);
-                    GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, null, null);
-                    if(soLuong < arrGV.length){
-                        arrGV[soLuong] = gv;
-                        soLuong++;
-                    }
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                if (this.soLuong >= arrGV.length) {
+                    System.out.println("Canh bao: Mang GiaoVien da day!");
+                    break;
+                }
+
+                String[] data = line.split(",");
+                if (data.length < 8) continue; 
+                try {
+                    String maGV = data[0].trim();
+                    String hoTen = data[1].trim();
+                    String ngaySinh = data[2].trim();
+                    boolean gioiTinh = Boolean.parseBoolean(data[3].trim());
+                    String diaChi = data[4].trim();
+                    String soDienThoai = data[5].trim();
+                    String chucVu = data[6].trim();
+                    double luong = Double.parseDouble(data[7].trim());
+
+                    GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong);
+                    this.them(gv);
+                } catch (NumberFormatException e) {
+                    System.out.println("Bo qua dong GiaoVien loi dinh dang so: " + line);
                 }
             }
+            System.out.println("Doc file GiaoVien thanh cong! Tong so: " + soLuong + " giao vien.");
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file GiaoVien: " + e.getMessage());
             return false;
         }
     }
-
 }
 
 
