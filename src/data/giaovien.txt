@@ -1,0 +1,5 @@
+GV01,Trần Mỹ Duyên,12/03/1988,false,12 Trần Hưng Đạo,0911223344,Tổ trưởng,10000000,Toán,3,10A1,11A1,12A1
+GV02,Trần Minh Hiếu,20/09/1995,true,34 Nguyễn Huệ,0922334455,Giáo Viên,8000000,Ngữ Văn,2,10A2,11A2
+GV03,Khương Hoàn Mỹ,15/02/1991,false,45 An Dương Vương,0933445566,Giáo Viên,8000000,Ngoại Ngữ,2,10A1,10A2
+GV04,Trần Thị Phương Thảo,10/09/1992,false,56 Nguyễn Trãi,0944556677,Giáo Viên,8000000,Hóa học,2,11A1,11A2
+GV05,Bùi Anh Tú,03/10/1990,true,67 Lê Lai,0955667788,Tổ trưởng,10000000,Lịch sử,1,12A1
