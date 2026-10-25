@@ -34,14 +34,6 @@ public class DanhSachPhuHuynh implements IThongKe {
         return false; // them that bai (day/null)
     } 
 
-    public void taoDuLieuMau(){
-        them(new PhuHuynh("Nguyễn Thái Sơn",("0908112233")));
-        them(new PhuHuynh("Trần Phương Ly",("0908223344")));
-        them(new PhuHuynh("Phạm Bảo Khang",("0908334455")));
-        them(new PhuHuynh("Trần Hoàng Phương Lan",("0908445566")));
-        them(new PhuHuynh("Võ Đình Nam",("0908556677")));
-    }
-
     @Override
     public void inTop5XuatSac() {
         // TODO Auto-generated method stub
