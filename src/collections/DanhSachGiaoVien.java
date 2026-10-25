@@ -208,33 +208,6 @@ public class DanhSachGiaoVien implements IThongKe {
             return false;
         }
     }
-    public void taoDuLieuMau (){
-    MonHoc monToan = new MonHoc("MH001","Toán", 2, true);
-    MonHoc monVan = new MonHoc("MH002","Ngữ Văn", 2, true);
-    MonHoc monAnh = new MonHoc("MH003","Anh", 1, true);
-    MonHoc monHoa = new MonHoc("MH004","Hóa học", 1, true);
-    MonHoc monSu = new MonHoc("MH005","Lịch sử", 1, true);
-
-    //Giáo viên 1: Dạy Toán của 3 lớp 10A1, 11A1, 12A1
-    LopHoc[] dsLopGV1 = { new LopHoc("10A1","2026-2029"), new LopHoc("11A1","2025-2028"), new LopHoc("12A1","2024-2027")};
-    them(new GiaoVien("GV01","Trần Mỹ Duyên","12/03/1988",false,"12 Trần Hưng Đạo","0911223344","Tổ trưởng",10000000, monToan, dsLopGV1));
-    
-    //Giáo viên 2: Dạy Văn của 2 lớp 10A2,11A2
-    LopHoc[] dsLopGV2 = { new LopHoc("10A2","2026-2029"), new LopHoc("11A2","2025-2028")};
-    them(new GiaoVien("GV02","Trần Minh Hiếu","20/09/1995",true,"34 Nguyễn Huệ","0922334455","Giáo Viên",8000000, monVan, dsLopGV2));
-    
-    //Giáo viên 3: Dạy Anh của lớp 10A1, 10A2
-    LopHoc[] dsLopGV3 = { new LopHoc("10A1","2026-2029"), new LopHoc("10A2","2026-2029")};
-    them(new GiaoVien("GV03","Khương Hoàn Mỹ","15/02/1991",false,"45 An Dương Vương","0933445566","Giáo Viên",8000000, monAnh, dsLopGV3));
-
-    //Giáo viên 4: Dạy Hóa của lớp 11A1, 11A2
-    LopHoc[] dsLopGV4 = { new LopHoc("11A1","2025-2028"), new LopHoc("11A2","2025-2028")};
-    them(new GiaoVien("GV04","Trần Thị Phương Thảo","10/09/1992",false,"56 Nguyễn Trãi","0944556677","Giáo Viên",8000000, monHoa, dsLopGV4));
-
-    //Giáo viên 5: Dạy sử của lớp 12A1
-    LopHoc[] dsLopGV5 = { new LopHoc("12A1","2024-2027")};
-    them(new GiaoVien("GV05","Bùi Anh Tú","03/10/1990",true,"67 Lê Lai","0955667788","Tổ trưởng",10000000, monSu, dsLopGV5));   
-}
 
     @Override
     public void inTop5XuatSac() {
