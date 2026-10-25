@@ -446,7 +446,7 @@ public class HeThongQuanLy {
                     if (mshsCapNhat.equals("0")) break;
                     HocSinh hsCapNhat = dsHocSinh.timKiem(mshsCapNhat);
 
-                    if (mshsCapNhat == null) {
+                    if (hsCapNhat == null) {
                         System.out.println(Color.RED + "Khong tim thay hoc sinh co ma " + mshsCapNhat + "!" + Color.RESET);
                         break;
                     }
