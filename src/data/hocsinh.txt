@@ -1,0 +1,15 @@
+Chuyen,HS001,Nguyen Van An,12/05/2011,true,10 Ly Tu Trong,0901112233,10A1,8.8,100,true,Toan,9.2,250000.0
+Chuyen,HS002,Le Thi Mai,18/08/2011,false,25 Le Loi,0902223344,10A1,9.1,95,true,Toan,9.5,250000.0
+Chuyen,HS003,Pham Gia Han,02/04/2011,false,88 Hai Ba Trưng,0902221122,10A1,8.5,90,false,Toan,8.9,250000.0
+DaiTra,HS004,Tran Quoc Bao,22/01/2011,true,14 Nguyen Trai,0903334455,10A2,7.5,90,false
+DaiTra,HS005,Do Hoang Long,11/11/2011,true,50 Pasteur,0903335566,10A2,8.0,100,true
+DaiTra,HS006,Vu Thu Trang,05/09/2011,false,12 Nguyen Du,0903337788,10A2,7.8,95,true
+Chuyen,HS007,Hoang Duc Cuong,14/03/2010,true,120 Dien Bien Phu,0905556677,11A1,8.6,90,true,Hóa học,8.9,200000.0
+Chuyen,HS008,Ngo Thanh Thuy,25/07/2010,false,33 CMT8,0905558899,11A1,9.2,100,true,Hóa học,9.4,200000.0
+Chuyen,HS009,Bui Minh Khoi,19/12/2010,true,77 Hoang Van Thu,0905550011,11A1,8.4,85,false,Hóa học,8.6,200000.0
+DaiTra,HS010,Dang Thu Thao,09/09/2010,false,45 Nam Ky Khoi ,0906667788,11A2,6.8,85,false
+DaiTra,HS011,Ly Hai Nam,14/02/2010,true,99 Phan Xich Long,0906662233,11A2,7.2,90,true
+DaiTra,HS012,Ho Ngoc Ha,30/10/2010,false,101 Dien Bien Phu,0906664455,11A2,7.9,95,true
+Chuyen,HS013,Vu Hoang Nam,30/12/2009,true,67 Ba Thang Hai,0907778899,12A1,8.9,100,true,Lịch sử,9.1,150000.0
+Chuyen,HS014,Duong Minh Triet,17/06/2009,true,12 Truong Chinh,0907771122,12A1,8.2,90,true,Lịch sử,8.5,150000.0
+Chuyen,HS015,Cao Thi Mong Me,08/01/2009,false,55 Ly Thai To,0907773344,12A1,8.7,95,true,Lịch sử,8.8,150000.0
