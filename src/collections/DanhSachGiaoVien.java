@@ -137,13 +137,13 @@ public class DanhSachGiaoVien implements IThongKe {
                     String tenMon = (gv.getMonChuyenMon() != null) ? gv.getMonChuyenMon().getTenMon() : "Không";
                     LopHoc [] dsLop = gv.getDsLopDay();
                     int soLop = (dsLop != null) ? dsLop.length : 0; 
-                    pw.print(gv.getMaGV() + "; " + gv.getHoTen() + "; " + gv.getNgaySinh() + "; " + gv.isGioiTinh() + 
-                    "; " + gv.getDiaChi() + "; " + gv.getSoDienThoai() + "; " + gv.getChucVu() + "; " + gv.getLuong() +"; "+
-                               tenMon + "; " + soLop);
+                    pw.print(gv.getMaGV() + "," + gv.getHoTen() + "," + gv.getNgaySinh() + "," + gv.isGioiTinh() + 
+                    "," + gv.getDiaChi() + "," + gv.getSoDienThoai() + "," + gv.getChucVu() + "," + gv.getLuong() +","+
+                               tenMon + "," + soLop);
                     if(soLop > 0){
                         for(int  j = 0; j < soLop; j++){
                             if(dsLop[j] != null){
-                                pw.print("; " + dsLop[j].getTenLop());
+                                pw.print("," + dsLop[j].getTenLop());
                             }
                             else{
                                 pw.print("Không");
@@ -171,7 +171,7 @@ public class DanhSachGiaoVien implements IThongKe {
             
             while ((line = br.readLine()) != null) {
                 if(line.trim().isEmpty()) continue;
-                String[] parts = line.split(";");
+                String[] parts = line.split(",");
                 if(parts.length >= 10){
                     String maGV = parts[0];
                     String hoTen = parts[1];
