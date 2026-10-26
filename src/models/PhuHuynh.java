@@ -24,4 +24,8 @@ public class PhuHuynh {
     public void setSdt(String sdt){
         this.sdt = sdt;
     }
+
+    public String toFileString() {
+        return hoTenBoMe + "," + sdt;
+    }
 }
