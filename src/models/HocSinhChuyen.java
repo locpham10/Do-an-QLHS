@@ -12,9 +12,9 @@ public class HocSinhChuyen extends HocSinh {
 
     public HocSinhChuyen(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
                          String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
-                         PhuHuynh phuhuynh, DiemMonHoc[] danhSachDiem, HoatDong[] lichSuHoatDong,
+                         PhuHuynh phuhuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong,
                          String monChuyen, double diemMonChuyen, double phuPhiChuyenDe) {
-        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, phuHuynh, danhSachDiem, lichSuHoatDong);
+        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
         this.monChuyen = monChuyen;
         this.diemMonChuyen = diemMonChuyen;
         this.phuPhiChuyenDe = phuPhiChuyenDe;
