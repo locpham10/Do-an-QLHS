@@ -17,8 +17,9 @@ public abstract class HocSinh extends Nguoi {
         super();
     }
 
-    public HocSinh(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong) {
-
+    public HocSinh(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, 
+                   String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
+                   PhuHuynh phuhuynh, DiemMonHoc[] danhSachDiem, HoatDong[] lichSuHoatDong)
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
         this.mshs = mshs;
         this.tenLop = tenLop;

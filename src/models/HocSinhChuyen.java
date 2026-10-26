@@ -6,21 +6,15 @@ public class HocSinhChuyen extends HocSinh {
     private double diemMonChuyen;
     private double phuPhiChuyenDe;
 
-    public HocSinhChuyen() {}
+    public HocSinhChuyen() {
+        super();
+    }
 
     public HocSinhChuyen(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
                          String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
+                         PhuHuynh phuhuynh, DiemMonHoc[] danhSachDiem, HoatDong[] lichSuHoatDong,
                          String monChuyen, double diemMonChuyen, double phuPhiChuyenDe) {
-        this.mshs = mshs;
-        this.hoTen = hoTen;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
-        this.diaChi = diaChi;
-        this.soDienThoai = soDienThoai;
-        this.tenLop = tenLop;
-        this.gpa = gpa;
-        this.diemHanhKiem = diemHanhKiem;
-        this.daDongHocPhi = daDongHocPhi;
+        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, phuHuynh, danhSachDiem, lichSuHoatDong);
         this.monChuyen = monChuyen;
         this.diemMonChuyen = diemMonChuyen;
         this.phuPhiChuyenDe = phuPhiChuyenDe;
@@ -28,12 +22,13 @@ public class HocSinhChuyen extends HocSinh {
 
     @Override
     public double tinhHocPhi() {
-        return 0;
+        double hocPhiCoBan = 150000.0;
+        return hocPhiCoBan + this.phuPhiChuyenDe;
     }
 
     @Override
     public boolean xetHocBong() {
-        return false;
+        return ( this.gpa >= 8.5 && this.diemHanhKiem >= 80 && this.diemMonChuyen >= 8.0 );
     }
 
     public String getMonChuyen() {
