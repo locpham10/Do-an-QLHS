@@ -18,12 +18,15 @@ public class DanhSachHocSinh implements IThongKe {
     private HocSinh[] arrHS = new HocSinh[1000];
     private int soLuong=0;
     private final String FILE_PATH = "hocsinh.txt";
-    
-    public void them(HocSinh hs){
-        if(soLuong<1000){
-            arrHS[soLuong]= hs;
+
+    public boolean them(HocSinh hs) {
+        // Dùng arrHS.length thay vì số cứng 1000 để linh hoạt theo kích thước mảng thực tế
+        if (hs != null && soLuong < arrHS.length) {
+            arrHS[soLuong] = hs;
             soLuong++;
+            return true; // Thêm thành công
         }
+        return false; // Mảng đã đầy hoặc hs bị null
     }
 
     public void xoa(HocSinh hs){

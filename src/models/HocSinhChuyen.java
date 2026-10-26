@@ -10,11 +10,12 @@ public class HocSinhChuyen extends HocSinh {
         super();
     }
 
-    public HocSinhChuyen(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
+    public HocSinhChuyen(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi,
                          String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
-                         PhuHuynh phuhuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong,
+                         PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong,
                          String monChuyen, double diemMonChuyen, double phuPhiChuyenDe) {
-        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
+        // Trong HocSinh.java, mshs nằm ở vị trí thứ 6 (sau soDienThoai)
+        super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, mshs, tenLop, gpa, diemHanhKiem, daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
         this.monChuyen = monChuyen;
         this.diemMonChuyen = diemMonChuyen;
         this.phuPhiChuyenDe = phuPhiChuyenDe;

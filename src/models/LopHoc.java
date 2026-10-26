@@ -47,6 +47,10 @@ public class LopHoc
 
     public boolean isLopChuyen() { return isLopChuyen; }
 
+    public MonHoc[] getChuongTrinhHoc() {
+        return chuongTrinhHoc;
+    }
+
     public void setChuongTrinhHoc(MonHoc[] chuongTrinhHoc) {
         this.chuongTrinhHoc = chuongTrinhHoc;
     }

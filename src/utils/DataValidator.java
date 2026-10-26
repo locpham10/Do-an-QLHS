@@ -44,9 +44,9 @@ public class DataValidator {
         }
         return ngaySinh;
     }
-    public static boolean kiemTraTonTaiMa(HocSinh hs, DanhSachHocSinh ds) throws TrungMaHocSinhException {
-        if (ds.timKiem(hs) != null) {
-            throw new TrungMaHocSinhException("Học sinh này đã tồn tại");
+    public static boolean kiemTraTonTaiMa(String mshs, DanhSachHocSinh ds) throws TrungMaHocSinhException {
+        if (ds.timKiem(mshs) != null) {
+            throw new TrungMaHocSinhException("Loi: MSHS nay da ton tai!");
         }
         return false; //Ko trùng mã
     }

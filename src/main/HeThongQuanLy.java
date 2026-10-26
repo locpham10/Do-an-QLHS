@@ -242,10 +242,26 @@ public class HeThongQuanLy {
                         break;
                     }
 
+                    String mshs = "";
+                    while (true) {
+                        System.out.print("Nhap ma so hoc sinh (MSHS): ");
+                        mshs = sc.nextLine().trim();
+                        try {
+                            if (mshs.isEmpty()) {
+                                System.out.println(Color.RED + "Loi: MSHS khong duoc de trong!" + Color.RESET);
+                                continue;
+                            }
+                            // Gọi hàm kiểm tra trùng mã (ném TrungMaHocSinhException nếu trùng)
+                            utils.DataValidator.kiemTraTonTaiMa(mshs, dsHocSinh);
+                            break; // Không trùng thì thoát vòng lặp đi tiếp
+                        } catch ( Exception e ) { // Hoặc bắt đích danh TrungMaHocSinhException
+                            System.out.println(Color.RED + e.getMessage() + Color.RESET);
+                        }
+                    }
+
                     System.out.print("Nhap ho ten: ");
                     String hoTen = sc.nextLine().trim();
-                    System.out.print("Nhap ngay sinh (dd/mm/yyyy): ");
-                    String ngaySinh = sc.nextLine().trim();
+                    String ngaySinh = utils.DataValidator.nhapNgaySinh(sc, "Nhap ngay sinh (dd/mm/yyyy): ");
                     System.out.print("Gioi tinh (1: Nam / 0: Nu): ");
                     boolean gioiTinh = sc.nextLine().trim().equals("1");
                     System.out.print("Nhap dia chi: ");
@@ -253,12 +269,22 @@ public class HeThongQuanLy {
                     System.out.print("Nhap so dien thoai: ");
                     String sdt = sc.nextLine().trim();
 
-                    System.out.print("Nhap ma so hoc sinh: ");
-                    String mshs = sc.nextLine().trim();
+                    System.out.println("--- Thong tin Phu huynh ---");
+                    System.out.print("Nhap ho ten Bo/Me: ");
+                    String tenPH = sc.nextLine().trim();
+                    System.out.print("Nhap SDT khan cap cua Phu huynh: ");
+                    String sdtPH = sc.nextLine().trim();
+                    PhuHuynh phuHuynhMoi = new PhuHuynh(tenPH, sdtPH);
 
+                    String tenLopChuan = lopCanTim.getTenLop();
                     double gpa = 0.0;
                     int diemHanhKiem = 100;
                     boolean daDongHocPhi = false;
+
+                    int soMonLop = (lopCanTim.getChuongTrinhHoc() != null) ? lopCanTim.getChuongTrinhHoc().length : 10;
+                    DiemMonHoc[] dsDiemBanDau = new DiemMonHoc[soMonLop];
+                    int soLuongMonBanDau = 0;
+                    HoatDong[] lichSuHDBanDau = new HoatDong[20];
 
                     HocSinh hsMoi = null;
 
@@ -266,12 +292,14 @@ public class HeThongQuanLy {
                         String monChuyenHs = lopCanTim.getMonChuyenCuaLop();
                         double phuPhi = lopCanTim.getPhuPhiChung();
                         double diemMonChuyen = 0.0;
-                        hsMoi = new HocSinhChuyen(hoTen, ngaySinh, gioiTinh, diaChi, sdt,
-                                mshs, lopCanThem, gpa, diemHanhKiem, daDongHocPhi,
+                        hsMoi = new HocSinhChuyen(mshs, hoTen, ngaySinh, gioiTinh, diaChi, sdt,
+                                tenLopChuan, gpa, diemHanhKiem, daDongHocPhi,
+                                phuHuynhMoi, dsDiemBanDau, soLuongMonBanDau, lichSuHDBanDau,
                                 monChuyenHs, diemMonChuyen, phuPhi);
                     } else {
-                        hsMoi = new HocSinhDaiTra(hoTen, ngaySinh, gioiTinh, diaChi,
-                                sdt, mshs, lopCanThem, gpa, diemHanhKiem, daDongHocPhi);
+                        hsMoi = new HocSinhDaiTra(hoTen, ngaySinh, gioiTinh, diaChi, sdt,
+                                mshs, tenLopChuan, gpa, diemHanhKiem, daDongHocPhi,
+                                phuHuynhMoi, dsDiemBanDau, soLuongMonBanDau, lichSuHDBanDau);
                     }
 
                     boolean themVaoTruong = dsHocSinh.them(hsMoi);
