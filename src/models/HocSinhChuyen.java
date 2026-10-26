@@ -26,6 +26,16 @@ public class HocSinhChuyen extends HocSinh {
         this.phuPhiChuyenDe = phuPhiChuyenDe;
     }
 
+    @Override
+    public double tinhHocPhi() {
+        return 0;
+    }
+
+    @Override
+    public boolean xetHocBong() {
+        return false;
+    }
+
     public String getMonChuyen() {
         return monChuyen;
     }

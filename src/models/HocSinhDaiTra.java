@@ -8,7 +8,7 @@ public class HocSinhDaiTra extends HocSinh {
 
     public HocSinhDaiTra(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, 
                          String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
-                         PhuHuyh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong) {
+                         PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong) {
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, mshs, tenLop, gpa, diemHanhKiem, 
               daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
     }
