@@ -103,7 +103,7 @@ public class HeThongQuanLy {
                     String tenLop = sc.nextLine().trim();
 
                     if (dsLopHoc.timKiemLopTheoTen(tenLop) != null) {
-                        System.out.println(Color.RED + "❌ Lớp " + tenLop + " đã tồn tại trong hệ thống!" + Color.RESET);
+                        System.out.println(Color.RED + "Loi: " + tenLop + " da ton tai trong he thong!" + Color.RESET);
                         break;
                     }
 
