@@ -107,7 +107,7 @@ public class DanhSachGiaoVien implements IThongKe {
         if(chonMon.equalsIgnoreCase("y")){
             System.out.print("Nhập tên môn chuyên môn mới: ");
             String tenMon = sc.nextLine();
-            models.MonHoc monMoi = new models.MonHoc(tenMon);
+            models.MonHoc monMoi = new models.MonHoc("", tenMon, 1, true);
             gv.setMonChuyenMon(monMoi);
         }
 
@@ -122,11 +122,12 @@ public class DanhSachGiaoVien implements IThongKe {
                 System.out.println("Nhập thông tin lớp thứ " + (i+1) + " :");
                 System.out.print("Nhập tên lớp mới: ");
                 String tenLop = sc.nextLine();
-                dsLopMoi[i] = new models.LopHoc(tenLop);  
+                dsLopMoi[i] = new models.LopHoc(tenLop, "", null, null, false, "", 0.0);  
             }
             gv.setDsLopDay(dsLopMoi);
         }
         System.out.println("Cập nhật  thông tin thành công!");
+        sc.close();
         return true;
     }
 
@@ -181,7 +182,7 @@ public class DanhSachGiaoVien implements IThongKe {
                     double luong = Double.parseDouble(parts[7]);
                     MonHoc monChuyenMon = null;
                     if(!parts[8].equalsIgnoreCase("Không")){
-                        monChuyenMon = new MonHoc(parts[8]);
+                        monChuyenMon = new MonHoc("", parts[8].trim(), 1, true);
                     }
 
                     int soLop = Integer.parseInt(parts[9]);
@@ -190,7 +191,7 @@ public class DanhSachGiaoVien implements IThongKe {
                         dsLopDay = new LopHoc[soLop];
                         for(int k = 0; k < soLop; k++){
                             String tenLop = parts[10+k];
-                            dsLopDay[k] = new LopHoc(tenLop);
+                            dsLopDay[k] = new LopHoc(tenLop, "", null, null, false, "", 0.0);
                         }
                     }
                     GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, monChuyenMon, dsLopDay);
