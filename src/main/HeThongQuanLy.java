@@ -39,6 +39,11 @@ public class HeThongQuanLy {
     }
 
     public void start() {
+        dsGiaoVien.docFile();   // đọc giáo viên TRƯỚC
+        dsLopHoc.docFile();     // lớp cần tra giáo viên chủ nhiệm
+        dsHocSinh.docFile();    // học sinh cần gắn vào lớp
+        dsPhuHuynh.docFile();
+
         int luaChon = -1;
         while (luaChon != 0) {
             hienThiMenuChinh();
@@ -315,67 +320,74 @@ public class HeThongQuanLy {
                     break;
 
                 case 3:
-                    System.out.println("\n[XEM DANH SACH LOP]");
-                    System.out.println("1. Xem danh sach tat ca lop");
-                    System.out.println("2. Xem danh sach hoc sinh cua mot lop");
-                    System.out.println("3. Xem danh sach hoc sinh toan truong");
-                    System.out.println("0. Quay lại");
-
                     int chonXem = -1;
-                    while(true) {
-                        System.out.print("Nhap lua chon: ");
-                        try {
-                            chonXem = Integer.parseInt(sc.nextLine().trim());
-                            if(chonXem >=0 && chonXem <=3){
-                                break;
+                    while (chonXem != 0) {
+                        System.out.println("\n[XEM DANH SACH LOP & HOC SINH]");
+                        System.out.println("1. Xem danh sach tat ca cac lop");
+                        System.out.println("2. Xem chi tiet mot lop (Thong tin, Mon hoc & Danh sach HS)");
+                        System.out.println("3. Xem danh sach hoc sinh toan truong");
+                        System.out.println("0. Quay lai");
+
+                        chonXem = nhapLuaChon();
+
+                        if (chonXem == 0) {
+                            break;
+                        } else if (chonXem == 1) {
+                            System.out.println("\n---- DANH SACH CAC LOP HOC ----");
+                            dsLopHoc.hienThiDanhSachLop();
+                        } else if (chonXem == 2) {
+                            System.out.print("Nhap ten lop can xem: ");
+                            String tenLopCanXem = sc.nextLine().trim();
+                            LopHoc lopCanXem = dsLopHoc.timKiemLopTheoTen(tenLopCanXem);
+
+                            if (lopCanXem != null) {
+                                System.out.println("\n" + Color.CYAN + "========================================");
+                                System.out.println("   THONG TIN LOP: " + lopCanXem.getTenLop().toUpperCase());
+                                System.out.println("========================================" + Color.RESET);
+                                System.out.println("- Khoa hoc: " + lopCanXem.getKhoaHoc());
+
+                                if (lopCanXem.isLopChuyen()) {
+                                    System.out.println("- He dao tao: " + Color.GREEN + "Chuyen " + lopCanXem.getMonChuyenCuaLop() + Color.RESET);
+                                } else {
+                                    System.out.println("- He dao tao: Dai tra");
+                                }
+
+                                if (lopCanXem.getGiaoVienChuNhiem() != null) {
+                                    System.out.println("- Giao vien chu nhiem: " + lopCanXem.getGiaoVienChuNhiem().getHoTen()
+                                            + " (Ma GV: " + lopCanXem.getGiaoVienChuNhiem().getMaGV() + ")");
+                                } else {
+                                    // Đã sửa lỗi Color.YELLOW ở cuối thành Color.RESET
+                                    System.out.println("- Giao vien chu nhiem: " + Color.YELLOW + "Chua phan cong" + Color.RESET);
+                                }
+
+                                // In thêm danh sách môn học (Chương trình học) của lớp
+                                System.out.print("- Chuong trinh hoc: ");
+                                MonHoc[] ctHoc = lopCanXem.getChuongTrinhHoc();
+                                if (ctHoc != null && ctHoc.length > 0) {
+                                    for (int i = 0; i < ctHoc.length; i++) {
+                                        if (ctHoc[i] != null) {
+                                            System.out.print(ctHoc[i].getTenMon() + " (x" + ctHoc[i].getHeSo() + ")");
+                                            if (i < ctHoc.length - 1) System.out.print(", ");
+                                        }
+                                    }
+                                    System.out.println();
+                                } else {
+                                    System.out.println(Color.YELLOW + "Chua thiet lap" + Color.RESET);
+                                }
+
+                                System.out.println("----------------------------------------");
+                                System.out.println("DANH SÁCH HỌC SINH TRONG LỚP:");
+                                lopCanXem.getDsHocSinh().hienThiDanhSach();
                             } else {
-                                System.out.print(Color.RED +
-                                        "Loi: vui long nhap cac lua chon hop le!" + Color.RESET);
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println( Color.RED +
-                                    "Loi: Nhap sai dinh dang so! Vui long nhap lai!" + Color.RESET);
-                        }
-                    }
-                    if (chonXem == 0) {
-                        break;
-                    } else if(chonXem == 1){
-                        System.out.println("\n ---- DANH SACH CAC LOP HOC ----");
-                        dsLopHoc.hienThiDanhSachLop();
-                    } else if (chonXem == 2){
-                        System.out.print("Nhap ten lop can xem: ");
-                        String tenLopCanXem = sc.nextLine().trim();
-                        LopHoc lopCanXem = dsLopHoc.timKiemLopTheoTen(tenLopCanXem);
-
-                        if(lopCanXem != null){
-                            System.out.println("\n" + Color.CYAN + "========================================");
-                            System.out.println(" THÔNG TIN LỚP: " + lopCanXem.getTenLop().toUpperCase());
-                            System.out.println("========================================" + Color.RESET);
-
-                            if(lopCanXem.isLopChuyen()){
-                                System.out.println("- He: Chuyen " + lopCanXem.getMonChuyenCuaLop());
-                            } else {
-                                System.out.println("- He: Dai tra");
+                                System.out.println(Color.RED + "Loi: Lop '" + tenLopCanXem + "' khong ton tai trong he thong!" + Color.RESET);
                             }
 
-                            if (lopCanXem.getGiaoVienChuNhiem() != null) {
-                                System.out.println("- Giao vien chu nhiem: " + lopCanXem.getGiaoVienChuNhiem().getHoTen());
-                            } else {
-                                System.out.println("- Giao vien chu nhiem: " + Color.YELLOW + "Chua phan cong" + Color.YELLOW);
-                            }
-
-                            System.out.println("----------------------------------------");
-                            System.out.println("DANH SÁCH HỌC SINH TRONG LỚP:");
-                            lopCanXem.getDsHocSinh().hienThiDanhSach();
+                        } else if (chonXem == 3) {
+                            System.out.println("\n---- DANH SÁCH HỌC SINH TOÀN TRƯỜNG ----");
+                            dsHocSinh.hienThiDanhSach();
                         } else {
-                            System.out.println(Color.RED + "Loi: Lop khong ton tai trong he thong" + Color.RESET);
+                            System.out.println(Color.RED + "Loi: Lua chon khong hop le! Vui long chon tu 0 den 3." + Color.RESET);
                         }
-
-                    } else if (chonXem == 3){
-                        System.out.println("\n--- DANH SÁCH HỌC SINH TOÀN TRƯỜNG ---");
-                        dsHocSinh.hienThiDanhSach();
-                    } else {
-                        System.out.println(Color.RED + "Lựa chọn không hợp lệ!" + Color.RESET);
                     }
                     break;
 
