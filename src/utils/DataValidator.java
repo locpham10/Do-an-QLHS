@@ -32,12 +32,16 @@ public class DataValidator {
         }
         return diem;
     }
+    public static boolean ngaySinhHopLe(String s) {
+        return s != null && s.matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((19|20)\\d\\d)$");
+    }
+
     public static String nhapNgaySinh(Scanner sc, String thongBao) {
         String ngaySinh = "";
         while (true) {
             System.out.print(thongBao);
-            ngaySinh=sc.nextLine().trim();
-            if(ngaySinh.matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((19|20)\\d\\d)$")) {
+            ngaySinh = sc.nextLine().trim();
+            if (ngaySinhHopLe(ngaySinh)) {
                 break;
             }
             System.out.println(Color.RED + "Lỗi: Ngày sinh phải theo chuẩn dd/MM/yyyy (VD: 01/05/2007)!" + Color.RESET);

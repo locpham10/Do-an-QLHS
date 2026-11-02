@@ -29,12 +29,14 @@ public class DanhSachHocSinh implements IThongKe {
         return false; // Mảng đã đầy hoặc hs bị null
     }
 
-    public void xoa(HocSinh hs){
+    public boolean xoa(HocSinh hs){
 
+        return false;
     }
 
-    public void sua(HocSinh hs){
+    public boolean sua(HocSinh hs, Scanner sc){
 
+        return false;
     }
 
     public HocSinh timKiem(HocSinh hs) {
