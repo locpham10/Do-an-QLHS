@@ -6,6 +6,7 @@ import collections.DanhSachPhuHuynh;
 import collections.DanhSachLopHoc;
 import models.*;
 import utils.Color;
+import utils.DataValidator;
 
 import java.sql.SQLOutput;
 import java.util.Scanner;
@@ -459,42 +460,76 @@ public class HeThongQuanLy {
             if(chon == 0) break;
             switch (chon) {
                 case 1:
-                    System.out.println("\n [NHAP / CAP NHAT DIEM] /");
-                    System.out.println("Nhap MSHS can nhap diem (nhap 0 de huy): ");
+                    System.out.println("\n[NHAP / CAP NHAT DIEM]");
+                    System.out.print("Nhap MSHS can nhap diem (nhap 0 de huy): ");
                     String mshsCapNhat = sc.nextLine().trim();
-
                     if (mshsCapNhat.equals("0")) break;
-                    HocSinh hsCapNhat = dsHocSinh.timKiem(mshsCapNhat);
 
+                    HocSinh hsCapNhat = dsHocSinh.timKiem(mshsCapNhat);
                     if (hsCapNhat == null) {
                         System.out.println(Color.RED + "Khong tim thay hoc sinh co ma " + mshsCapNhat + "!" + Color.RESET);
                         break;
                     }
 
                     LopHoc lopCuaHs = dsLopHoc.timKiemLopTheoTen(hsCapNhat.getTenLop());
-                    MonHoc[] chuongTrinh = lopCuaHs.getChuongTrinhHoc();
-
-                    if(chuongTrinh == null || chuongTrinh.length == 0 || chuongTrinh[0] == null){
-                        System.out.println(Color.RED + "Loi: Lop " + lopCuaHs + "chua duoc thiet lap cac mon hoc!" + Color.RESET);
+                    if (lopCuaHs == null) {
+                        System.out.println(Color.RED + "Loi: Khong tim thay lop " + hsCapNhat.getTenLop() + "!" + Color.RESET);
                         break;
                     }
 
-                    System.out.println(Color.CYAN + "Dang cap nhat diem hoc sinh " + hsCapNhat.getHoTen() +
-                                " - " + hsCapNhat.getTenLop() + ":" + Color.RESET);
-
-                    DiemMonHoc[] bangDiemMoi = new DiemMonHoc[chuongTrinh.length];
-                    int demSomon = 0;
-
-                    double tongDiemNhanHeSo = 0;
-                    int tongHeSo = 0;
-
-                    for(int i =0; i < chuongTrinh.length; i++){
-                        MonHoc mh = chuongTrinh[i];
-                        if (mh==null) continue;
-
-                        System.out.println("\n--- Mon: " + Color.YELLOW + mh.getTenMon() + Color.RESET);
+                    MonHoc[] chuongTrinh = lopCuaHs.getChuongTrinhHoc();
+                    if (chuongTrinh == null || chuongTrinh.length == 0 || chuongTrinh[0] == null) {
+                        System.out.println(Color.RED + "Loi: Lop " + lopCuaHs.getTenLop()
+                                + " chua duoc thiet lap cac mon hoc!" + Color.RESET);
+                        break;
                     }
 
+                    System.out.println(Color.CYAN + "Dang cap nhat diem hoc sinh " + hsCapNhat.getHoTen()
+                            + " - Lop " + hsCapNhat.getTenLop() + Color.RESET);
+
+                    DiemMonHoc[] bangDiemMoi = new DiemMonHoc[chuongTrinh.length];
+                    int demMon = 0;
+
+                    for (int i = 0; i < chuongTrinh.length; i++) {
+                        MonHoc mh = chuongTrinh[i];
+                        if (mh == null) continue;
+
+                        System.out.println("\n--- Mon: " + Color.YELLOW + mh.getTenMon() + Color.RESET
+                                + " (He so: " + mh.getHeSo() + ")");
+                        double dTX = DataValidator.nhapDiem(sc, "   + Diem TX: ");
+                        double dGK = DataValidator.nhapDiem(sc, "   + Diem GK: ");
+                        double dCK = DataValidator.nhapDiem(sc, "   + Diem CK: ");
+
+                        bangDiemMoi[demMon++] = new DiemMonHoc(mh, dTX, dGK, dCK);
+                    }
+
+                    // Cap nhat vao hoc sinh
+                    hsCapNhat.setDanhSachDiem(bangDiemMoi);
+                    hsCapNhat.setSoLuongMon(demMon);
+                    double gpaMoi = DiemMonHoc.tinhGPATongHop(bangDiemMoi);
+                    hsCapNhat.setGpa(gpaMoi);
+
+                    // Hoc sinh chuyen: cap nhat diem mon chuyen (= DTB cua mon chuyen)
+                    if (hsCapNhat instanceof HocSinhChuyen) {
+                        HocSinhChuyen hsc = (HocSinhChuyen) hsCapNhat;
+                        for (int i = 0; i < demMon; i++) {
+                            MonHoc m = bangDiemMoi[i].getMonHoc();
+                            if (m.getTenMon().equalsIgnoreCase(hsc.getMonChuyen())) {
+                                hsc.setDiemMonChuyen(Math.round(bangDiemMoi[i].tinhDiemTBMon() * 100.0) / 100.0);
+                                break;
+                            }
+                        }
+                    }
+
+                    // In ket qua
+                    System.out.println("\n" + Color.GREEN + "Da cap nhat bang diem thanh cong!" + Color.RESET);
+                    for (int i = 0; i < demMon; i++) {
+                        System.out.println("  " + bangDiemMoi[i]);
+                    }
+                    System.out.println("=> GPA moi cua " + hsCapNhat.getHoTen() + ": " + gpaMoi);
+                    break;
+
+                case 2:
 
             }
         }
