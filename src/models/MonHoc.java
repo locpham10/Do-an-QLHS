@@ -34,47 +34,20 @@ public class MonHoc
             new MonHoc("TD", "Thể Dục", 1, false)
     };
 
-    public String getMaMon() 
-    {
-        return maMon;
-    }
-    public void setMaMon(String maMon) 
-    {
-        this.maMon = maMon;
-    }
+    public String getMaMon() { return maMon; }
+    public void setMaMon(String maMon) { this.maMon = maMon; }
 
-    public String getTenMon() 
-    {
-        return tenMon;
-    }
-    public void setTenMon(String tenMon) 
-    {
-        this.tenMon = tenMon;
-    }
+    public String getTenMon() { return tenMon; }
+    public void setTenMon(String tenMon) { this.tenMon = tenMon; }
 
-    public int getHeSo() 
-    {
-        return heSo;
-    }
-    public void setHeSo(int heSo) 
-    {
-        this.heSo = heSo;
-    }
+    public int getHeSo() { return heSo; }
+    public void setHeSo(int heSo) { this.heSo = heSo; }
 
-    public boolean isTinhVaoGPA() 
-    {
-        return tinhVaoGPA;
-    }
-    public void setTinhVaoGPA(boolean tinhVaoGPA) 
-    {
-        this.tinhVaoGPA = tinhVaoGPA;
-    }
-
-    public
+    public boolean isTinhVaoGPA() { return tinhVaoGPA; }
+    public void setTinhVaoGPA(boolean tinhVaoGPA)  { this.tinhVaoGPA = tinhVaoGPA; }
 
     @Override
-    public String toString() 
-    {
+    public String toString() {
         return "Môn: " + tenMon + " (" + maMon + ") | Hệ số: " + heSo + " | Tính GPA: " + (tinhVaoGPA ? "Có" : "Không");
     }
 }
