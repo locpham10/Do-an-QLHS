@@ -44,7 +44,7 @@ public class DanhSachPhuHuynh implements IThongKe {
         return -1;
     }
 
-    public boolean timKiem(String sdt){
+    public PhuHuynh timKiem(String sdt){
         int index = timKiemViTri(sdt);
         if (index != -1){
             return arrPH[index];
