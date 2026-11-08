@@ -1,5 +1,6 @@
 package collections;
 
+import java.util.Scanner
 import interfaces.IThongKe;
 import models.PhuHuynh;
 
@@ -65,7 +66,7 @@ public class DanhSachPhuHuynh implements IThongKe {
         if(index == -1){
             return false;
         }
-        for(int i = 0; i < soLuong; i++){
+        for(int i = 0; i < soLuong-1; i++){
             arrPH[i] = arrPH[i+1];
         }
         arrPH[soLuong-1] = null;
@@ -73,7 +74,7 @@ public class DanhSachPhuHuynh implements IThongKe {
         return true;
     }
 
-    pubic boolean sua(String sdt, Scanner sc){
+    public boolean sua(String sdt, Scanner sc){
         int index = timKiemViTri(sdt);
         if (index == -1){
             return false;
