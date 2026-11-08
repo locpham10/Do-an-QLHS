@@ -54,4 +54,22 @@ public class DataValidator {
         }
         return false; //Ko trùng mã
     }
+    public static String nhapChuoiKhongRong(Scanner sc, String thongBao){
+        String chuoi="";
+        while(true){
+            System.out.println(thongBao);
+            chuoi=sc.nextLine().trim();
+            if(chuoi.isEmpty()){
+                System.out.println(Color.RED + "Loi: Khong duoc de trong, vui long nhap lai!" + Color.RESET);
+            } else if(chuoi.contains(",")){
+                System.out.println(Color.RED + "Loi: Chuoi khong duoc chua dau phay (,), vui long nhap lai!" + Color.RESET);
+            } else {
+                break;
+            }
+        }
+        return chuoi;
+    }
+    public static int nhapSoNguyen(Scanner sc, String thongBao){
+
+    }
 }
