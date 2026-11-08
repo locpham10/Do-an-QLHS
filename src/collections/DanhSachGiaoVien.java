@@ -74,13 +74,12 @@ public class DanhSachGiaoVien implements IThongKe {
         return true;
     }
     
-    public boolean sua(String maGV){
+    public boolean sua(String maGV, Scanner sc){
         int index = timKiemViTri(maGV);
         if(index == -1){
             return false;
         }
         GiaoVien gv = arrGV[index];
-        java.util.Scanner sc = new Scanner(System.in);
 
         System.out.println("Cập nhật thông tin cho giáo viên có mã là " + maGV);
         
@@ -130,7 +129,6 @@ public class DanhSachGiaoVien implements IThongKe {
             gv.setDsLopDay(dsLopMoi);
         }
         System.out.println("Cập nhật  thông tin thành công!");
-        sc.close();
         return true;
     }
 
@@ -151,7 +149,7 @@ public class DanhSachGiaoVien implements IThongKe {
                                 pw.print("," + dsLop[j].getTenLop());
                             }
                             else{
-                                pw.print("Không");
+                                pw.print(",Không");
                             }
                         }
                     }
