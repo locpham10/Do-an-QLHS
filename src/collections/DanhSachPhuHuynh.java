@@ -32,8 +32,53 @@ public class DanhSachPhuHuynh implements IThongKe {
             return true; //them thanh cong
         }
         return false; // them that bai (day/null)
-    } 
+    }
 
+    private int timKiemViTri(String sdt){
+        for(int i = 0; i < soLuong; i++){
+            if(arrPH[i] != null && arrPH[i].getSdtKhanCap().equalsIgnoreCase(sdt)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean timKiem(String sdt){
+        int index = timKiemViTri(sdt);
+        if (index != -1){
+            return arrPH[index];
+        }
+        return null;
+    }
+
+    public boolean xoa(String sdt){
+        int index = timKiemViTri(sdt);
+        if(index == -1){
+            return false;
+        }
+        for(int i = 0; i < soLuong; i++){
+            arrPH[i] = arrPH[i+1];
+        }
+        arrPH[soLuong-1] = null;
+        soLuong--;
+        return true;
+    }
+
+    pubic boolean sua(String sdt, Scanner sc){
+        int index = timKiemViTri(sdt);
+        if (index == -1){
+            return false;
+        }
+        PhuHuynh ph = arrPH[index];
+        System.out.println("Cập nhật thông tin cho phụ huynh có SĐT khẩn cấp: " + sdt);
+        System.out.print("Nhập họ tên phụ huynh mới: ");
+        ph.setHoTenBoMe(sc.nextLine());
+        System.out.print("Nhập SĐT khẩn cấp mới: ");
+        ph.setSdtKhanCap(sc.nextLine());
+        System.out.println("Cập nhật thông tin phụ huynh thành công!");
+        return true;
+    }
+    
     @Override
     public void inTop5XuatSac() {
         // TODO Auto-generated method stub
