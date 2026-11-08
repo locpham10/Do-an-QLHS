@@ -150,7 +150,7 @@ public class HeThongQuanLy {
                     }
 
                     if (thaoTac == 1) {
-                        if (dsHocSinh.sua(hsTimThay, sc)) {
+                        if (dsHocSinh.sua(hsTimThay.getMshs(), sc)) {
                             System.out.println(Color.GREEN + "Cap nhat thong tin thanh cong!" + Color.RESET);
                         } else {
                             System.out.println(Color.YELLOW + "Khong co thay doi duoc luu!" + Color.RESET);
@@ -162,11 +162,11 @@ public class HeThongQuanLy {
 
                         if (xacNhan.equals("Y")) {
                             String tenLopCuaHs = hsTimThay.getTenLop();
-                            boolean xoaTruong = dsHocSinh.xoa(hsTimThay);
+                            boolean xoaTruong = dsHocSinh.xoa(hsTimThay.getMshs());
 
                             LopHoc lopCuaHs = dsLopHoc.timKiemLopTheoTen(tenLopCuaHs);
                             if (lopCuaHs != null && lopCuaHs.getDsHocSinh() != null) {
-                                lopCuaHs.getDsHocSinh().xoa(hsTimThay);
+                                lopCuaHs.getDsHocSinh().xoa(hsTimThay.getMshs());
                             }
 
                             if (xoaTruong) {
