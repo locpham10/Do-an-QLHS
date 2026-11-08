@@ -29,6 +29,9 @@ public class DanhSachHocSinh implements IThongKe {
         return false; // Mảng đã đầy hoặc hs bị null
     }
 
+    public int them(HocSinh[] dsMoi, int k){
+        return 0; //để tạm return 0 cho khỏi báo lỗi
+    }
     public boolean xoa(HocSinh hs){
 
         return false;
@@ -57,6 +60,21 @@ public class DanhSachHocSinh implements IThongKe {
         return null;
     }
 
+    public void lamRong(){
+
+    }
+
+    public void hienThiDanhSach(){
+
+    }
+
+    public void hienThiTheoLop(String tenLop) {
+
+    }
+
+    public void hienThiTheoHe(boolean laChuyen) {
+
+    }
     public int getSoLuong(){
         return soLuong;
     }
