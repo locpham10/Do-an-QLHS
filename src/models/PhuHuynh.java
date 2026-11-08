@@ -1,14 +1,14 @@
 package models;
 public class PhuHuynh {
     private String hoTenBoMe;
-    private String sdt;
+    private String sdtKhanCap;
 
     public PhuHuynh(){
     }
 
-    public PhuHuynh (String hoTenBoMe, String sdt) {
+    public PhuHuynh (String hoTenBoMe, String sdtKhanCap) {
         this.hoTenBoMe = hoTenBoMe;
-        this.sdt = sdt;
+        this.sdtKhanCap  = sdtKhanCap;
     }
 
     public String getHoTenBoMe(){
@@ -18,14 +18,14 @@ public class PhuHuynh {
         this.hoTenBoMe = hoTenBoMe;
     }
 
-    public String getSdt(){
-        return sdt;
+    public String getSdtKhanCap(){
+        return sdtKhanCap;
     }
-    public void setSdt(String sdt){
-        this.sdt = sdt;
+    public void setSdtKhanCap(String sdtKhanCap){
+        this.sdtKhanCap  = sdtKhanCap;
     }
 
     public String toFileString() {
-        return hoTenBoMe + "," + sdt;
+        return hoTenBoMe + "," + sdtKhanCap;
     }
 }
