@@ -54,4 +54,46 @@ public class DataValidator {
         }
         return false; //Ko trùng mã
     }
+    public static String nhapChuoiKhongRong(Scanner sc, String thongBao){
+        String chuoi="";
+        while(true){
+            System.out.print(thongBao);
+            chuoi=sc.nextLine().trim();
+            if(chuoi.isEmpty()){
+                System.out.println(Color.RED + "Loi: Khong duoc de trong, vui long nhap lai!" + Color.RESET);
+            } else if(chuoi.contains(",")){
+                System.out.println(Color.RED + "Loi: Chuoi khong duoc chua dau phay (,), vui long nhap lai!" + Color.RESET);
+            } else {
+                break;
+            }
+        }
+        return chuoi;
+    }
+    public static int nhapSoNguyen(Scanner sc, String thongBao, int min, int max){
+        int so = 0;
+        while (true) {
+            try {
+                System.out.print(thongBao);
+                so=Integer.parseInt(sc.nextLine().trim());
+                if(so >= min && so <= max) break;
+                System.out.println(Color.RED + "Loi: Phai nhap so tu " + min + " den " + max +"!" + Color.RESET);
+            } catch(NumberFormatException e){
+                System.out.println(Color.RED + "Loi: Phai nhap so nguyen, vui long nhap lai!" + Color.RESET);
+            }
+        }
+        return so;
+    }
+
+    public static String nhapSoDienThoai(Scanner sc, String thongBao) {
+        String sdt = "";
+        while (true) {
+            System.out.print(thongBao);
+            sdt = sc.nextLine().trim().replaceAll("[\\s.]", "");
+            if (sdt.matches("^0\\d{9}$")) {
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0 (VD: 0901112233)!" + Color.RESET);
+        }
+        return sdt;
+    }
 }
