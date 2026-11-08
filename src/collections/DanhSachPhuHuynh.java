@@ -3,6 +3,9 @@ package collections;
 import java.util.Scanner
 import interfaces.IThongKe;
 import models.PhuHuynh;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class DanhSachPhuHuynh implements IThongKe {
     private PhuHuynh[] arrPH;
