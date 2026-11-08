@@ -39,7 +39,7 @@ public class HeThongQuanLy {
         System.out.println("0. Thoát chương trình");
     }
 
-    public void start() {
+    public void menu() {
         dsGiaoVien.docFile();   // đọc giáo viên TRƯỚC
         dsLopHoc.docFile();     // lớp cần tra giáo viên chủ nhiệm
         dsHocSinh.docFile();    // học sinh cần gắn vào lớp
