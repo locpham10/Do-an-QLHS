@@ -51,6 +51,15 @@ public class DanhSachPhuHuynh implements IThongKe {
         return null;
     }
 
+    public PhuHuynh timtheoMSHS (String mshs){
+        for(int i = 0; i < soLuong; i++){
+            if(arrPH[i] != null && arrPH[i].getMshs() != null && arrPH[i].getMshs().equalsIgnoreCase(mshs)){
+                return arrPH[i];
+            }
+            return null;
+        }
+    }
+
     public boolean xoa(String sdt){
         int index = timKiemViTri(sdt);
         if(index == -1){
@@ -77,6 +86,11 @@ public class DanhSachPhuHuynh implements IThongKe {
         ph.setSdtKhanCap(sc.nextLine());
         System.out.println("Cập nhật thông tin phụ huynh thành công!");
         return true;
+    }
+    
+    @Override
+    public void hienThiDanhSach(){
+        
     }
     
     @Override
