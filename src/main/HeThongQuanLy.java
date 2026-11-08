@@ -116,135 +116,7 @@ public class HeThongQuanLy {
                     break;
 
                 case 5:
-                    System.out.println("\n[THEM LOP HOC MOI]");
-                    System.out.print("Nhap ten lop: ");
-                    String tenLop = sc.nextLine().trim();
-
-                    if (dsLopHoc.timKiemLopTheoTen(tenLop) != null) {
-                        System.out.println(Color.RED + "Loi: " + tenLop + " da ton tai trong he thong!" + Color.RESET);
-                        break;
-                    }
-
-                    System.out.print("Nhap khoa hoc: ");
-                    String khoaHoc = sc.nextLine().trim();
-                    System.out.print("Nhap ma giao vien chu nhiem: ");
-                    String maGVCN = sc.nextLine().trim();
-                    GiaoVien gvcn = dsGiaoVien.timKiem(maGVCN);
-
-                    if (gvcn == null) {
-                        System.out.println(Color.YELLOW + "Loi: Khong tim thay ma giao vien " + maGVCN + ". Tam thoi de trong!." + Color.RESET);
-                    }
-
-                    DanhSachHocSinh dsHsLop = new DanhSachHocSinh();
-
-                    System.out.println("\n--- THIET LAP CHUONG TRINH HOC LOP " + tenLop.toUpperCase() + " ---");
-                    for (int i = 0; i < MonHoc.KHO_MON_HOC.length; i++) {
-                        MonHoc m = MonHoc.KHO_MON_HOC[i];
-                        System.out.println((i + 1) + ". " + m.getTenMon() + " (Mã: " + m.getMaMon() + ")");
-                    }
-
-                    int soMonCuaLop = 0;
-                    while (true) {
-                        System.out.print("So mon hoc cua lop (1-" + MonHoc.KHO_MON_HOC.length + "): ");
-                        try {
-                            soMonCuaLop = Integer.parseInt(sc.nextLine().trim());
-                            if (soMonCuaLop >= 1 && soMonCuaLop <= MonHoc.KHO_MON_HOC.length) break;
-                            System.out.println(Color.RED + "So luong mon khong hop le!" + Color.RESET);
-                        } catch (NumberFormatException e) {
-                            System.out.println(Color.RED + "Loi: Vui long nhap so nguyen" + Color.RESET);
-                        }
-                    }
-
-                    MonHoc[] chuongTrinhCuaLop = new MonHoc[soMonCuaLop];
-                    for (int i = 0; i < soMonCuaLop; i++) {
-                        while (true) {
-                            System.out.print("Chon STT mon hoc thu " + (i + 1) + " (1-" + MonHoc.KHO_MON_HOC.length + "): ");
-                            try {
-                                int chonMon = Integer.parseInt(sc.nextLine().trim());
-                                if (chonMon >= 1 && chonMon <= MonHoc.KHO_MON_HOC.length) {
-                                    MonHoc monGoc = MonHoc.KHO_MON_HOC[chonMon - 1];
-
-                                    // Kiểm tra trùng môn đã chọn
-                                    boolean biTrung = false;
-                                    for (int j = 0; j < i; j++) {
-                                        if (chuongTrinhCuaLop[j].getMaMon().equals(monGoc.getMaMon())) {
-                                            biTrung = true;
-                                            break;
-                                        }
-                                    }
-                                    if (biTrung) {
-                                        System.out.println(Color.RED + "Loi: Mon " + monGoc.getTenMon() + " da ton tai trong chuong trinh!" + Color.RESET);
-                                        continue;
-                                    }
-
-                                    // Tạo bản sao với Hệ số 1 mặc định
-                                    chuongTrinhCuaLop[i] = monGoc.copyVoiHeSo(1);
-                                    System.out.println("  -> Da them: " + monGoc.getTenMon());
-                                    break;
-                                } else {
-                                    System.out.println(Color.RED + "Loi: Vui long chon tu 1 den " + MonHoc.KHO_MON_HOC.length + "!" + Color.RESET);
-                                }
-                            } catch (NumberFormatException e) {
-                                System.out.println(Color.RED + "Loi: Vui long nhap so!" + Color.RESET);
-                            }
-                        }
-                    }
-
-                    System.out.print("He cua lop (0: Dai tra / 1: Chuyen): ");
-                    boolean isLopChuyen = sc.nextLine().trim().equals("1");
-                    String monChuyenLop = "";
-                    double phuPhiChung = 0.0;
-
-                    if (isLopChuyen) {
-                        System.out.println("\nDanh sach cac mon cua lop " + tenLop + ":");
-                        for (int i = 0; i < soMonCuaLop; i++) {
-                            System.out.println((i + 1) + ". " + chuongTrinhCuaLop[i].getTenMon());
-                        }
-                        while (true) {
-                            System.out.print("Chon STT mon lam mon chuyen (1-" + soMonCuaLop + "): ");
-                            try {
-                                int sttChuyen = Integer.parseInt(sc.nextLine().trim());
-                                if (sttChuyen >= 1 && sttChuyen <= soMonCuaLop) {
-                                    MonHoc monDuocChon = chuongTrinhCuaLop[sttChuyen - 1];
-
-                                    // Chặn trường hợp chọn nhầm môn Thể dục (không tính GPA) làm môn chuyên
-                                    if (!monDuocChon.isTinhVaoGPA()) {
-                                        System.out.println(Color.RED + "Mon khong tinh GPA (" + monDuocChon.getTenMon() + ") khong the lam mon chuyen!" + Color.RESET);
-                                        continue;
-                                    }
-
-                                    // Nâng hệ số môn chuyên lên 2 và lưu tên môn chuyên
-                                    monDuocChon.setHeSo(2);
-                                    monChuyenLop = monDuocChon.getTenMon();
-                                    System.out.println(Color.GREEN + "  -> Thiet lap chuyen  " + monChuyenLop + Color.RESET);
-                                    break;
-                                } else {
-                                    System.out.println(Color.RED + "Loi: Chi chon 1 den " + soMonCuaLop + "!" + Color.RESET);
-                                }
-                            } catch (NumberFormatException e) {
-                                System.out.println(Color.RED + "Loi: Vui long nhap so!" + Color.RESET);
-                            }
-                        }
-
-                        // Nhập phụ phí chuyên đề
-                        while (true) {
-                            System.out.print("Nhap phu phi chuyen de cua lop (VNĐ): ");
-                            try {
-                                phuPhiChung = Double.parseDouble(sc.nextLine().trim());
-                                if (phuPhiChung >= 0) break;
-                                System.out.println(Color.RED + "Loi: Phu phi phai la so duong!" + Color.RESET);
-                            } catch (NumberFormatException e) {
-                                System.out.println(Color.RED + "Loi: Sai dinh dang so!" + Color.RESET);
-                            }
-                        }
-                    }
-
-                    // Khởi tạo đối tượng LopHoc và gán chương trình học
-                    LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen, monChuyenLop, phuPhiChung);
-                    lopMoi.setChuongTrinhHoc(chuongTrinhCuaLop);
-
-                    dsLopHoc.themLopHoc(lopMoi);
-                    System.out.println(Color.GREEN + "✅ Đã tạo lớp " + tenLop + " hoàn tất!" + Color.RESET);
+                    themLopHocMoi();
                     break;
 
                 case 4:
@@ -278,10 +150,10 @@ public class HeThongQuanLy {
                     }
 
                     if (thaoTac == 1) {
-                        if (dsHocSinh.sua(hsTimThay, sc)) {
+                        if (dsHocSinh.sua(hsTimThay.getMshs(), sc)) {
                             System.out.println(Color.GREEN + "Cap nhat thong tin thanh cong!" + Color.RESET);
                         } else {
-                            System.out.println(Color.RED + "Cap nhat that bai!" + Color.RESET);
+                            System.out.println(Color.YELLOW + "Khong co thay doi duoc luu!" + Color.RESET);
                         }
                     } else if (thaoTac == 2) {
                         System.out.print(Color.YELLOW + "Xac nhan xoa hoc sinh " + hsTimThay.getHoTen()
@@ -290,11 +162,11 @@ public class HeThongQuanLy {
 
                         if (xacNhan.equals("Y")) {
                             String tenLopCuaHs = hsTimThay.getTenLop();
-                            boolean xoaTruong = dsHocSinh.xoa(hsTimThay);
+                            boolean xoaTruong = dsHocSinh.xoa(hsTimThay.getMshs());
 
                             LopHoc lopCuaHs = dsLopHoc.timKiemLopTheoTen(tenLopCuaHs);
                             if (lopCuaHs != null && lopCuaHs.getDsHocSinh() != null) {
-                                lopCuaHs.getDsHocSinh().xoa(hsTimThay);
+                                lopCuaHs.getDsHocSinh().xoa(hsTimThay.getMshs());
                             }
 
                             if (xoaTruong) {
@@ -309,9 +181,208 @@ public class HeThongQuanLy {
                         System.out.println(Color.YELLOW + "Da huy thao tac." + Color.RESET);
                     }
                     break;
+
+
             }
         }
     }
+    private void themLopHocMoi() {
+        System.out.println("\n[THEM LOP HOC MOI]");
+
+        // 1. Ten lop: khong rong, khong trung, khong co dau phay (file luu dang CSV)
+        String tenLop;
+        while (true) {
+            System.out.print("Nhap ten lop (0 = quay lai): ");
+            tenLop = sc.nextLine().trim();
+            if (tenLop.equals("0")) return;
+            if (tenLop.isEmpty() || tenLop.contains(",")) {
+                System.out.println(Color.RED + "Loi: Ten lop khong duoc de trong va khong duoc chua dau phay!" + Color.RESET);
+            } else if (dsLopHoc.timKiemLopTheoTen(tenLop) != null) {
+                System.out.println(Color.RED + "Loi: Lop " + tenLop + " da ton tai trong he thong!" + Color.RESET);
+            } else {
+                break;
+            }
+        }
+
+        // 2. Khoa hoc dang yyyy-yyyy (VD: 2026-2029), nam sau phai lon hon nam dau
+        String khoaHoc;
+        while (true) {
+            System.out.print("Nhap khoa hoc (VD: 2026-2029): ");
+            khoaHoc = sc.nextLine().trim();
+            if (khoaHoc.matches("\\d{4}-\\d{4}")
+                    && Integer.parseInt(khoaHoc.substring(5)) > Integer.parseInt(khoaHoc.substring(0, 4))) {
+                break;
+            }
+            System.out.println(Color.RED + "Loi: Khoa hoc phai dung dang nam-nam (VD: 2026-2029)!" + Color.RESET);
+        }
+
+        // 3. Giao vien chu nhiem: Enter = de trong, nhap sai ma thi nhap lai
+        GiaoVien gvcn = null;
+        while (true) {
+            System.out.print("Nhap ma giao vien chu nhiem (Enter = de trong): ");
+            String maGVCN = sc.nextLine().trim();
+            if (maGVCN.isEmpty()) {
+                System.out.println(Color.YELLOW + "Lop tam thoi chua co giao vien chu nhiem." + Color.RESET);
+                break;
+            }
+            gvcn = dsGiaoVien.timKiem(maGVCN);
+            if (gvcn != null) break;
+            System.out.println(Color.RED + "Loi: Khong tim thay ma giao vien " + maGVCN + "!" + Color.RESET);
+        }
+
+        DanhSachHocSinh dsHsLop = new DanhSachHocSinh();
+
+        // 4. Chuong trinh hoc
+        System.out.println("\n--- THIET LAP CHUONG TRINH HOC LOP " + tenLop.toUpperCase() + " ---");
+        for (int i = 0; i < MonHoc.KHO_MON_HOC.length; i++) {
+            MonHoc m = MonHoc.KHO_MON_HOC[i];
+            System.out.println((i + 1) + ". " + m.getTenMon() + " (Mã: " + m.getMaMon() + ")");
+        }
+
+        int soMonCuaLop = 0;
+        while (true) {
+            System.out.print("So mon hoc cua lop (1-" + MonHoc.KHO_MON_HOC.length + "): ");
+            try {
+                soMonCuaLop = Integer.parseInt(sc.nextLine().trim());
+                if (soMonCuaLop >= 1 && soMonCuaLop <= MonHoc.KHO_MON_HOC.length) break;
+                System.out.println(Color.RED + "So luong mon khong hop le!" + Color.RESET);
+            } catch (NumberFormatException e) {
+                System.out.println(Color.RED + "Loi: Vui long nhap so nguyen" + Color.RESET);
+            }
+        }
+
+        MonHoc[] chuongTrinhCuaLop = new MonHoc[soMonCuaLop];
+        for (int i = 0; i < soMonCuaLop; i++) {
+            while (true) {
+                System.out.print("Chon STT mon hoc thu " + (i + 1) + " (1-" + MonHoc.KHO_MON_HOC.length + "): ");
+                try {
+                    int chonMon = Integer.parseInt(sc.nextLine().trim());
+                    if (chonMon < 1 || chonMon > MonHoc.KHO_MON_HOC.length) {
+                        System.out.println(Color.RED + "Loi: Vui long chon tu 1 den " + MonHoc.KHO_MON_HOC.length + "!" + Color.RESET);
+                        continue;
+                    }
+                    MonHoc monGoc = MonHoc.KHO_MON_HOC[chonMon - 1];
+
+                    // Kiem tra trung mon da chon
+                    boolean biTrung = false;
+                    for (int j = 0; j < i; j++) {
+                        if (chuongTrinhCuaLop[j].getMaMon().equals(monGoc.getMaMon())) {
+                            biTrung = true;
+                            break;
+                        }
+                    }
+                    if (biTrung) {
+                        System.out.println(Color.RED + "Loi: Mon " + monGoc.getTenMon() + " da ton tai trong chuong trinh!" + Color.RESET);
+                        continue;
+                    }
+
+                    // Tao ban sao voi he so 1 mac dinh (khong sua vao KHO_MON_HOC)
+                    chuongTrinhCuaLop[i] = monGoc.copyVoiHeSo(1);
+                    System.out.println("  -> Da them: " + monGoc.getTenMon());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println(Color.RED + "Loi: Vui long nhap so!" + Color.RESET);
+                }
+            }
+        }
+
+        // 5. He cua lop: Dai tra / Chuyen. Lop chuyen can it nhat 1 mon tinh GPA de lam mon chuyen
+        boolean coMonTinhGPA = false;
+        for (int i = 0; i < soMonCuaLop; i++) {
+            if (chuongTrinhCuaLop[i].isTinhVaoGPA()) coMonTinhGPA = true;
+        }
+
+        boolean isLopChuyen = false;
+        String monChuyenLop = "";
+        double phuPhiChung = 0.0;
+
+        if (!coMonTinhGPA) {
+            System.out.println(Color.YELLOW + "Chuong trinh chi co mon khong tinh GPA nen lop chi co the la lop Dai tra." + Color.RESET);
+        } else {
+            while (true) {
+                System.out.print("He cua lop (0: Dai tra / 1: Chuyen): ");
+                String heLop = sc.nextLine().trim();
+                if (heLop.equals("0") || heLop.equals("1")) {
+                    isLopChuyen = heLop.equals("1");
+                    break;
+                }
+                System.out.println(Color.RED + "Loi: Chi nhap 0 hoac 1!" + Color.RESET);
+            }
+        }
+
+        if (isLopChuyen) {
+            System.out.println("\nDanh sach cac mon cua lop " + tenLop + ":");
+            for (int i = 0; i < soMonCuaLop; i++) {
+                System.out.println((i + 1) + ". " + chuongTrinhCuaLop[i].getTenMon()
+                        + (chuongTrinhCuaLop[i].isTinhVaoGPA() ? "" : " (khong tinh GPA)"));
+            }
+            while (true) {
+                System.out.print("Chon STT mon lam mon chuyen (1-" + soMonCuaLop + "): ");
+                try {
+                    int sttChuyen = Integer.parseInt(sc.nextLine().trim());
+                    if (sttChuyen < 1 || sttChuyen > soMonCuaLop) {
+                        System.out.println(Color.RED + "Loi: Chi chon 1 den " + soMonCuaLop + "!" + Color.RESET);
+                        continue;
+                    }
+                    MonHoc monDuocChon = chuongTrinhCuaLop[sttChuyen - 1];
+
+                    // Mon khong tinh GPA (The duc) khong the lam mon chuyen
+                    if (!monDuocChon.isTinhVaoGPA()) {
+                        System.out.println(Color.RED + "Mon khong tinh GPA (" + monDuocChon.getTenMon() + ") khong the lam mon chuyen!" + Color.RESET);
+                        continue;
+                    }
+
+                    // Nang he so mon chuyen len 2 va luu ten mon chuyen
+                    monDuocChon.setHeSo(2);
+                    monChuyenLop = monDuocChon.getTenMon();
+                    System.out.println(Color.GREEN + "  -> Thiet lap mon chuyen: " + monChuyenLop + Color.RESET);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println(Color.RED + "Loi: Vui long nhap so!" + Color.RESET);
+                }
+            }
+
+            // Phu phi chuyen de: so huu han, khong am
+            while (true) {
+                System.out.print("Nhap phu phi chuyen de cua lop (VND): ");
+                try {
+                    phuPhiChung = Double.parseDouble(sc.nextLine().trim());
+                    if (!Double.isNaN(phuPhiChung) && !Double.isInfinite(phuPhiChung) && phuPhiChung >= 0) break;
+                    System.out.println(Color.RED + "Loi: Phu phi phai la so khong am!" + Color.RESET);
+                } catch (NumberFormatException e) {
+                    System.out.println(Color.RED + "Loi: Sai dinh dang so!" + Color.RESET);
+                }
+            }
+        }
+
+        // 6. Tom tat + xac nhan truoc khi tao
+        System.out.println("\n--- XAC NHAN TAO LOP ---");
+        System.out.println("Ten lop   : " + tenLop);
+        System.out.println("Khoa hoc  : " + khoaHoc);
+        System.out.println("GVCN      : " + (gvcn != null ? gvcn.getHoTen() + " (" + gvcn.getMaGV() + ")" : "Chua phan cong"));
+        System.out.println("He        : " + (isLopChuyen ? "Chuyen - mon chuyen " + monChuyenLop + ", phu phi " + String.format("%,.0f", phuPhiChung) + " VND" : "Dai tra"));
+        System.out.print("Chuong trinh: ");
+        for (int i = 0; i < soMonCuaLop; i++) {
+            System.out.print(chuongTrinhCuaLop[i].getTenMon() + "(x" + chuongTrinhCuaLop[i].getHeSo() + ")" + (i < soMonCuaLop - 1 ? ", " : "\n"));
+        }
+        System.out.print(Color.YELLOW + "Xac nhan tao lop? (Y/N): " + Color.RESET);
+        if (!sc.nextLine().trim().equalsIgnoreCase("Y")) {
+            System.out.println(Color.YELLOW + "Da huy tao lop." + Color.RESET);
+            return;
+        }
+
+        // 7. Tao lop va them vao danh sach (kiem tra ket qua: danh sach co the da day)
+        LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen, monChuyenLop, phuPhiChung);
+        lopMoi.setChuongTrinhHoc(chuongTrinhCuaLop);
+
+        if (dsLopHoc.themLopHoc(lopMoi)) {
+            System.out.println(Color.GREEN + "Da tao lop " + tenLop + " thanh cong!" + Color.RESET);
+        } else {
+            System.out.println(Color.RED + "Tao lop that bai: danh sach lop da day (toi da "
+                    + dsLopHoc.getDsLop().length + " lop)!" + Color.RESET);
+        }
+    }
+
     private LopHoc chonLop(LopHoc macDinh) {
         while (true) {
             if (macDinh != null) {
