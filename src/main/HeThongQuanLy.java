@@ -74,6 +74,7 @@ public class HeThongQuanLy {
                 }
             } catch (NoSuchElementException | IllegalStateException e){
                 System.out.println(Color.RED + "\nKhong con du lieu nhap, thoat chuong trinh." + Color.RESET);
+                return;
             } catch (RuntimeException e){
                 // Lỗi ngoài dự kiến trong menu con: báo rồi quay về menu chính
                 System.out.println(Color.RED + "Loi khong mong muon: " + e + Color.RESET);
