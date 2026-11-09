@@ -4,11 +4,13 @@ import collections.DanhSachHocSinh;
 import collections.DanhSachGiaoVien;
 import collections.DanhSachPhuHuynh;
 import collections.DanhSachLopHoc;
+import exceptions.TrungMaHocSinhException;
 import models.*;
 import utils.Color;
 import utils.DataValidator;
 
 import java.sql.SQLOutput;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class HeThongQuanLy {
@@ -40,42 +42,58 @@ public class HeThongQuanLy {
     }
 
     public void menu() {
-        dsGiaoVien.docFile();   // đọc giáo viên TRƯỚC
-        dsLopHoc.docFile();     // lớp cần tra giáo viên chủ nhiệm
-        dsHocSinh.docFile();    // học sinh cần gắn vào lớp
-        dsPhuHuynh.docFile();
-
+        taiDuLieuBanDau();
         int luaChon = -1;
         while (luaChon != 0) {
-            hienThiMenuChinh();
-            luaChon=nhapLuaChon();
+            try {
+                hienThiMenuChinh();
+                luaChon = nhapLuaChon(6);
 
-            switch(luaChon) {
-                case 1:
-                    menuQuanLyHoSo();
-                    break;
-                case 2:
-                    menuQuanLyHocTap();
-                    break;
-                case 3:
-                    menuQuanLyTaiChinh();
-                    break;
-                case 4:
-                    menuThongKe();
-                    break;
-                case 5:
-                    menuQuanLyDuLieu();
-                    break;
-                case 6:
-                    menuQuanLyNhanSuVaPH();
-                    break;
-                case 0:
-                    System.out.println(Color.GREEN + "Cảm ơn bạn đã sử dụng phần mềm. Tạm biệt!" + Color.RESET);
-                    break;
-                default:
-                    System.out.println(Color.RED + "Lựa chọn không hợp lệ. Vui lòng chọn từ 0 đến 6!" + Color.RESET);
+                switch (luaChon) {
+                    case 1:
+                        menuQuanLyHoSo();
+                        break;
+                    case 2:
+                        menuQuanLyHocTap();
+                        break;
+                    case 3:
+                        menuQuanLyTaiChinh();
+                        break;
+                    case 4:
+                        menuThongKe();
+                        break;
+                    case 5:
+                        menuQuanLyDuLieu();
+                        break;
+                    case 6:
+                        menuQuanLyNhanSuVaPH();
+                        break;
+                    case 0:
+                        System.out.println(Color.GREEN + "Cảm ơn bạn đã sử dụng phần mềm. Tạm biệt!" + Color.RESET);
+                        break;
+                }
+            } catch (NoSuchElementException | IllegalStateException e){
+                System.out.println(Color.RED + "\nKhong con du lieu nhap, thoat chuong trinh." + Color.RESET);
+            } catch (RuntimeException e){
+                // Lỗi ngoài dự kiến trong menu con: báo rồi quay về menu chính
+                System.out.println(Color.RED + "Loi khong mong muon: " + e + Color.RESET);
             }
         }
+    }
+
+    private void taiDuLieuBanDau() {   // sau này Liểu thay bằng taiTatCa(), vẫn giữ lớp try này
+        try { dsGiaoVien.docFile(); } catch (RuntimeException e) { baoLoiTai("giaovien.txt", e); }
+        try { dsLopHoc.docFile(); }   catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
+        try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
+        try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
+    }
+
+    private void baoLoiTai(String tenFile, RuntimeException e) {
+        System.out.println(Color.RED + "Loi khi doc " + tenFile + ": " + e + Color.RESET);
+    }
+
+    private int nhapLuaChon(int max) {
+        return DataValidator.nhapSoNguyen(sc, "Nhap lua chon (0-" + max + "): ", 0, max);
     }
 
     private int nhapLuaChon() {
@@ -92,6 +110,7 @@ public class HeThongQuanLy {
     private void menuQuanLyHoSo() {
         int chon = -1;
         while (chon != 0) {
+            System.out.println("\n---- 1. QUAN LY HO SO ----");
             System.out.println("1. Nhap n hoc sinh dau tien");
             System.out.println("2. Them hoc sinh vao lop hoc");
             System.out.println("3. Xuat danh sach hoc sinh");
@@ -407,36 +426,25 @@ public class HeThongQuanLy {
         String mshs;
         while (true) {
             System.out.print("Nhap ma so hoc sinh (MSHS): ");
-            mshs = sc.nextLine().trim();
-            if (mshs.isEmpty()) {
-                System.out.println(Color.RED + "Loi: MSHS khong duoc de trong!" + Color.RESET);
-                continue;
-            }
+            mshs = DataValidator.nhapChuoiKhongRong(sc, "Nhap ma so hoc sinh (MSHS): ").toUpperCase();
             try {
                 DataValidator.kiemTraTonTaiMa(mshs, dsHocSinh);
-                if (dsTam != null) DataValidator.kiemTraTonTaiMa(mshs, dsTam);
+                DataValidator.kiemTraTonTaiMa(mshs, dsTam);
                 break;
-            } catch (exceptions.TrungMaHocSinhException e) {
-                System.out.println(e.getMessage()); // message da co san mau do
+            } catch (TrungMaHocSinhException e) {
+                System.out.println(e.getMessage());
             }
         }
 
-        System.out.print("Nhap ho ten: ");
-        String hoTen = sc.nextLine().trim();
+        String hoTen = DataValidator.nhapChuoiKhongRong(sc, "Nhap ho ten: ");
         String ngaySinh = DataValidator.nhapNgaySinh(sc, "Nhap ngay sinh (dd/mm/yyyy): ");
-        System.out.print("Gioi tinh (1: Nam / 0: Nu): ");
-        boolean gioiTinh = sc.nextLine().trim().equals("1");
-        System.out.print("Nhap dia chi: ");
-        String diaChi = sc.nextLine().trim();
-        System.out.print("Nhap so dien thoai: ");
-        String sdt = sc.nextLine().trim();
-
+        boolean gioiTinh = DataValidator.nhapSoNguyen(sc, "Gioi tinh (1: Nam / 0: Nu): ", 0, 1) == 1;
+        String diaChi = DataValidator.nhapChuoiKhongRong(sc, "Nhap dia chi: ");
+        String sdt = DataValidator.nhapSoDienThoai(sc, "Nhap so dien thoai: ");
         System.out.println("--- Thong tin Phu huynh ---");
-        System.out.print("Nhap ho ten Bo/Me: ");
-        String tenPH = sc.nextLine().trim();
-        System.out.print("Nhap SDT khan cap cua Phu huynh: ");
-        String sdtPH = sc.nextLine().trim();
-        PhuHuynh phuHuynhMoi = new PhuHuynh(tenPH, sdtPH);
+        String tenPH = DataValidator.nhapChuoiKhongRong(sc, "Nhap ho ten Bo/Me: ");
+        String sdtPH = DataValidator.nhapSoDienThoai(sc, "Nhap SDT khan cap cua Phu huynh: ");
+        PhuHuynh phuHuynhMoi = new PhuHuynh(tenPH, sdtPH, mshs);
 
         int soMonLop = (lop.getChuongTrinhHoc() != null) ? lop.getChuongTrinhHoc().length : 10;
         DiemMonHoc[] dsDiemBanDau = new DiemMonHoc[soMonLop];

@@ -48,11 +48,10 @@ public class DataValidator {
         }
         return ngaySinh;
     }
-    public static boolean kiemTraTonTaiMa(String mshs, DanhSachHocSinh ds) throws TrungMaHocSinhException {
-        if (ds.timKiem(mshs) != null) {
-            throw new TrungMaHocSinhException("Loi: MSHS nay da ton tai!");
+    public static void kiemTraTonTaiMa(String mshs, DanhSachHocSinh ds) throws TrungMaHocSinhException {
+        if (ds != null && ds.timKiem(mshs) != null) {
+            throw new TrungMaHocSinhException("Loi: MSHS " + mshs + " da ton tai!");
         }
-        return false; //Ko trùng mã
     }
     public static String nhapChuoiKhongRong(Scanner sc, String thongBao){
         String chuoi="";
