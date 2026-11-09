@@ -1,6 +1,6 @@
 package collections;
 
-import java.util.Scanner
+import java.util.Scanner;
 import interfaces.IThongKe;
 import models.PhuHuynh;
 import java.io.BufferedReader;
@@ -59,9 +59,9 @@ public class DanhSachPhuHuynh implements IThongKe {
         for(int i = 0; i < soLuong; i++){
             if(arrPH[i] != null && arrPH[i].getMshs() != null && arrPH[i].getMshs().equalsIgnoreCase(mshs)){
                 return arrPH[i];
-            }
-            return null;
+            }    
         }
+        return null;
     }
 
     public boolean xoa(String sdt){
@@ -69,7 +69,7 @@ public class DanhSachPhuHuynh implements IThongKe {
         if(index == -1){
             return false;
         }
-        for(int i = 0; i < soLuong-1; i++){
+        for(int i = index; i < soLuong-1; i++){
             arrPH[i] = arrPH[i+1];
         }
         arrPH[soLuong-1] = null;
