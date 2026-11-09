@@ -2,13 +2,15 @@ package models;
 public class PhuHuynh {
     private String hoTenBoMe;
     private String sdtKhanCap;
+    private String mshs;
 
     public PhuHuynh(){
     }
 
-    public PhuHuynh (String hoTenBoMe, String sdtKhanCap) {
+    public PhuHuynh (String hoTenBoMe, String sdtKhanCap, String mshs) {
         this.hoTenBoMe = hoTenBoMe;
         this.sdtKhanCap  = sdtKhanCap;
+        this.mshs = mshs;
     }
 
     public String getHoTenBoMe(){
@@ -25,7 +27,14 @@ public class PhuHuynh {
         this.sdtKhanCap  = sdtKhanCap;
     }
 
+    public String getMshs(){
+        return mshs;
+    }
+    public void setMshs(String mshs){
+        this.mshs = mshs;
+    }
+
     public String toFileString() {
-        return hoTenBoMe + "," + sdtKhanCap;
+        return hoTenBoMe + "," + sdtKhanCap + "," + (mshs != null ? mshs : "");
     }
 }
