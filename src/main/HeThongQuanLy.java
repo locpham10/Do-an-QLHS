@@ -30,15 +30,15 @@ public class HeThongQuanLy {
 
     private void hienThiMenuChinh() {
         System.out.println("\n" + Color.CYAN + "========================================");
-        System.out.println("    HỆ THỐNG QUẢN LÝ HỌC SINH");
+        System.out.println("    HE THONG QUAN LY HOC SINH");
         System.out.println("========================================" + Color.RESET);
-        System.out.println("1. Quản lý hồ sơ");
-        System.out.println("2. Quản lý học tập");
-        System.out.println("3. Quản lý tài chính");
-        System.out.println("4. Thống kê & xét duyệt");
-        System.out.println("5. Quản lý dữ liệu");
+        System.out.println("1. Quan ly ho so");
+        System.out.println("2. Quan ly hoc tap");
+        System.out.println("3. Quan ly tai chinh");
+        System.out.println("4. Thong ke & xet duyet");
+        System.out.println("5. Quan ly du lieu");
         System.out.println("6. Quan ly nhan su & phu huynh");
-        System.out.println("0. Thoát chương trình");
+        System.out.println("0. Thoat chuong trinh");
     }
 
     public void menu() {
@@ -69,7 +69,7 @@ public class HeThongQuanLy {
                         menuQuanLyNhanSuVaPH();
                         break;
                     case 0:
-                        System.out.println(Color.GREEN + "Cảm ơn bạn đã sử dụng phần mềm. Tạm biệt!" + Color.RESET);
+                        System.out.println(Color.GREEN + "Cam on ban da su dung phan mem! Tam biet!" + Color.RESET);
                         break;
                 }
             } catch (NoSuchElementException | IllegalStateException e){
@@ -103,7 +103,7 @@ public class HeThongQuanLy {
             System.out.print("Nhap lua chon cua ban: ");
             luaChon = Integer.parseInt(sc.nextLine().trim());
         } catch (NumberFormatException e) {
-            System.out.println(Color.RED + "Lỗi: Vui lòng nhập số hợp lệ" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Vui long nhap so hop le" + Color.RESET);
         }
         return luaChon;
     }
