@@ -7,20 +7,16 @@ public class DanhSachLopHoc
     private LopHoc[] dsLop;
     private int soLuong;
 
-    public DanhSachLopHoc()
-    {
+    public DanhSachLopHoc() {
         this.dsLop = new LopHoc[100];
         this.soLuong = 0;
     }
 
-    public DanhSachLopHoc(int dungLuong)
-    {
+    public DanhSachLopHoc(int dungLuong) {
         this.dsLop = new LopHoc[dungLuong];
-        this.soLuong = 0;
-    }
+        this.soLuong = 0; }
 
-    public boolean themLopHoc(LopHoc lh)
-    {
+    public boolean themLop(LopHoc lh) {
         if(lh != null && soLuong < dsLop.length)
         {
             this.dsLop[soLuong] = lh;
@@ -30,8 +26,7 @@ public class DanhSachLopHoc
         return false; //Thêm lớp thất bại vì đối tượng null/mảng đã đầy.
     }
 
-    public LopHoc timKiemLopTheoTen(String tenLop)
-    {
+    public LopHoc timKiemLopTheoTen(String tenLop) {
         for(int i = 0; i < soLuong; i++)
             if(dsLop[i] != null && dsLop[i].getTenLop().equalsIgnoreCase(tenLop))
                 return dsLop[i];
@@ -51,17 +46,8 @@ public class DanhSachLopHoc
             System.out.println((i+1) + ". " + dsLop[i]);
     }
 
-    public LopHoc[] getDsLop()
-    {
-        return dsLop;
-    }
-    public void setDsLop(LopHoc[] dsLop)
-    {
-        this.dsLop = dsLop;
-    }
+    public LopHoc[] getDsLop() { return dsLop; }
+    public void setDsLop(LopHoc[] dsLop) { this.dsLop = dsLop; }
 
-    public int getSoLuong()
-    {
-        return soLuong;
-    }
+    public int getSoLuong() { return soLuong; }
 }

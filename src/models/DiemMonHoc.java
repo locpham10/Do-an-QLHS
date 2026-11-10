@@ -9,21 +9,18 @@ public class DiemMonHoc
 
     public DiemMonHoc() {}
 
-    public DiemMonHoc(MonHoc monHoc, double diemTX, double diemGK, double diemCK) 
-    {
+    public DiemMonHoc(MonHoc monHoc, double diemTX, double diemGK, double diemCK) {
         this.monHoc = monHoc;
         this.diemTX = diemTX;
         this.diemGK = diemGK;
         this.diemCK = diemCK;
     }
 
-    public double tinhDiemTBMon() 
-    {
+    public double tinhDiemTBMon() {
         return (this.diemTX*1.0 + this.diemGK * 2.0 + this.diemCK * 3.0) / 6.0;
     }
 
-    public static double tinhGPATongHop(DiemMonHoc[] dsDiem)
-    {
+    public static double tinhGPATongHop(DiemMonHoc[] dsDiem) {
         if(dsDiem == null || dsDiem.length == 0)
             return 0.0;
 
@@ -50,49 +47,20 @@ public class DiemMonHoc
         return Math.round(gpa * 100.0) / 100.0;
     }
 
-    public MonHoc getMonHoc() 
-    {
-        return monHoc;
-    }
+    public MonHoc getMonHoc() { return monHoc; }
+    public void setMonHoc(MonHoc monHoc) { this.monHoc = monHoc; }
 
-    public void setMonHoc(MonHoc monHoc) 
-    {
-        this.monHoc = monHoc;
-    }
+    public double getDiemTX() { return diemTX; }
+    public void setDiemTX(double diemTX)  { this.diemTX = diemTX; }
 
-    public double getDiemTX() 
-    {
-        return diemTX;
-    }
+    public double getDiemGK() { return diemGK; }
+    public void setDiemGK(double diemGK) { this.diemGK = diemGK; }
 
-    public void setDiemTX(double diemTX) 
-    {
-        this.diemTX = diemTX;
-    }
-
-    public double getDiemGK() 
-    {
-        return diemGK;
-    }
-
-    public void setDiemGK(double diemGK) 
-    {
-        this.diemGK = diemGK;
-    }
-
-    public double getDiemCK() 
-    {
-        return diemCK;
-    }
-
-    public void setDiemCK(double diemCK) 
-    {
-        this.diemCK = diemCK;
-    }
+    public double getDiemCK() { return diemCK; }
+    public void setDiemCK(double diemCK) { this.diemCK = diemCK; }
 
     @Override
-    public String toString() 
-    {
+    public String toString()  {
         String tenMonHoc = (monHoc != null) ? monHoc.getTenMon() : "Chưa xác định.";
         return String.format("%s | TX: %.1f | GK: %.1f | CK: %.1f => ĐTB: %.2f", tenMonHoc, diemTX, diemGK, diemCK, tinhDiemTBMon());
     }

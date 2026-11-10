@@ -395,7 +395,7 @@ public class HeThongQuanLy {
         LopHoc lopMoi = new LopHoc(tenLop, khoaHoc, gvcn, dsHsLop, isLopChuyen, monChuyenLop, phuPhiChung);
         lopMoi.setChuongTrinhHoc(chuongTrinhCuaLop);
 
-        if (dsLopHoc.themLopHoc(lopMoi)) {
+        if (dsLopHoc.themLop(lopMoi)) {
             System.out.println(Color.GREEN + "Da tao lop " + tenLop + " thanh cong!" + Color.RESET);
         } else {
             System.out.println(Color.RED + "Tao lop that bai: danh sach lop da day (toi da "
