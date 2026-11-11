@@ -35,14 +35,12 @@ public class DanhSachPhuHuynh implements IThongKe {
     } 
 
     @Override
-    public void inTop5XuatSac() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'inTop5XuatSac'");
+    public void hienThiDanhSach() { 
+        // Mai viết code của Mai nha
     }
 
     @Override
-    public void tinhTyLeDat() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'tinhTyLeDat'");
+    public void inBaoCaoThongKe() { 
+        // Mai viết code của Mai nha
     }
 }
