@@ -13,12 +13,14 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
 import interfaces.IThongKe;
 
 public class DanhSachHocSinh implements IThongKe {
     private HocSinh[] arrHS;
     private int soLuong;
     private final String FILE_PATH = "hocsinh.txt";
+
 
     public DanhSachHocSinh() {
         this.arrHS = new HocSinh[100];
@@ -54,6 +56,7 @@ public class DanhSachHocSinh implements IThongKe {
         }
         return soLuongDaThem;
     }
+
 
     public boolean xoa(String mshs) {
         int viTri = -1;
@@ -120,6 +123,7 @@ public class DanhSachHocSinh implements IThongKe {
         return null;
     }
 
+
     public HocSinh[] timKiemTheoTen(String tuKhoa) {
         int count = 0;
         String key = tuKhoa.toLowerCase();
@@ -132,6 +136,7 @@ public class DanhSachHocSinh implements IThongKe {
             if (arrHS[i] != null && arrHS[i].getHoTen().toLowerCase().contains(key)) kq[index++] = arrHS[i];
         }
         return kq;
+
     }
 
     public HocSinh[] timKiemTheoLop(String tenLop) {
@@ -332,23 +337,28 @@ public class DanhSachHocSinh implements IThongKe {
     }
 
     public boolean ghiFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (int i = 0; i < soLuong; i++) {
-                if (arrHS[i] != null) {
-                    bw.write(arrHS[i].toFileString());
-                    bw.newLine();
-                }
-            }
-            System.out.println("Ghi file danh sach hoc sinh thanh cong!");
-            return true;
-        } catch (IOException e) {
-            System.out.println("Loi khi ghi file HocSinh: " + e.getMessage());
-            return false;
-        }
+    File f = new File(DUONG_DAN_FILE);
+    File thuMucCha = f.getParentFile();
+    if (thuMucCha != null && !thuMucCha.exists()) {
+        thuMucCha.mkdirs();
     }
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null) {
+                bw.write(arrHS[i].toFileString());
+                bw.newLine();
+            }
+        }
+        System.out.println("Ghi file danh sach hoc sinh thanh cong!");
+        return true;
+    } catch (IOException e) {
+        System.out.println("Loi khi ghi file HocSinh: " + e.getMessage());
+        return false;
+    }
+}
 
     public boolean docFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             this.soLuong = 0; 
 

@@ -8,11 +8,12 @@ import interfaces.IThongKe;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
 
 public class DanhSachGiaoVien implements IThongKe {
     private GiaoVien[] arrGV;
     private int soLuong;
-    private final String FILE_PATH = "giaovien.txt";
+    public static final String DUONG_DAN_FILE = "src/data/giaovien.txt";
 
     public DanhSachGiaoVien() {
         this.arrGV = new GiaoVien[100];
@@ -74,13 +75,12 @@ public class DanhSachGiaoVien implements IThongKe {
         return true;
     }
     
-    public boolean sua(String maGV){
+    public boolean sua(String maGV, Scanner sc){
         int index = timKiemViTri(maGV);
         if(index == -1){
             return false;
         }
         GiaoVien gv = arrGV[index];
-        java.util.Scanner sc = new Scanner(System.in);
 
         System.out.println("Cập nhật thông tin cho giáo viên có mã là " + maGV);
         
@@ -130,11 +130,14 @@ public class DanhSachGiaoVien implements IThongKe {
             gv.setDsLopDay(dsLopMoi);
         }
         System.out.println("Cập nhật  thông tin thành công!");
-        sc.close();
         return true;
     }
 
    public boolean ghiFile(){
+    File f = new File(DUONG_DAN_FILE);
+    File thuMucCha = f.getParentFile();
+    if (thuMucCha != null && !thuMucCha.exists()) {
+        thuMucCha.mkdirs();}
         try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("giaovien.txt"))) {
             for(int i = 0; i < soLuong; i++){
                 GiaoVien gv = arrGV[i];
@@ -151,7 +154,7 @@ public class DanhSachGiaoVien implements IThongKe {
                                 pw.print("," + dsLop[j].getTenLop());
                             }
                             else{
-                                pw.print("Không");
+                                pw.print(",Không");
                             }
                         }
                     }
@@ -167,7 +170,7 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     public boolean docFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             this.soLuong = 0;
 
