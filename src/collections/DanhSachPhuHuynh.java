@@ -10,6 +10,7 @@ import java.io.IOException;
 public class DanhSachPhuHuynh implements IThongKe {
     private PhuHuynh[] arrPH;
     private int soLuong;
+    public static final String DUONG_DAN_FILE = "src/data/phuhuynh.txt";
 
     public DanhSachPhuHuynh(){
         this.arrPH = new PhuHuynh[100];

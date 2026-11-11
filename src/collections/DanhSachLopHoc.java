@@ -6,6 +6,8 @@ public class DanhSachLopHoc
 {
     private LopHoc[] dsLop;
     private int soLuong;
+    public static final String DUONG_DAN_FILE = "src/data/lophoc.txt";
+
 
     public DanhSachLopHoc() {
         this.dsLop = new LopHoc[100];
