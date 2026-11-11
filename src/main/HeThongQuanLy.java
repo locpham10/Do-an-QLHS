@@ -747,7 +747,23 @@ public class HeThongQuanLy {
             chon = nhapLuaChon();
 
             if(chon == 0) break;
-            //Code tiep o day
+            switch (chon) {
+                case 1:
+                    System.out.println("\n--- TY LE LEN LOP / O LAI ---");
+                    dsHocSinh.tinhTyLeDat();
+                    System.out.println(" Ghi chu: Quy tac len lop (GPA >= 5.0)");
+                    break;
+                case 2:
+                    System.out.println("\n--- TOP 5 HOC SINH XUAT SAC NHAT ---");
+                    dsHocSinh.inTop5XuatSac();
+                    break;
+                case 3:
+                    dsHocSinh.inBaoCaoThongKe();
+                    break;
+                default:
+                    System.out.println("Lua chon khong hop le, vui long nhap lai!");
+                    break;
+            }
         }
     }
 
@@ -779,4 +795,83 @@ public class HeThongQuanLy {
             //code tiếp ở đây
         }
     }
+    private void menuTimKiem() {
+        int chon = -1;
+        while (chon != 0) {
+            System.out.println("\n---- 7. TIM KIEM HOC SINH ----");
+            System.out.println("1. Tim chinh xac theo Ma hoc sinh");
+            System.out.println("2. Tim gan dung theo ten (tu khoa)");
+            System.out.println("3. Tim theo lop");
+            System.out.println("4. Tim theo he dao tao (Chuyen/Dai tra)");
+            System.out.println("5. Tim theo gioi tinh (Nam/Nu)");
+            System.out.println("6. Tim theo khoang diem GPA");
+            System.out.println("0. Quay lai menu chinh");
+            chon = nhapLuaChon();
+
+            if (chon == 0) break;
+            models.HocSinh[] kq = null;
+            switch (chon) {
+                case 1:
+                    System.out.print("Nhap MSHS can tim: ");
+                    String mshs = sc.nextLine().trim();
+                    models.HocSinh hs = dsHocSinh.timKiem(mshs);
+                    if (hs != null) kq = new models.HocSinh[]{hs}; 
+                    break;
+                case 2:
+                    System.out.print("Nhap ten hoac tu khoa can tim: ");
+                    kq = dsHocSinh.timKiemTheoTen(sc.nextLine().trim());
+                    break;
+                case 3:
+                    System.out.print("Nhap ten lop (vd: 10A1): ");
+                    kq = dsHocSinh.timKiemTheoLop(sc.nextLine().trim());
+                    break;
+                case 4:
+                    System.out.print("Chon he 1: Chuyen; 2: Dai tra ");
+                    int chonHe = nhapLuaChon();
+                    if (chonHe == 1 || chonHe == 2) {
+                        kq = dsHocSinh.timKiemTheoHe(chonHe == 1);
+                    } else {
+                        System.out.println("Lua chon he khong hop le!");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Chon gioi tinh 1: Nam; 2: Nu. ");
+                    int chonGT = nhapLuaChon();
+                    if (chonGT == 1 || chonGT == 2) {
+                        kq = dsHocSinh.timKiemTheoGioiTinh(chonGT == 1); 
+                    } else {
+                        System.out.println("Lua chon gioi tinh khong hop le!");
+                    }
+                    break;
+                case 6:
+                    try {
+                        System.out.print("Nhap diem GPA thap nhat: ");
+                        double min = Double.parseDouble(sc.nextLine().trim());
+                        System.out.print("Nhap diem GPA cao nhat: ");
+                        double max = Double.parseDouble(sc.nextLine().trim());
+                        kq = dsHocSinh.timKiemTheoGpa(min, max);
+                    } catch (NumberFormatException e) {
+                        System.out.println(" Diem GPA phai la so thuc hop le!");
+                    }
+                    break;
+                default:
+                    System.out.println("Lua chon khong hop le, vui long nhap lai!");
+                    continue; 
+            }
+
+            // --- IN KET QUA ---
+            if (chon >= 1 && chon <= 6) {
+                if (kq == null || kq.length == 0) {
+                    System.out.println(" Khong tim thay ket qua nao phu hop!");
+                } else {
+                    System.out.println("\n=> Da tim thay " + kq.length + " hoc sinh:");
+                    for (models.HocSinh h : kq) {
+                        h.hienThiThongTin();
+                        System.out.println("-------------------------");
+                    }
+                }
+            }
+        }
+    }
+
 }
