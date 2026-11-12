@@ -19,7 +19,7 @@ public class DiemMonHoc
     //Công thức 1: Tính điểm Trung bình môn học theo hệ số (TX:1) (GK:2) (CK:3)
     // Công thức: ĐTB\_Môn = (ĐTX * 1 + ĐGK * 2 + ĐCK * 3) / 6
     public double tinhDiemTBMon() {
-        double dtb = this.diemTX*1.0 + this.diemGK * 2.0 + this.diemCK * 3.0 / 6.0;
+        double dtb = (this.diemTX*1.0 + this.diemGK * 2.0 + this.diemCK * 3.0) / 6.0;
         return Math.round(dtb * 100.0) / 100.0;
     }
 
@@ -73,5 +73,43 @@ public class DiemMonHoc
     public String toString()  {
         String tenMonHoc = (monHoc != null) ? monHoc.getTenMon() : "Chưa xác định.";
         return String.format("%s | TX: %.1f | GK: %.1f | CK: %.1f => ĐTB: %.2f", tenMonHoc, diemTX, diemGK, diemCK, tinhDiemTBMon());
+    }
+
+    public String toFileString() {
+        String ma = (monHoc != null && monHoc.getMaMon() != null) ? monHoc.getMaMon() : "";
+        return ma + "," + diemTX + "," + diemGK + "," + diemCK;
+    }
+
+    public static DiemMonHoc tuChuoi(String dong) {
+        if(dong == null || dong.trim().isEmpty())
+            throw new IllegalArgumentException("Dòng điểm rỗng!");
+
+        String[] p = dong.split(",", -1);
+        if(p.length != 4 && p.length != 5)
+            throw new IllegalArgumentException("Dòng điểm phải có 4 hoặc 5 cột: " + dong);
+        int dau = (p.length == 5) ? 1 : 0; //5 cột thì bỏ cột MSHS
+
+        String maMon = p[dau].trim().toUpperCase();
+        MonHoc mh = null;
+        for(MonHoc m : MonHoc.KHO_MON_HOC) {
+            if(m.getMaMon().equals(maMon)) { 
+                mh = m; 
+                break; 
+            }
+        }
+        if(mh == null) throw new IllegalArgumentException("Không tồn tại môn có mã '" + maMon + "'.");
+        
+        double tx, gk, ck;
+        try {
+            tx = Double.parseDouble(p[dau + 1].trim());
+            gk = Double.parseDouble(p[dau + 2].trim());
+            ck = Double.parseDouble(p[dau + 3].trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Điểm không phải số hoặc không đúng định dạng: " + dong);
+        }
+        if (tx < 0 || tx > 10 || gk < 0 || gk > 10 || ck < 0 || ck > 10)
+            throw new IllegalArgumentException("Điểm phải nằm trong [0,10]: " + dong);
+
+        return new DiemMonHoc(mh, tx, gk, ck);
     }
 }
