@@ -1,11 +1,13 @@
 package collections;
 
-import java.util.Scanner;
 import interfaces.IThongKe;
-import models.PhuHuynh;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
+import models.PhuHuynh;
 
 public class DanhSachPhuHuynh implements IThongKe {
     private PhuHuynh[] arrPH;
@@ -92,19 +94,85 @@ public class DanhSachPhuHuynh implements IThongKe {
         System.out.println("Cập nhật thông tin phụ huynh thành công!");
         return true;
     }
-    
-    @Override
-    public void hienThiDanhSach(){
-        
+
+    public boolean docFile(){
+        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))){
+            String line;
+            this.soLuong = 0;
+            while ((line = br.readLine()) != null){
+                line = line.trim();
+                if(line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if(parts.length >=2){
+                    String hoTenBoMe = parts[0].trim();
+                    String sdtKhanCap = parts[1].trim();
+                    String mshs = ((parts.length > 2) ? parts[2].trim() : "");
+
+                    PhuHuynh ph = new PhuHuynh(hoTenBoMe, sdtKhanCap, mshs);
+                    if(soLuong < arrPH.length){
+                        arrPH[soLuong] = ph;
+                        soLuong++;
+                    }
+                }
+            }
+            System.out.println("Doc file PhuHuynh thanh cong! Tong: " + soLuong + " phu huynh.");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file PhuHuynh: " + e.getMessage());
+            return false;
+        }
+    } 
+
+    public boolean ghiFile(){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DUONG_DAN_FILE))){
+            for (int i = 0; i < soLuong; i++) {
+                if(arrPH[i] != null){
+                    bw.write(arrPH[i].toFileString());
+                    bw.newLine();
+                }
+            }
+            System.out.println("Ghi file PhuHuynh thanh cong!");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file PhuHuynh: " + e.getMessage());
+            return false;
+        }
     }
     
     @Override
     public void hienThiDanhSach() { 
-        // Mai viết code của Mai nha
+        System.out.println("========== DANH SACH PHU HUYNH ==========");
+        if(soLuong == 0){
+            System.out.println("Danh sach phu huynh dang trong!");
+            return;
+        }
+        System.out.printf("%-25s | %-15s | %-10s\n", "Ho ten bo me", "So dien thoai", "MSHS");
+        System.out.println("-------------------------------------------------------------------");
+        for(int i = 0; i < soLuong; i++){
+            if(arrPH[i] != null){
+                System.out.printf("%-25s | %-15s | %-10s\n", 
+                arrPH[i].getHoTenBoMe(), 
+                arrPH[i].getSdtKhanCap(), 
+                arrPH[i].getMshs() != null ? arrPH[i].getMshs() : "");
+            }
+        }
     }
 
     @Override
     public void inBaoCaoThongKe() { 
-        // Mai viết code của Mai nha
+        System.out.println("========== BAO CAO THONG KE ==========");
+        if(soLuong == 0){
+            System.out.println("Khong co phu huynh nao de thong ke!");
+            return;
+        }
+        int daLienKet = 0;
+        for(int i = 0; i < soLuong; i++){
+            if(arrPH[i] != null && arrPH[i].getMshs() != null && !arrPH[i].getMshs().isEmpty()){
+                daLienKet++;
+            }
+        }
+        System.out.println("Tong so luong phu huynh: " + soLuong);
+        System.out.println("So phu huynh da lien ket hoc sinh: " + daLienKet);
+        System.out.println("So phu huynh chua lien ket hoc sinh: " + (soLuong - daLienKet));
     }
 }
