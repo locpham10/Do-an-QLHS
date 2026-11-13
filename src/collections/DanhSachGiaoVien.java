@@ -62,6 +62,51 @@ public class DanhSachGiaoVien implements IThongKe {
         return null;
     }
 
+    public GiaoVien[] timKiemTheoTen(String tuKhoa){
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa.trim().toLowerCase()));
+            dem++;
+        }
+        GiaoVien[] ketQua = new GiaoVien[dem];
+        int index = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa.trim().toLowerCase()));
+            ketQua[index++] = arrGV[i];
+        }
+        return ketQua;
+    }
+
+    public GiaoVien[] timKiemTheoMon(String tenMon){
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null && arrGV[i].getMonChuyenMon().getTenMon().toLowerCase().contains(tenMon.trim().toLowerCase()));
+            dem++;
+        }
+        GiaoVien[] ketQua = new GiaoVien[dem];
+        int index = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null && arrGV[i].getMonChuyenMon().getTenMon().toLowerCase().contains(tenMon.trim().toLowerCase()));
+            ketQua[index++] = arrGV[i];
+        }
+        return ketQua;
+    }
+
+    public GiaoVien[] timKiemTheoChucVu(String chucVu){
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVu.trim().toLowerCase()));
+            dem++;
+        }
+        GiaoVien[] ketQua = new GiaoVien[dem];
+        int index = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVu.trim().toLowerCase()));
+            ketQua[index++] = arrGV[i];
+        }
+        return ketQua;
+    }
+
     public boolean xoa(String maGV){
         int index = timKiemViTri(maGV);
         if(index == -1){
@@ -243,7 +288,14 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     @Override
-    public void inBaoCaoThongKe() { }
+    public void inBaoCaoThongKe() { 
+        System.out.println("========== BAO CAO THONG KE ==========");
+        if(soLuong == 0){
+            System.out.println("Khong co giao vien nao de thong ke!");
+            return;
+        }
+
+    }
     }
 
 
