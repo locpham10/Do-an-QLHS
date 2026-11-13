@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import models.GiaoVien;
 
 public class DanhSachLopHoc
 {
@@ -69,6 +72,60 @@ public class DanhSachLopHoc
             return true;
         } catch (IOException e) {
             System.out.println("Loi khi ghi file LopHoc: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // đọc & không gắn GVCN
+    public boolean docFile() {
+        return docFile(null);
+    }
+
+    // đọc & gắn GVCN= dsGV.timKiem(maGV), tạo DanhSachHocSinh rỗng cho mỗi lớp
+    public boolean docFile(DanhSachGiaoVien dsGV) {
+        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
+            String line;
+            int soDong = 0;
+            this.soLuong = 0;
+            while ((line = br.readLine()) != null) {
+                soDong++;
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] p = line.split(",", -1);
+                if (p.length < 6) {
+                    System.out.println("Dong " + soDong + ": thieu cot (can it nhat 6, co " + p.length + ")");
+                    continue;
+                }
+                for (int i = 0; i < p.length; i++) p[i] = p[i].trim();
+
+                try {
+                    String tenLop = p[0];
+                    String khoaHoc = p[1];
+                    String maGV = p[2];
+                    boolean laChuyen = Boolean.parseBoolean(p[3]);
+                    String monChuyen = p[4];
+                    double phuPhi = Double.parseDouble(p[5]);
+
+                    GiaoVien gvcn = null;
+                    if (dsGV != null && !maGV.isEmpty()) {
+                        gvcn = dsGV.timKiem(maGV);
+                        if (gvcn == null) {
+                            System.out.println("Dong " + soDong + ": khong tim thay ma GV '" + maGV + "'");
+                        }
+                    }
+
+                    LopHoc lop = new LopHoc(tenLop, khoaHoc, gvcn, new DanhSachHocSinh(),
+                                            laChuyen, monChuyen, phuPhi);
+                    themLop(lop);
+                } catch (NumberFormatException e) {
+                    System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
+                }
+            }
+            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop.");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file LopHoc: " + e.getMessage());
             return false;
         }
     }
