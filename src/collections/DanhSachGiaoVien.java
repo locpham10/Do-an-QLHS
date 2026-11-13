@@ -1,14 +1,14 @@
 package collections;
 
+import interfaces.IThongKe;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 import models.GiaoVien;
 import models.LopHoc;
 import models.MonHoc;
-import interfaces.IThongKe;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.File;
 
 public class DanhSachGiaoVien implements IThongKe {
     private GiaoVien[] arrGV;
@@ -216,7 +216,31 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     @Override
-    public void hienThiDanhSach() { }
+    public void hienThiDanhSach() { 
+        System.out.println("========== DANH SACH GIAO VIEN ==========");
+        if(soLuong == 0){
+            System.out.println("Danh sach giao vien dang trong!");
+            return;
+        }
+        System.out.printf("%-10s | %-20s | %-12s | %-10s | %-15s | %-18s | %-15s\n", 
+                "Mã GV", "Họ tên", "Ngày sinh", "Giới tính", "SĐT", "Môn chuyên môn", "Chức vụ");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
+        for (int i = 0; i < soLuong; i++) {
+            if (arrGV[i] != null) {
+                String tenMon = (arrGV[i].getMonChuyenMon() != null) ? arrGV[i].getMonChuyenMon().getTenMon() : "Không";
+                String gioiTinhStr = arrGV[i].isGioiTinh() ? "Nam" : "Nữ";
+                
+                System.out.printf("%-10s | %-20s | %-12s | %-10s | %-15s | %-18s | %-15s\n",
+                        arrGV[i].getMaGV(),
+                        arrGV[i].getHoTen(),
+                        arrGV[i].getNgaySinh(),
+                        gioiTinhStr,
+                        arrGV[i].getSoDienThoai(),
+                        tenMon,
+                        arrGV[i].getChucVu());
+            }
+        }
+    }
 
     @Override
     public void inBaoCaoThongKe() { }
