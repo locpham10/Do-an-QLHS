@@ -1,6 +1,10 @@
 package collections;
 
 import models.LopHoc;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class DanhSachLopHoc
 {
@@ -46,6 +50,27 @@ public class DanhSachLopHoc
         System.out.println("| DANH SÁCH CÁC LỚP HỌC |");
         for(int i = 0; i < soLuong; i++)
             System.out.println((i+1) + ". " + dsLop[i]);
+    }
+
+    public boolean ghiFile() {
+        File f = new File(DUONG_DAN_FILE);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) {
+            thuMucCha.mkdirs();
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+            for (int i = 0; i < soLuong; i++) {
+                if (dsLop[i] != null) {
+                    bw.write(dsLop[i].toFileString());
+                    bw.newLine();
+                }
+            }
+            System.out.println("Ghi file LopHoc thanh cong!");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file LopHoc: " + e.getMessage());
+            return false;
+        }
     }
 
     public LopHoc[] getDsLop() { return dsLop; }
