@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import models.GiaoVien;
+import models.HocSinh;
 
 public class DanhSachLopHoc
 {
@@ -127,6 +128,18 @@ public class DanhSachLopHoc
         } catch (IOException e) {
             System.out.println("Loi khi doc file LopHoc: " + e.getMessage());
             return false;
+        }
+    }
+
+public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
+        if (dsHS == null) return;
+        for (int i = 0; i < soLuong; i++) {
+            if (dsLop[i] == null) continue;
+            DanhSachHocSinh dsLopNay = new DanhSachHocSinh();
+            for (HocSinh hs : dsHS.timKiemTheoLop(dsLop[i].getTenLop())) {
+                dsLopNay.them(hs);
+            }
+            dsLop[i].setDsHocSinh(dsLopNay);
         }
     }
 

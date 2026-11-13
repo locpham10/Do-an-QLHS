@@ -84,9 +84,10 @@ public class HeThongQuanLy {
 
     private void taiDuLieuBanDau() {   // sau này Liểu thay bằng taiTatCa(), vẫn giữ lớp try này
         try { dsGiaoVien.docFile(); } catch (RuntimeException e) { baoLoiTai("giaovien.txt", e); }
-        try { dsLopHoc.docFile(); }   catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
-        try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
+        try { dsLopHoc.docFile(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
         try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
+        try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
+        dsLopHoc.phanHocSinhVaoLop(dsHocSinh);
     }
 
     private void baoLoiTai(String tenFile, RuntimeException e) {
