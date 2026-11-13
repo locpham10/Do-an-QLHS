@@ -125,7 +125,11 @@ public class DanhSachPhuHuynh implements IThongKe {
     } 
 
     public boolean ghiFile(){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(DUONG_DAN_FILE))){
+        File f = new File(DUONG_DAN_FILE);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) {
+                thuMucCha.mkdirs();}
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
             for (int i = 0; i < soLuong; i++) {
                 if(arrPH[i] != null){
                     bw.write(arrPH[i].toFileString());
