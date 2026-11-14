@@ -294,7 +294,76 @@ public class DanhSachGiaoVien implements IThongKe {
             System.out.println("Khong co giao vien nao de thong ke!");
             return;
         }
+        double tongLuong = 0;
+        int chuaDayLop = 0;
+        
+        String[] danhSachMon = new String[soLuong];
+        int[] demMon = new int[soLuong];
+        int soMonKhacNhau = 0;
 
+        String[] dachSachCV = new String[soLuong];
+        int[] demCV = new int[soLuong];
+        int soCVKhacNhau = 0;
+
+        for (int i = 0; i < soLuong; i++) {
+            if(arrGV[i] != null){
+                GiaoVien gv = arrGV[i];
+                tongLuong += gv.getLuong();
+                
+                LopHoc[] dsLop = gv.getDsLopDay();
+                if(dsLop == null || dsLop.length == 0){
+                    chuaDayLop++;
+                }   
+                String tenMon = (gv.getMonChuyenMon() != null) ? gv.getMonChuyenMon().getTenMon() : "Chua duoc phan mon!";
+                int idxMon = -1;
+                for (int m = 0; m < soMonKhacNhau; m++) {
+                    if(danhSachMon[m].equalsIgnoreCase(tenMon)){
+                        idxMon = m;
+                        break;
+                    }
+                }
+                if(idxMon != -1){
+                    demMon[idxMon]++;
+                }
+                else{
+                    danhSachMon[soMonKhacNhau] = tenMon;
+                    demMon[soMonKhacNhau] = 1;
+                    soMonKhacNhau++;
+                }
+
+                String cv = (gv.getChucVu() != null && !gv.getChucVu().trim().isEmpty()) ? gv.getChucVu() : "Chua duoc phan chuc vu!";
+                int idxCV = -1;
+                for (int c = 0; c < soMonKhacNhau; c++) {
+                    if(dachSachCV[c].equalsIgnoreCase(cv)){
+                        idxCV = c;
+                        break;
+                    }
+                }
+                if(idxCV != -1){
+                    demCV[idxCV]++;
+                }
+                else{
+                    dachSachCV[soCVKhacNhau] = cv;
+                    demCV[soCVKhacNhau] = 1;
+                    soCVKhacNhau++;
+                }
+            }
+        }
+        double luongTB = (soLuong > 0) ? (tongLuong / soLuong) : 0;
+        System.out.println("Tong so luong giao vien: " + soLuong);
+        System.out.println("Tong luong cua tat ca giao vien: " + String.format("%.2f", tongLuong));
+        System.out.println("Tong luong trung binh cua cac giao vien: " + String.format("%.2f", luongTB));
+        System.out.println("So giao vien chua day lop nao: " + chuaDayLop);
+
+        System.out.println("--- Thong ke theo mon chuyen mon ---");
+        for (int i = 0; i < soMonKhacNhau; i++) {
+            System.out.println("   + " + danhSachMon[i] + ": " + demMon[i] + " giao vien");
+        }            
+        
+        System.out.println("--- Thong ke theo chuc vu ---");
+        for (int j = 0; j < soCVKhacNhau; j++) {
+            System.out.println("   + " + dachSachCV[j] + ": " + demCV[j] + " giao vien");
+        }  
     }
     }
 
