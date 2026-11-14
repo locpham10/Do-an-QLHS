@@ -120,8 +120,6 @@ public class DanhSachLopHoc
                     LopHoc lop = new LopHoc(tenLop, khoaHoc, gvcn, new DanhSachHocSinh(),
                                             laChuyen, monChuyen, phuPhi);
                     if (p.length >= 7 && !p[6].isEmpty()) {
-                    lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));}
-                    if (p.length >= 7 && !p[6].isEmpty()) {
                         lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));
                     }
                     themLop(lop);
