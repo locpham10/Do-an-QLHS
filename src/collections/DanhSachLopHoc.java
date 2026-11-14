@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import models.GiaoVien;
 import models.HocSinh;
+import models.MonHoc;
 
 public class DanhSachLopHoc
 {
@@ -118,6 +119,11 @@ public class DanhSachLopHoc
 
                     LopHoc lop = new LopHoc(tenLop, khoaHoc, gvcn, new DanhSachHocSinh(),
                                             laChuyen, monChuyen, phuPhi);
+                    if (p.length >= 7 && !p[6].isEmpty()) {
+                    lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));}
+                    if (p.length >= 7 && !p[6].isEmpty()) {
+                        lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));
+                    }
                     themLop(lop);
                 } catch (NumberFormatException e) {
                     System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
@@ -141,6 +147,33 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             }
             dsLop[i].setDsHocSinh(dsLopNay);
         }
+    }
+
+        private MonHoc[] docChuongTrinh(String cot, int soDong) {
+        String[] items = cot.split(";");
+        MonHoc[] tam = new MonHoc[items.length];
+        int n = 0;
+        for (String item : items) {
+            item = item.trim();
+            if (item.isEmpty()) continue;
+            String[] kv = item.split(":");
+            if (kv.length != 2) {
+                System.out.println("Dong " + soDong + ": chuong trinh hoc sai dinh dang '" + item + "'");
+                continue;
+            }
+            String maMon = kv[0].trim();
+            MonHoc goc = MonHoc.timTheoMa(maMon);
+            if (goc == null) {
+                System.out.println("Dong " + soDong + ": khong tim thay ma mon '" + maMon + "'");
+                continue;
+            }
+            try {
+                tam[n++] = goc.copyVoiHeSo(Integer.parseInt(kv[1].trim()));  // copy, không sửa kho môn
+            } catch (NumberFormatException e) {
+                System.out.println("Dong " + soDong + ": he so khong hop le '" + kv[1] + "'");
+            }
+        }
+        return java.util.Arrays.copyOf(tam, n);
     }
 
     public LopHoc[] getDsLop() { return dsLop; }
