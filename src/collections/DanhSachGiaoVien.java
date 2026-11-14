@@ -183,7 +183,7 @@ public class DanhSachGiaoVien implements IThongKe {
     File thuMucCha = f.getParentFile();
     if (thuMucCha != null && !thuMucCha.exists()) {
         thuMucCha.mkdirs();}
-        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter("giaovien.txt"))) {
+        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(f))) {
             for(int i = 0; i < soLuong; i++){
                 GiaoVien gv = arrGV[i];
                 if(gv != null){
