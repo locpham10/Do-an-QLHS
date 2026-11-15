@@ -117,6 +117,7 @@ public class HeThongQuanLy {
             System.out.println("3. Xuat danh sach hoc sinh");
             System.out.println("4. Sua/Xoa hoc sinh");
             System.out.println("5. Them lop hoc moi");
+            System.out.println("6. Tim kiem hoc sinh");
             System.out.println("0. Quay lai menu chinh");
             chon = nhapLuaChon();
 
@@ -133,10 +134,6 @@ public class HeThongQuanLy {
 
                 case 3:
                     xuatDanhSachHocSinh();
-                    break;
-
-                case 5:
-                    themLopHocMoi();
                     break;
 
                 case 4:
@@ -202,7 +199,13 @@ public class HeThongQuanLy {
                     }
                     break;
 
+                case 5:
+                    themLopHocMoi();
+                    break;
 
+                case 6:
+                    menuTimKiem();
+                    break;
             }
         }
     }
@@ -250,7 +253,7 @@ public class HeThongQuanLy {
             System.out.println(Color.RED + "Loi: Khong tim thay ma giao vien " + maGVCN + "!" + Color.RESET);
         }
 
-        DanhSachHocSinh dsHsLop = new DanhSachHocSinh();
+        DanhSachHocSinh dsHsLop = new DanhSachHocSinh(0);
 
         // 4. Chuong trinh hoc
         System.out.println("\n--- THIET LAP CHUONG TRINH HOC LOP " + tenLop.toUpperCase() + " ---");
@@ -416,7 +419,7 @@ public class HeThongQuanLy {
 
             LopHoc lop = dsLopHoc.timKiemLopTheoTen(ten);
             if (lop != null) {
-                if (lop.getDsHocSinh() == null) lop.setDsHocSinh(new DanhSachHocSinh());
+                if (lop.getDsHocSinh() == null) lop.setDsHocSinh(new DanhSachHocSinh(0));
                 return lop;
             }
             System.out.println(Color.RED + "Khong tim thay lop " + ten + "!" + Color.RESET);
@@ -426,7 +429,6 @@ public class HeThongQuanLy {
     private HocSinh taoHocSinh(LopHoc lop, DanhSachHocSinh dsTam) {
         String mshs;
         while (true) {
-            System.out.print("Nhap ma so hoc sinh (MSHS): ");
             mshs = DataValidator.nhapChuoiKhongRong(sc, "Nhap ma so hoc sinh (MSHS): ").toUpperCase();
             try {
                 DataValidator.kiemTraTonTaiMa(mshs, dsHocSinh);
@@ -447,9 +449,8 @@ public class HeThongQuanLy {
         String sdtPH = DataValidator.nhapSoDienThoai(sc, "Nhap SDT khan cap cua Phu huynh: ");
         PhuHuynh phuHuynhMoi = new PhuHuynh(tenPH, sdtPH, mshs);
 
-        int soMonLop = (lop.getChuongTrinhHoc() != null) ? lop.getChuongTrinhHoc().length : 10;
-        DiemMonHoc[] dsDiemBanDau = new DiemMonHoc[soMonLop];
-        HoatDong[] lichSuHDBanDau = new HoatDong[20];
+        DiemMonHoc[] dsDiemBanDau = new DiemMonHoc[0];
+        HoatDong[] lichSuHDBanDau = new HoatDong[0];
 
         if (lop.isLopChuyen()) {
             return new HocSinhChuyen(mshs, hoTen, ngaySinh, gioiTinh, diaChi, sdt,
@@ -475,10 +476,6 @@ public class HeThongQuanLy {
         if (lop == null) return;
 
         int conTrong = dsHocSinh.getArrHS().length - dsHocSinh.getSoLuong();
-        if (conTrong == 0) {
-            System.out.println(Color.RED + "Danh sach hoc sinh toan truong da day!" + Color.RESET);
-            return;
-        }
 
         int k;
         while (true) {
@@ -493,7 +490,7 @@ public class HeThongQuanLy {
         }
 
         // Nhap du k hoc sinh vao danh sach tam, sau do them 1 lan vao truong va lop
-        DanhSachHocSinh dsTam = new DanhSachHocSinh();
+        DanhSachHocSinh dsTam = new DanhSachHocSinh(k);
         for (int i = 1; i <= k; i++) {
             System.out.println("\n--- Hoc sinh thu " + i + "/" + k + " ---");
             dsTam.them(taoHocSinh(lop, dsTam));
@@ -530,14 +527,13 @@ public class HeThongQuanLy {
             }
         }
 
-        int toiDa = dsHocSinh.getArrHS().length;
         int n;
         while (true) {
             System.out.print("Nhap so hoc sinh n (1-" + toiDa + "): ");
             try {
                 n = Integer.parseInt(sc.nextLine().trim());
-                if (n >= 1 && n <= toiDa) break;
-                System.out.println(Color.RED + "Loi: n phai tu 1 den " + toiDa + "!" + Color.RESET);
+                if (n >= 1) break;
+                System.out.println(Color.RED + "Loi: Them hoc sinh that bai!" + Color.RESET);
             } catch (NumberFormatException e) {
                 System.out.println(Color.RED + "Loi: Vui long nhap so nguyen!" + Color.RESET);
             }
