@@ -497,14 +497,15 @@ public class HeThongQuanLy {
         LopHoc lop = chonLop(null);
         if (lop == null) return;
 
-        int conTrong = dsHocSinh.getArrHS().length - dsHocSinh.getSoLuong();
+        // int conTrong = dsHocSinh.getArrHS().length - dsHocSinh.getSoLuong();
 
         int k;
         while (true) {
             System.out.print("Nhap so hoc sinh can them k (k >= 1): ");
             try {
                 k = Integer.parseInt(sc.nextLine().trim());
-                if (k >= 1 && k <= conTrong) break;
+                // if (k >= 1 && k <= conTrong) break;
+                if (k >= 1) break; 
                 System.out.println(Color.RED + "Loi: k phai lon hon hoac bang 1!" + Color.RESET);
             } catch (NumberFormatException e) {
                 System.out.println(Color.RED + "Loi: Vui long nhap so nguyen!" + Color.RESET);
@@ -512,13 +513,13 @@ public class HeThongQuanLy {
         }
 
         // Nhap du k hoc sinh vao danh sach tam, sau do them 1 lan vao truong va lop
-        DanhSachHocSinh dsTam = new DanhSachHocSinh(k);
+        DanhSachHocSinh dsTam = new DanhSachHocSinh();
         for (int i = 1; i <= k; i++) {
             System.out.println("\n--- Hoc sinh thu " + i + "/" + k + " ---");
             dsTam.them(taoHocSinh(lop, dsTam));
         }
 
-        int daThem = dsHocSinh.them(dsTam.getArrHS(), k);
+        int daThem = dsHocSinh.them(dsTam.getArrHS(), dsTam.getSoLuong()); 
         lop.getDsHocSinh().them(dsTam.getArrHS(), daThem);
         for (int i = 0; i < daThem; i++) {
             luuPhuHuynh(dsTam.getArrHS()[i]);
@@ -767,7 +768,7 @@ public class HeThongQuanLy {
             System.out.println("\n---- 4. THONG KE & XET DUYET ----");
             System.out.println("1. Thong ke ty le len lop / o lai lop");
             System.out.println("2. Top 5 hoc sinh xuat sac nhat");
-            System.out.println("3. Thong ke chi tiet hoc bong theo dien (dai tra / chuyen)");
+            System.out.println("3. Bao cao thong ke tong hop");
             System.out.println("0. Quay lai menu chinh");
             chon = nhapLuaChon();
 
@@ -823,7 +824,7 @@ public class HeThongQuanLy {
     private void menuTimKiem() {
         int chon = -1;
         while (chon != 0) {
-            System.out.println("\n---- 7. TIM KIEM HOC SINH ----");
+            System.out.println("\n TIM KIEM HOC SINH");
             System.out.println("1. Tim chinh xac theo Ma hoc sinh");
             System.out.println("2. Tim gan dung theo ten (tu khoa)");
             System.out.println("3. Tim theo lop");

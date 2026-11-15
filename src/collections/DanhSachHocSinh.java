@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import interfaces.IThongKe;
 import exceptions.TrungMaHocSinhException;
+import utils.Color;
 
 public class DanhSachHocSinh implements IThongKe {
     private HocSinh[] arrHS;
@@ -23,7 +24,7 @@ public class DanhSachHocSinh implements IThongKe {
     public static final String DUONG_DAN_FILE = "src/data/hocsinh.txt";
 
     public DanhSachHocSinh() {
-        this.arrHS = new HocSinh[100];
+        this.arrHS = new HocSinh[0];
         this.soLuong = 0;
     }   
     public DanhSachHocSinh(int kichThuoc) {
@@ -31,10 +32,13 @@ public class DanhSachHocSinh implements IThongKe {
         this.soLuong = 0;
     }
 
+    public HocSinh[] getArrHS() { return arrHS; }
+    public int getSoLuong() { return soLuong; }
+
     public boolean them(HocSinh hs) {
         if (hs == null) return false;
         if (this.soLuong >= this.arrHS.length) {
-            this.arrHS = Arrays.copyOf(this.arrHS, this.arrHS.length + 10);
+            this.arrHS = Arrays.copyOf(this.arrHS, this.arrHS.length + 1);
         }
         this.arrHS[soLuong] = hs;
         this.soLuong++;
@@ -44,15 +48,8 @@ public class DanhSachHocSinh implements IThongKe {
     public int them(HocSinh[] dsMoi, int k) {
         int soLuongDaThem = 0;
         for (int i = 0; i < k; i++) {
-            if (dsMoi[i] != null) {
-                if (this.soLuong >= this.arrHS.length) {
-                    this.arrHS = Arrays.copyOf(this.arrHS, this.arrHS.length + 10);
-                }
-                
-                this.arrHS[soLuong] = dsMoi[i];
-                this.soLuong++;
+            if (them(dsMoi[i]))
                 soLuongDaThem++;
-            }
         }
         return soLuongDaThem;
     }
@@ -66,7 +63,6 @@ public class DanhSachHocSinh implements IThongKe {
             }
         }
         if (viTri == -1) {
-            System.out.println("Khong tim thay hoc sinh ma: " + mshs);
             return false;
         }
         for (int i = viTri; i < soLuong - 1; i++) {
@@ -74,7 +70,6 @@ public class DanhSachHocSinh implements IThongKe {
         }
         arrHS[soLuong - 1] = null;
         soLuong--;
-        System.out.println("Da xoa thanh cong hoc sinh ma: " + mshs);
         return true;
     }
 
@@ -87,30 +82,65 @@ public class DanhSachHocSinh implements IThongKe {
             }
         }
         if (hs == null) {
-            System.out.println("Khong tim thay hoc sinh ma: " + mshs);
             return false;
         }
 
         System.out.println("Dang sua thong tin cho hoc sinh: " + hs.getHoTen());
         System.out.println("Luu y: Nhan Enter de bo qua neu khong muon doi truong do.");
-        System.out.print("Nhap ho ten moi: ");
-        String hoTen = sc.nextLine();
-        if (!hoTen.trim().isEmpty()) hs.setHoTen(hoTen);
-        System.out.print("Nhap ngay sinh moi (dd/MM/yyyy): ");
-        String ngaySinh = sc.nextLine();
-        if (!ngaySinh.trim().isEmpty()) hs.setNgaySinh(ngaySinh);
-        System.out.print("Nhap gioi tinh moi: ");
-        String gioiTinh = sc.nextLine();
-        if (!gioiTinh.trim().isEmpty()) {
-            hs.setGioiTinh(Boolean.parseBoolean(gioiTinh));
+        // System.out.print("Nhap ho ten moi: ");
+        // String hoTen = sc.nextLine();
+        // if (!hoTen.trim().isEmpty()) hs.setHoTen(hoTen);
+        // System.out.print("Nhap ngay sinh moi (dd/MM/yyyy): ");
+        // String ngaySinh = sc.nextLine();
+        // if (!ngaySinh.trim().isEmpty()) hs.setNgaySinh(ngaySinh);
+        // System.out.print("Nhap gioi tinh moi: ");
+        // String gioiTinh = sc.nextLine();
+        // if (!gioiTinh.trim().isEmpty()) {
+        //     hs.setGioiTinh(Boolean.parseBoolean(gioiTinh));
+        // }
+        // System.out.print("Nhap Dia Chi Moi: ");
+        // String diaChi = sc.nextLine();
+        // if (!diaChi.trim().isEmpty()) hs.setDiaChi(diaChi);
+        // System.out.print("Nhap so dien thoai moi: ");
+        // String sdt = sc.nextLine();
+        // if (!sdt.trim().isEmpty()) hs.setSoDienThoai(sdt);
+        // System.out.println("Cap nhat thong tin thanh cong!");
+        String s;
+        while (true) {                           
+            System.out.print("Nhap ho ten moi: ");
+            s = sc.nextLine().trim();
+            if (s.isEmpty()) break;
+            if (!s.contains(",")) { hs.setHoTen(s); break; }
+            System.out.println(Color.RED + "Loi: Khong duoc chua dau phay (,)!" + Color.RESET);
         }
-        System.out.print("Nhap Dia Chi Moi: ");
-        String diaChi = sc.nextLine();
-        if (!diaChi.trim().isEmpty()) hs.setDiaChi(diaChi);
-        System.out.print("Nhap so dien thoai moi: ");
-        String sdt = sc.nextLine();
-        if (!sdt.trim().isEmpty()) hs.setSoDienThoai(sdt);
-        System.out.println("Cap nhat thong tin thanh cong!");
+        while (true) {                            
+            System.out.print("Nhap ngay sinh moi (dd/MM/yyyy): ");
+            s = sc.nextLine().trim();
+            if (s.isEmpty()) break;
+            if (DataValidator.ngaySinhHopLe(s)) { hs.setNgaySinh(s); break; }
+            System.out.println(Color.RED + "Loi: Ngay sinh phai dung dinh dang DD/MM/YYYY!" + Color.RESET);
+        }
+        while (true) {                           
+            System.out.print("Nhap gioi tinh moi (1: Nam / 0: Nu): ");
+            s = sc.nextLine().trim();
+            if (s.isEmpty()) break;
+            if (s.equals("1") || s.equals("0")) { hs.setGioiTinh(s.equals("1")); break; }
+            System.out.println(Color.RED + "Loi: Chi nhap 1 hoac 0!" + Color.RESET);
+        }
+        while (true) {
+            System.out.print("Nhap dia chi moi: ");
+            s = sc.nextLine().trim();
+            if (s.isEmpty()) break;
+            if (!s.contains(",")) { hs.setDiaChi(s); break; }
+            System.out.println(Color.RED + "Loi: Khong duoc chua dau phay (,)!" + Color.RESET);
+        }
+        while (true) { 
+            System.out.print("Nhap so dien thoai moi: ");
+            s = sc.nextLine().trim().replaceAll("[\\s.]", "");
+            if (s.isEmpty()) break;
+            if (s.matches("^0\\d{9}$")) { hs.setSoDienThoai(s); break; }
+            System.out.println(Color.RED + "Loi: So dien thoai phai co 10 so va bat dau bang 0!" + Color.RESET);
+        }
         return true;
     }
 
@@ -197,7 +227,8 @@ public class DanhSachHocSinh implements IThongKe {
     } 
 
     public void lamRong() {
-        this.soLuong = 0; 
+        this.arrHS = new HocSinh[0];
+        this.soLuong = 0;
     }
 
     @Override
@@ -302,8 +333,9 @@ public class DanhSachHocSinh implements IThongKe {
                 soHocSinhDat++;
             }
         }
-        double tyLe = (double) soHocSinhDat / soLuong * 100;
-        System.out.println("Ty le hoc sinh dat: " + tyLe + "%");
+    double tyLe = (double) soHocSinhDat / soLuong * 100;
+    System.out.printf("Len lop: %d/%d (%.1f%%), o lai: %d%n",
+            soHocSinhDat, soLuong, tyLe, soLuong - soHocSinhDat);
     }
 
     @Override
