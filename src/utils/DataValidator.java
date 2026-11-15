@@ -44,7 +44,7 @@ public class DataValidator {
             if (ngaySinhHopLe(ngaySinh)) {
                 break;
             }
-            System.out.println(Color.RED + "Loi: Ngay sinh phai dung dinh dang DD/MM/YYY (VD: 28/10/2007)!" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Ngay sinh phai dung dinh dang DD/MM/YYYY (VD: 28/10/2007)!" + Color.RESET);
         }
         return ngaySinh;
     }
