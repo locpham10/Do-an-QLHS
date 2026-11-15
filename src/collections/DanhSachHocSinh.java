@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import interfaces.IThongKe;
+import exceptions.TrungMaHocSinhException;
 
 public class DanhSachHocSinh implements IThongKe {
     private HocSinh[] arrHS;
@@ -352,58 +353,85 @@ public class DanhSachHocSinh implements IThongKe {
         }
     }
 
-    public boolean docFile() {
+        public boolean docFile() {
+        final int TOI_DA = 1000;
+        int soDong = 0;
+        int soLoi = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
-            this.soLuong = 0; 
+            this.soLuong = 0;
 
             while ((line = br.readLine()) != null) {
+                soDong++;
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                if (this.soLuong >= arrHS.length) {
-                    System.out.println("Canh bao: Mang danh sach hoc sinh da day (Toi da " + arrHS.length + ")!");
+                if (this.soLuong >= TOI_DA) {
+                    System.out.println("Dong " + soDong + ": danh sach da du " + TOI_DA
+                            + " hoc sinh, bo qua phan con lai cua file");
+                    soLoi++;
                     break;
                 }
 
-                String[] data = line.split(",");
-                if (data.length < 11) continue; 
+                String[] data = line.split(",", -1);
+                if (data.length < 11) {
+                    System.out.println("Dong " + soDong + ": thieu cot (can it nhat 11, co " + data.length + ")");
+                    soLoi++;
+                    continue;
+                }
+                for (int i = 0; i < data.length; i++) data[i] = data[i].trim();
 
                 try {
-                    String loaiHS = data[0].trim();
-                    String mshs = data[1].trim();
-                    String hoTen = data[2].trim();
-                    String ngaySinh = data[3].trim();
-                    boolean gioiTinh = Boolean.parseBoolean(data[4].trim());
-                    String diaChi = data[5].trim();
-                    String soDienThoai = data[6].trim();
-                    String tenLop = data[7].trim();
-                    double gpa = Double.parseDouble(data[8].trim());
-                    int diemHanhKiem = Integer.parseInt(data[9].trim());
-                    boolean daDongHocPhi = Boolean.parseBoolean(data[10].trim());
+                    String loaiHS = data[0];
+                    String mshs = data[1];
+                    String hoTen = data[2];
+                    String ngaySinh = data[3];
+                    boolean gioiTinh = Boolean.parseBoolean(data[4]);
+                    String diaChi = data[5];
+                    String soDienThoai = data[6];
+                    String tenLop = data[7];
+                    double gpa = Double.parseDouble(data[8]);
+                    int diemHanhKiem = Integer.parseInt(data[9]);
+                    boolean daDongHocPhi = Boolean.parseBoolean(data[10]);
 
-                    HocSinh hs = null;
+                    if (timKiem(mshs) != null) {
+                        throw new TrungMaHocSinhException("Dong " + soDong + ": MSHS '" + mshs
+                                + "' bi trung, bo qua dong nay");
+                    }
+
+                    HocSinh hs;
                     if (loaiHS.equalsIgnoreCase("DaiTra")) {
-                        hs = new HocSinhDaiTra(mshs, hoTen, ngaySinh, gioiTinh, diaChi, 
+                        hs = new HocSinhDaiTra(mshs, hoTen, ngaySinh, gioiTinh, diaChi,
                                                soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi);
-                    } else if (loaiHS.equalsIgnoreCase("Chuyen") && data.length >= 14) {
-                        String monChuyen = data[11].trim();
-                        double diemMonChuyen = Double.parseDouble(data[12].trim());
-                        double phuPhiChuyenDe = Double.parseDouble(data[13].trim());
-
-                        hs = new HocSinhChuyen(mshs, hoTen, ngaySinh, gioiTinh, diaChi, 
-                                              soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi, 
-                                              monChuyen, diemMonChuyen, phuPhiChuyenDe);
+                    } else if (loaiHS.equalsIgnoreCase("Chuyen")) {
+                        if (data.length < 14) {
+                            System.out.println("Dong " + soDong + ": hoc sinh chuyen thieu cot (can 14, co "
+                                    + data.length + ")");
+                            soLoi++;
+                            continue;
+                        }
+                        String monChuyen = data[11];
+                        double diemMonChuyen = Double.parseDouble(data[12]);
+                        double phuPhiChuyenDe = Double.parseDouble(data[13]);
+                        hs = new HocSinhChuyen(mshs, hoTen, ngaySinh, gioiTinh, diaChi,
+                                               soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi,
+                                               monChuyen, diemMonChuyen, phuPhiChuyenDe);
+                    } else {
+                        System.out.println("Dong " + soDong + ": loai hoc sinh khong hop le '" + loaiHS + "'");
+                        soLoi++;
+                        continue;
                     }
-
-                    if (hs != null) {
-                        this.them(hs);
-                    }
+                    this.them(hs);
                 } catch (NumberFormatException e) {
-                    System.out.println("Bo qua dong do loi dinh dang so: " + line);
+                    System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
+                    soLoi++;
+                } catch (TrungMaHocSinhException e) {
+                    System.out.println(e.getMessage());
+                    soLoi++;
                 }
             }
-            System.out.println("Doc file HocSinh thanh cong! Tong so: " + soLuong + " hoc sinh.");
+            System.out.println("Doc file HocSinh thanh cong! Tong so: " + soLuong
+                    + " hoc sinh, " + soLoi + " dong loi.");
             return true;
         } catch (IOException e) {
             System.out.println("Loi khi doc file HocSinh: " + e.getMessage());
