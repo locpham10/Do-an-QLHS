@@ -12,6 +12,15 @@ import utils.DataValidator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import interfaces.IThongKe;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+
 public class HeThongQuanLy {
     private DanhSachHocSinh dsHocSinh;
     private DanhSachGiaoVien dsGiaoVien;
@@ -793,6 +802,45 @@ public class HeThongQuanLy {
         }
     }
 
+        public static final String DUONG_DAN_BAO_CAO = "src/data/baocao.txt";
+
+    //xuất báo cáo thống kê của hs, gv, ph ra file
+    private void xuatBaoCaoRaFile() {
+        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
+        PrintStream manHinh = System.out;
+        ByteArrayOutputStream boDem = new ByteArrayOutputStream();
+        String noiDung;
+        try {
+            System.setOut(new PrintStream(boDem, true, "UTF-8"));
+            for (int i = 0; i < dsThongKe.length; i++) {
+                dsThongKe[i].inBaoCaoThongKe(); 
+                System.out.println();
+            }
+            System.out.flush();
+            noiDung = boDem.toString("UTF-8");
+        } catch (IOException e) {
+            System.out.println(Color.RED + "Loi khi xuat bao cao: " + e.getMessage() + Color.RESET);
+            return;
+        } finally {
+            System.setOut(manHinh);               
+        }
+
+        noiDung = noiDung.replaceAll("\\u001B\\[[;\\d]*m", "");
+
+        File f = new File(DUONG_DAN_BAO_CAO);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) {
+            thuMucCha.mkdirs();
+        }
+        try (BufferedWriter bw = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(f), "UTF-8"))) {
+            bw.write(noiDung);
+            System.out.println(Color.GREEN + "Da xuat bao cao ra " + DUONG_DAN_BAO_CAO + Color.RESET);
+        } catch (IOException e) {
+            System.out.println(Color.RED + "Loi khi ghi bao cao: " + e.getMessage() + Color.RESET);
+        }
+    }
+
     private void menuQuanLyDuLieu(){
         int chon = -1;
         while (chon != 0){
@@ -801,10 +849,19 @@ public class HeThongQuanLy {
             System.out.println("2. Tai du lieu tu file len he thong");
             System.out.println("3. Xem du lieu tong quan hien co");
             System.out.println("4. Xoa du lieu bo nho");
+            System.out.println("5. Xuat bao cao thong ke ra file baocao.txt");
             System.out.println("0. Quay lai menu chinh");
             chon=nhapLuaChon();
 
             if(chon == 0) break;
+            switch (chon) {
+                case 5:
+                    xuatBaoCaoRaFile();
+                    break;
+                default:
+                    // Le6
+                    break;
+            }
             //Code tiep
         }
     }
