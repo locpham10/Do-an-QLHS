@@ -25,8 +25,21 @@ public class GiaoVien extends Nguoi{
     }
 
     public String toFileString() {
-        return String.format("%s,%s,%s,%b,%s,%s,%s,%.1f",
-            maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong);
+        String tenMon = (monChuyenMon != null) ? monChuyenMon.getTenMon() : "Không";
+        int soLop = (dsLopDay != null) ? dsLopDay.length : 0;
+        String kq = String.format(java.util.Locale.US, "%s,%s,%s,%b,%s,%s,%s,%.0f,%s,%d",
+            maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, tenMon, soLop);
+        if(soLop > 0 && dsLopDay != null){
+            for (int i = 0; i < soLop; i++) {
+               if(dsLopDay[i] != null){
+                kq = kq + "," + dsLopDay[i].getTenLop();
+               }
+               else{
+                kq = kq + ",Không";
+               } 
+            }
+        }
+        return kq;
     }
 
     public String getMaGV (){
@@ -75,7 +88,7 @@ public class GiaoVien extends Nguoi{
         System.out.println("Giới tính: " + (isGioiTinh() ? "Nam" : "Nữ"));
         System.out.println("Địa chỉ: " + getDiaChi());
         System.out.println("Số điện thoại: " + getSoDienThoai());
-        System.out.println("Môn chuyên môn: " + monChuyenMon.getTenMon() + " - Mã: " + monChuyenMon.getMaMon());
+        System.out.println("Môn chuyên môn: " + (monChuyenMon != null ? monChuyenMon.getTenMon()+ " - Mã: " + monChuyenMon.getMaMon() : "Chưa phân môn"));
         if (dsLopDay != null && dsLopDay.length > 0){
             System.out.println("Danh sách lớp dạy");
             for (int i = 0; i < dsLopDay.length; i ++){

@@ -2,13 +2,18 @@ package collections;
 
 import interfaces.IThongKe;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import models.GiaoVien;
 import models.LopHoc;
 import models.MonHoc;
+import utils.Color;
+import utils.DataValidator;
 
 public class DanhSachGiaoVien implements IThongKe {
     private GiaoVien[] arrGV;
@@ -37,12 +42,15 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     public boolean them(GiaoVien gv){
-        if( gv != null && soLuong < arrGV.length){
-            this.arrGV[soLuong] = gv;
-            soLuong ++;
-            return true; // Thêm thành công
+        if( gv == null ){
+            return false; // Thêm thất bại (đầy/null)
         }
-        return false; // Thêm thất bại (đầy/null)
+        if(soLuong >= arrGV.length){
+            arrGV = Arrays.copyOf(arrGV,arrGV.length * 2);
+        }
+        this.arrGV[soLuong] = gv;
+        soLuong ++;
+        return true; // Thêm thành công
     }
 
     private int timKiemViTri(String maGV){
@@ -65,14 +73,16 @@ public class DanhSachGiaoVien implements IThongKe {
     public GiaoVien[] timKiemTheoTen(String tuKhoa){
         int dem = 0;
         for (int i = 0; i < soLuong; i++) {
-            if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa.trim().toLowerCase()));
-            dem++;
+            if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa.trim().toLowerCase())){
+                dem++;
+            }      
         }
         GiaoVien[] ketQua = new GiaoVien[dem];
         int index = 0;
         for (int i = 0; i < soLuong; i++) {
-            if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa.trim().toLowerCase()));
-            ketQua[index++] = arrGV[i];
+            if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa.trim().toLowerCase())){
+                ketQua[index++] = arrGV[i];
+            }   
         }
         return ketQua;
     }
@@ -80,14 +90,16 @@ public class DanhSachGiaoVien implements IThongKe {
     public GiaoVien[] timKiemTheoMon(String tenMon){
         int dem = 0;
         for (int i = 0; i < soLuong; i++) {
-            if(arrGV[i] != null && arrGV[i].getMonChuyenMon().getTenMon().toLowerCase().contains(tenMon.trim().toLowerCase()));
-            dem++;
+            if(arrGV[i] != null && arrGV[i].getMonChuyenMon()!= null && arrGV[i].getMonChuyenMon().getTenMon().toLowerCase().contains(tenMon.trim().toLowerCase())){
+                dem++;
+            }     
         }
         GiaoVien[] ketQua = new GiaoVien[dem];
         int index = 0;
         for (int i = 0; i < soLuong; i++) {
-            if(arrGV[i] != null && arrGV[i].getMonChuyenMon().getTenMon().toLowerCase().contains(tenMon.trim().toLowerCase()));
-            ketQua[index++] = arrGV[i];
+            if(arrGV[i] != null && arrGV[i].getMonChuyenMon()!= null && arrGV[i].getMonChuyenMon().getTenMon().toLowerCase().contains(tenMon.trim().toLowerCase())){
+                ketQua[index++] = arrGV[i];
+            }   
         }
         return ketQua;
     }
@@ -95,14 +107,16 @@ public class DanhSachGiaoVien implements IThongKe {
     public GiaoVien[] timKiemTheoChucVu(String chucVu){
         int dem = 0;
         for (int i = 0; i < soLuong; i++) {
-            if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVu.trim().toLowerCase()));
-            dem++;
+            if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVu.trim().toLowerCase())){
+                dem++;
+            }  
         }
         GiaoVien[] ketQua = new GiaoVien[dem];
         int index = 0;
         for (int i = 0; i < soLuong; i++) {
-            if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVu.trim().toLowerCase()));
-            ketQua[index++] = arrGV[i];
+            if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVu.trim().toLowerCase())){
+                ketQua[index++] = arrGV[i];
+            }     
         }
         return ketQua;
     }
@@ -128,53 +142,130 @@ public class DanhSachGiaoVien implements IThongKe {
         GiaoVien gv = arrGV[index];
 
         System.out.println("Cập nhật thông tin cho giáo viên có mã là " + maGV);
+        System.out.println("Lưu ý nếu không muốn đổi thông tin mục nào vui lòng nhấn ENTER!");
+
+        String s;
         
-        System.out.print("Nhập họ tên mới: ");
-        gv.setHoTen(sc.nextLine());
-        
-        System.out.print("Nhập ngày sinh mới: ");
-        gv.setNgaySinh(sc.nextLine());
-        
-        System.out.print("Nhập giới tính mới (true-Nam / false-Nữ): ");
-        gv.setGioiTinh(Boolean.parseBoolean(sc.nextLine()));
-
-        System.out.print("Nhập địa chỉ mới: ");
-        gv.setDiaChi(sc.nextLine());
-
-        System.out.print("Nhập số điện thoại mới: ");
-        gv.setSoDienThoai(sc.nextLine());
-
-        System.out.print("Nhập chức vụ mới: ");
-        gv.setChucVu(sc.nextLine());
-
-        System.out.print("Nhập lương mới: ");
-        gv.setLuong(Double.parseDouble(sc.nextLine()));
-
-        System.out.print("Bạn có muốn thay đổi môn chuyên môn không? (y/n): ");
-        String chonMon = sc.nextLine();
-        if(chonMon.equalsIgnoreCase("y")){
-            System.out.print("Nhập tên môn chuyên môn mới: ");
-            String tenMon = sc.nextLine();
-            models.MonHoc monMoi = new models.MonHoc("", tenMon, 1, true);
-            gv.setMonChuyenMon(monMoi);
-        }
-
-        System.out.print("Bạn có muốn thay đổi danh sách lớp dạy không? (y/n): ");
-        String chonLop = sc.nextLine();
-        if(chonLop.equalsIgnoreCase("y")){
-            System.out.print("Nhập số lượng lớp dạy mới: ");
-            int soLop = Integer.parseInt(sc.nextLine());
-            models.LopHoc[] dsLopMoi = new models.LopHoc[soLop];
-
-            for(int i = 0 ; i < soLop; i++){
-                System.out.println("Nhập thông tin lớp thứ " + (i+1) + " :");
-                System.out.print("Nhập tên lớp mới: ");
-                String tenLop = sc.nextLine();
-                dsLopMoi[i] = new models.LopHoc(tenLop, "", null, null, false, "", 0.0);  
+        while (true) { 
+            System.out.print("Nhập họ tên mới: ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){ break;}
+            if( !s.contains(",")){
+            gv.setHoTen(s);
+            break;
             }
-            gv.setDsLopDay(dsLopMoi);
+        System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
         }
-        System.out.println("Cập nhật  thông tin thành công!");
+
+        while (true) { 
+            System.out.print("Nhập ngày sinh mới (DD/MM/YYYY): ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            if(DataValidator.ngaySinhHopLe(s)){
+                gv.setNgaySinh(s);
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Ngày sinh phải đúng định dạng DD/MM/YYYY" + Color.RESET);
+        }
+        
+        while (true) { 
+            System.out.print("Nhập giới tính mới (1-Nam / 0-Nữ): ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            if(s.equals("1") || s.equals("0")){
+                gv.setGioiTinh(s.equals("1"));
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Chỉ nhập 1 hoặc 0" + Color.RESET);
+        }
+
+        
+        while (true) { 
+            System.out.print("Nhập địa chỉ mới: ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            if( !s.contains(",")){
+                gv.setDiaChi(s);
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+        }
+
+        while (true) { 
+            System.out.print("Nhập số điện thoại mới: ");
+            s= sc.nextLine().trim().replaceAll("[\\s.]", "");
+            if(s.isEmpty()){break;}
+            if(s.matches("^0\\d{9}$")){
+                gv.setSoDienThoai(s);
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Số điện thoại phải có 10 số và bắt đầu từ số 0" + Color.RESET);
+        }
+
+        while (true) { 
+            System.out.print("Nhập chức vụ mới: ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            if( !s.contains(",")){
+                gv.setChucVu(s);
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+        }
+
+        while (true) { 
+            System.out.print("Nhập lương mới: ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            try {
+                double luong = Double.parseDouble(s);
+                if(luong >= 0 ){
+                    gv.setLuong(luong);
+                    break;
+                }
+                else{
+                    System.out.println(Color.RED + "Lỗi: Lương không được là số âm" + Color.RESET);
+                }
+            } catch (NumberFormatException e ) {
+                System.out.println(Color.RED + "Lỗi: Lương phải là số thực hợp lệ" + Color.RESET);
+            }
+        }
+
+        while (true) { 
+            System.out.print("Nhập tên môn chuyên môn mới:");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            if(!s.contains(",")){
+                models.MonHoc monMoi = new models.MonHoc("",s,1,true);
+                gv.setMonChuyenMon(monMoi);
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+        }
+        
+        while (true) { 
+            System.out.print("Nhập số lượng lớp dạy mới:");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            try {
+                int soLop = Integer.parseInt(s);
+                if(soLop >= 0){
+                    models.LopHoc[] dsLopMoi = new models.LopHoc[soLop];
+                    for (int i = 0; i < soLop; i++) {
+                        System.out.println("Nhập thông tin lớp thứ " + (i+1) + " - Nhập tên lớp: ");
+                        String tenLop = sc.nextLine().trim();
+                        dsLopMoi[i] = new models.LopHoc(tenLop, "", gv, null, false, "", 0.0);
+                    }
+                    gv.setDsLopDay(dsLopMoi);
+                    break;
+                }
+                else{
+                    System.out.println(Color.RED + "Lỗi: Số lớp không được là số âm" + Color.RESET);
+                }
+            } catch (NumberFormatException e ) {
+                System.out.println(Color.RED + "Lỗi: Số lớp phải là số nguyên hợp lệ" + Color.RESET);
+            }
+        }
         return true;
     }
 
@@ -183,46 +274,48 @@ public class DanhSachGiaoVien implements IThongKe {
     File thuMucCha = f.getParentFile();
     if (thuMucCha != null && !thuMucCha.exists()) {
         thuMucCha.mkdirs();}
-        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(f))) {
-            for(int i = 0; i < soLuong; i++){
-                GiaoVien gv = arrGV[i];
-                if(gv != null){
-                    String tenMon = (gv.getMonChuyenMon() != null) ? gv.getMonChuyenMon().getTenMon() : "Không";
-                    LopHoc [] dsLop = gv.getDsLopDay();
-                    int soLop = (dsLop != null) ? dsLop.length : 0; 
-                    pw.print(gv.getMaGV() + "," + gv.getHoTen() + "," + gv.getNgaySinh() + "," + gv.isGioiTinh() + 
-                    "," + gv.getDiaChi() + "," + gv.getSoDienThoai() + "," + gv.getChucVu() + "," + gv.getLuong() +","+
-                               tenMon + "," + soLop);
-                    if(soLop > 0){
-                        for(int  j = 0; j < soLop; j++){
-                            if(dsLop[j] != null){
-                                pw.print("," + dsLop[j].getTenLop());
-                            }
-                            else{
-                                pw.print(",Không");
-                            }
-                        }
-                    }
-                    pw.println();
-                }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+        for (int i = 0; i < soLuong; i++) {
+            if (arrGV[i] != null) {
+                bw.write(arrGV[i].toFileString());
+                bw.newLine();
             }
-            System.out.println("Ghi file GiaoVien thanh cong!");
+            }
+            System.out.println("Ghi file GiaoVien thành công!");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi ghi file GiaoVien: " + e.getMessage());
+            System.out.println("Lỗi khi ghi file GiaoVien: " + e.getMessage());
             return false;
         }
     }
 
     public boolean docFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
+        int soDong = 0;
+        int soDongLoi = 0;
+        File f = new File(DUONG_DAN_FILE);
+        if(!f.exists()){
+            return false;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String line;
             this.soLuong = 0;
 
             while ((line = br.readLine()) != null) {
-                if(line.trim().isEmpty()) continue;
-                String[] parts = line.split(",");
-                if(parts.length >= 10){
+                soDong++;
+                line = line.trim();
+
+                if(line.isEmpty()) continue;
+                String[] parts = line.split(",",-1);
+                if(parts.length < 10){
+                    System.out.println("Dòng " + soDong + ": Thiếu cột dữ liệu (cần ít nhất 10, có " + parts.length + ")");
+                    soDongLoi++;
+                    continue;
+                }
+                for(int i = 0; i < parts.length; i++){
+                    parts[i] = parts[i].trim();
+                }
+                try{
                     String maGV = parts[0];
                     String hoTen = parts[1];
                     String ngaySinh = parts[2];
@@ -231,9 +324,10 @@ public class DanhSachGiaoVien implements IThongKe {
                     String soDienThoai = parts[5];
                     String chucVu = parts[6];
                     double luong = Double.parseDouble(parts[7]);
+
                     MonHoc monChuyenMon = null;
                     if(!parts[8].equalsIgnoreCase("Không")){
-                        monChuyenMon = new MonHoc("", parts[8].trim(), 1, true);
+                        monChuyenMon = new MonHoc("", parts[8], 1, true);
                     }
 
                     int soLop = Integer.parseInt(parts[9]);
@@ -246,16 +340,26 @@ public class DanhSachGiaoVien implements IThongKe {
                         }
                     }
                     GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, monChuyenMon, dsLopDay);
-                    if(soLuong < arrGV.length){
-                        arrGV[soLuong] = gv;
-                        soLuong++; 
+                    if (dsLopDay != null) {
+                        for(int i = 0; i < dsLopDay.length; i++){
+                            if(dsLopDay[i] != null){
+                                dsLopDay[i].setGiaoVienChuNhiem(gv);
+                            }
+                        }
                     }
+                    them(gv);
+                } catch (NumberFormatException e) {
+                    System.out.println("Dòng " + soDong + ": Lỗi định dạng số (lương/số lớp): " + line);
+                    soDongLoi++;
+                } catch (Exception e) {
+                    System.out.println("Dòng " + soDong + ": " + e.getMessage());
+                    soDongLoi++;
                 }
             }
-            System.out.println("Doc file GiaoVien thanh cong! Tong so: " + soLuong + " giao vien.");
+            System.out.println("Đọc file GiaoVien thành công! Tổng số: " + soLuong + " giáo viên, " + soDongLoi + " dòng lỗi.");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi doc file GiaoVien: " + e.getMessage());
+            System.out.println("Lỗi khi đọc file GiaoVien: " + e.getMessage());
             return false;
         }
     }
@@ -333,7 +437,7 @@ public class DanhSachGiaoVien implements IThongKe {
 
                 String cv = (gv.getChucVu() != null && !gv.getChucVu().trim().isEmpty()) ? gv.getChucVu() : "Chua duoc phan chuc vu!";
                 int idxCV = -1;
-                for (int c = 0; c < soMonKhacNhau; c++) {
+                for (int c = 0; c < soCVKhacNhau; c++) {
                     if(dachSachCV[c].equalsIgnoreCase(cv)){
                         idxCV = c;
                         break;
