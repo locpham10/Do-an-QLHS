@@ -89,7 +89,7 @@ public class HeThongQuanLy {
         try { dsLopHoc.docFile(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
         try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
         try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
-        dsLopHoc.phanHocSinhVaoLop(dsHocSinh);
+        try { dsLopHoc.phanHocSinhVaoLop(dsHocSinh); } catch (RuntimeException e) { baoLoiTai("lophoc.txt (phan hoc sinh vao lop)", e); }
     }
 
     private void baoLoiTai(String tenFile, RuntimeException e) {
