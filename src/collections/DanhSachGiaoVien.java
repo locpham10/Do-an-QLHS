@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import models.GiaoVien;
 import models.LopHoc;
@@ -41,11 +42,11 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     public boolean them(GiaoVien gv){
-        if( gv = null ){
+        if( gv == null ){
             return false; // Thêm thất bại (đầy/null)
         }
         if(soLuong >= arrGV.length){
-            arrGV = java.util.Arrays.copyOf(arrGV,arrGV.length * 2);
+            arrGV = Arrays.copyOf(arrGV,arrGV.length * 2);
         }
         this.arrGV[soLuong] = gv;
         soLuong ++;
@@ -280,10 +281,10 @@ public class DanhSachGiaoVien implements IThongKe {
                 bw.newLine();
             }
             }
-            System.out.println("Ghi file GiaoVien thanh cong!");
+            System.out.println("Ghi file GiaoVien thành công!");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi ghi file GiaoVien: " + e.getMessage());
+            System.out.println("Lỗi khi ghi file GiaoVien: " + e.getMessage());
             return false;
         }
     }
@@ -340,9 +341,9 @@ public class DanhSachGiaoVien implements IThongKe {
                     }
                     GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, monChuyenMon, dsLopDay);
                     if (dsLopDay != null) {
-                        for (LopHoc lop : dsLopDay) {
-                            if (lop != null) {
-                            lop.setGiaoVien(gv);
+                        for(int i = 0; i < dsLopDay.length; i++){
+                            if(dsLopDay[i] != null){
+                                dsLopDay[i].setGiaoVienChuNhiem(gv);
                             }
                         }
                     }
@@ -352,12 +353,13 @@ public class DanhSachGiaoVien implements IThongKe {
                     soDongLoi++;
                 } catch (Exception e) {
                     System.out.println("Dòng " + soDong + ": " + e.getMessage());
-                     soDongLoi++;
+                    soDongLoi++;
+                }
             }
-            System.out.println("Doc file GiaoVien thanh cong! Tong so: " + soLuong + " giao vien.");
+            System.out.println("Đọc file GiaoVien thành công! Tổng số: " + soLuong + " giáo viên, " + soDongLoi + " dòng lỗi.");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi doc file GiaoVien: " + e.getMessage());
+            System.out.println("Lỗi khi đọc file GiaoVien: " + e.getMessage());
             return false;
         }
     }

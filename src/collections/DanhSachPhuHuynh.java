@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import models.PhuHuynh;
 import utils.Color;
@@ -34,13 +35,16 @@ public class DanhSachPhuHuynh implements IThongKe {
         return soLuong;
     }
 
-    public boolean them(PhuHuynh ph){
-        if(ph != null && soLuong < arrPH.length){
-            arrPH[soLuong] = ph;
-            soLuong ++;
-            return true; //them thanh cong
+    public boolean them(PhuHuynh ph) {
+        if (ph == null) {
+            return false;
         }
-        return false; // them that bai (day/null)
+        if (soLuong >= arrPH.length) {
+            arrPH = Arrays.copyOf(arrPH, arrPH.length * 2); 
+        }
+        arrPH[soLuong] = ph;
+        soLuong++;
+        return true;
     }
 
     private int timKiemViTri(String sdt){
@@ -61,10 +65,20 @@ public class DanhSachPhuHuynh implements IThongKe {
     }
 
     public PhuHuynh timtheoMSHS (String mshs){
-        for(int i = 0; i < soLuong; i++){
-            if(arrPH[i] != null && arrPH[i].getMshs() != null && arrPH[i].getMshs().equalsIgnoreCase(mshs)){
-                return arrPH[i];
-            }    
+        if(mshs == null || mshs.trim().isEmpty()){
+            return null;
+        }
+        mshs = mshs.trim();
+        for (int i = 0; i < soLuong; i++) {
+            PhuHuynh ph = arrPH[i];
+            if(ph != null && ph.getMshs() != null && !ph.getMshs().isEmpty()){
+                String[] dsMaCon = ph.getMshs().split(";");
+                for (int j = 0; j < dsMaCon.length; j++) {
+                    if(dsMaCon[j].trim().equalsIgnoreCase(mshs)){
+                        return ph;
+                    }
+                }
+            }
         }
         return null;
     }
@@ -109,38 +123,101 @@ public class DanhSachPhuHuynh implements IThongKe {
             s= sc.nextLine().trim().replaceAll("[\\s.]", "");
             if(s.isEmpty()){break;}
             if(s.matches("^0\\d{9}$")){
-                ph.setSdtKhanCap(sdt);
+                ph.setSdtKhanCap(s);
                 break;
             }
             System.out.println(Color.RED + "Lỗi: Số điện thoại phải có 10 số và bắt đầu từ số 0" + Color.RESET);
+        }
+        while (true) { 
+            System.out.println("Nhập số lượng MSHS mới: ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){break;}
+            try {
+                int soLuongHS = Integer.parseInt(s);
+                if(soLuongHS >= 0){
+                    if(soLuongHS == 0){
+                        ph.setMshs("");
+                        break;
+                    }
+                    String mshsMoi = "";
+                    boolean nhapThanhCong = true;
+                    for (int i = 0; i < soLuongHS; i++) {
+                        System.out.print("  + Nhập MSHS thứ " + (i + 1) + ": ");
+                        String maHS = sc.nextLine().trim();
+                        if(maHS.isEmpty() || maHS.contains(",")){
+                            System.out.println(Color.RED + "Lỗi: MSHS không được để trống hoặc chứa dấu phẩy! Vui lòng nhập lại từ đầu" + Color.RESET);
+                            nhapThanhCong = false;
+                            break;
+                        }
+                        if(mshsMoi == null){
+                            mshsMoi = maHS;
+                        }
+                        else{
+                            mshsMoi = mshsMoi + ";" + maHS;
+                        }
+                    }
+                    if(nhapThanhCong){
+                        ph.setMshs(mshsMoi);
+                        break;
+                    }
+                }
+                else{
+                        System.out.println(Color.RED + "Lỗi: Số lượng không được là số âm" + Color.RESET);
+                    }
+            } catch (NumberFormatException e) {
+                System.out.println(Color.RED + "Lỗi: Số lượng phải là số nguyên hợp lệ" + Color.RESET);
+            }
         }
         return true;
     }
 
     public boolean docFile(){
+        int soDong = 0;
+        int soDongLoi = 0;
+        File f = new File(DUONG_DAN_FILE);
+        if(!f.exists()){
+            return false;
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))){
             String line;
             this.soLuong = 0;
+
             while ((line = br.readLine()) != null){
                 line = line.trim();
+                soDong++;
+
                 if(line.isEmpty()) continue;
-                String[] parts = line.split(",");
-                if(parts.length >=2){
+                String[] parts = line.split(",",-1);
+                if(parts.length < 3){
+                    System.out.println("Dòng " + soDong + ": Thiếu cột dữ liệu (cần ít nhất 3, có " + parts.length + ")");
+                    soDongLoi++;
+                    continue;
+                }
+                for(int i = 0; i < parts.length; i++){
+                    parts[i] = parts[i].trim();
+                }
+                try {
                     String hoTenBoMe = parts[0].trim();
                     String sdtKhanCap = parts[1].trim();
-                    String mshs = ((parts.length > 2) ? parts[2].trim() : "");
+                    String mshs = ((parts.length >= 3) ? parts[2].trim() : "");
+
+                    if(hoTenBoMe.isEmpty() || sdtKhanCap.isEmpty()){
+                        System.out.println("Dòng " + soDong + ": Họ tên hoặc SĐT không được để trống!");
+                        soDongLoi++;
+                        continue;
+                    }
 
                     PhuHuynh ph = new PhuHuynh(hoTenBoMe, sdtKhanCap, mshs);
-                    if(soLuong < arrPH.length){
-                        arrPH[soLuong] = ph;
-                        soLuong++;
-                    }
+                    them(ph);
+                } catch (Exception e) {
+                    System.out.println("Dòng " + soDong + ": " + e.getMessage());
+                    soDongLoi++;
                 }
             }
-            System.out.println("Doc file PhuHuynh thanh cong! Tong: " + soLuong + " phu huynh.");
+            System.out.println("Đọc file PhuHuynh thành công! Tổng số: " + soLuong + " phụ huynh, " + soDongLoi + " dòng lỗi.");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi doc file PhuHuynh: " + e.getMessage());
+            System.out.println("Lỗi khi đọc file PhuHuynh: " + e.getMessage());
             return false;
         }
     } 
@@ -157,10 +234,10 @@ public class DanhSachPhuHuynh implements IThongKe {
                     bw.newLine();
                 }
             }
-            System.out.println("Ghi file PhuHuynh thanh cong!");
+            System.out.println("Ghi file PhuHuynh thành công!");
             return true;
         } catch (IOException e) {
-            System.out.println("Loi khi ghi file PhuHuynh: " + e.getMessage());
+            System.out.println("Lỗi khi ghi file PhuHuynh: " + e.getMessage());
             return false;
         }
     }
