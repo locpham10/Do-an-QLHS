@@ -236,9 +236,20 @@ public class DanhSachGiaoVien implements IThongKe {
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             if(!s.contains(",")){
-                models.MonHoc monMoi = new models.MonHoc("",s,1,true);
-                gv.setMonChuyenMon(monMoi);
-                break;
+                MonHoc monTimDuoc = null;
+                for(int i = 0; i < MonHoc.KHO_MON_HOC.length; i++){
+                    if(MonHoc.KHO_MON_HOC[i] != null && MonHoc.KHO_MON_HOC[i].getTenMon().equalsIgnoreCase(s)){
+                        monTimDuoc = MonHoc.KHO_MON_HOC[i];
+                        break;
+                    }
+                }
+                if(monTimDuoc =! null){
+                    gv.setMonChuyenMon(monTimDuoc);
+                    break;
+                }
+                else{
+                    System.out.println(Color.RED + "Lỗi: Không tìm thấy môn này trong kho môn học!" + Color.RESET);
+                }
             }
             System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
         }
@@ -326,8 +337,14 @@ public class DanhSachGiaoVien implements IThongKe {
                     double luong = Double.parseDouble(parts[7]);
 
                     MonHoc monChuyenMon = null;
-                    if(!parts[8].equalsIgnoreCase("Không")){
-                        monChuyenMon = new MonHoc("", parts[8], 1, true);
+                    String tenMonHoc = parts[8];
+                    if(!tenMonHoc.equalsIgnoreCase("Không") && !tenMonHoc.isEmpty()){
+                        for(int i = 0; i < MonHoc.KHO_MON_HOC.length; i++){
+                            if(MonHoc.KHO_MON_HOC[i] != null && MonHoc.KHO_MON_HOC[i].getTenMon().equalsIgnoreCase(tenMonHoc)){
+                                monChuyenMon = MonHoc.KHO_MON_HOC[i];
+                                break;
+                            }
+                        }
                     }
 
                     int soLop = Integer.parseInt(parts[9]);
