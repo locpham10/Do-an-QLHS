@@ -2,8 +2,10 @@ package collections;
 
 import interfaces.IThongKe;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import models.GiaoVien;
@@ -39,12 +41,15 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     public boolean them(GiaoVien gv){
-        if( gv != null && soLuong < arrGV.length){
-            this.arrGV[soLuong] = gv;
-            soLuong ++;
-            return true; // Thêm thành công
+        if( gv = null ){
+            return false; // Thêm thất bại (đầy/null)
         }
-        return false; // Thêm thất bại (đầy/null)
+        if(soLuong >= arrGV.length){
+            arrGV = java.util.Arrays.copyOf(arrGV,arrGV.length * 2);
+        }
+        this.arrGV[soLuong] = gv;
+        soLuong ++;
+        return true; // Thêm thành công
     }
 
     private int timKiemViTri(String maGV){
@@ -268,28 +273,12 @@ public class DanhSachGiaoVien implements IThongKe {
     File thuMucCha = f.getParentFile();
     if (thuMucCha != null && !thuMucCha.exists()) {
         thuMucCha.mkdirs();}
-        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(f))) {
-            for(int i = 0; i < soLuong; i++){
-                GiaoVien gv = arrGV[i];
-                if(gv != null){
-                    String tenMon = (gv.getMonChuyenMon() != null) ? gv.getMonChuyenMon().getTenMon() : "Không";
-                    LopHoc [] dsLop = gv.getDsLopDay();
-                    int soLop = (dsLop != null) ? dsLop.length : 0; 
-                    pw.print(gv.getMaGV() + "," + gv.getHoTen() + "," + gv.getNgaySinh() + "," + gv.isGioiTinh() + 
-                    "," + gv.getDiaChi() + "," + gv.getSoDienThoai() + "," + gv.getChucVu() + "," + gv.getLuong() +","+
-                               tenMon + "," + soLop);
-                    if(soLop > 0){
-                        for(int  j = 0; j < soLop; j++){
-                            if(dsLop[j] != null){
-                                pw.print("," + dsLop[j].getTenLop());
-                            }
-                            else{
-                                pw.print(",Không");
-                            }
-                        }
-                    }
-                    pw.println();
-                }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+        for (int i = 0; i < soLuong; i++) {
+            if (arrGV[i] != null) {
+                bw.write(arrGV[i].toFileString());
+                bw.newLine();
+            }
             }
             System.out.println("Ghi file GiaoVien thanh cong!");
             return true;
@@ -300,14 +289,32 @@ public class DanhSachGiaoVien implements IThongKe {
     }
 
     public boolean docFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
+        int soDong = 0;
+        int soDongLoi = 0;
+        File f = new File(DUONG_DAN_FILE);
+        if(!f.exists()){
+            return false;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String line;
             this.soLuong = 0;
 
             while ((line = br.readLine()) != null) {
-                if(line.trim().isEmpty()) continue;
-                String[] parts = line.split(",");
-                if(parts.length >= 10){
+                soDong++;
+                line = line.trim();
+
+                if(line.isEmpty()) continue;
+                String[] parts = line.split(",",-1);
+                if(parts.length < 10){
+                    System.out.println("Dòng " + soDong + ": Thiếu cột dữ liệu (cần ít nhất 10, có " + parts.length + ")");
+                    soDongLoi++;
+                    continue;
+                }
+                for(int i = 0; i < parts.length; i++){
+                    parts[i] = parts[i].trim();
+                }
+                try{
                     String maGV = parts[0];
                     String hoTen = parts[1];
                     String ngaySinh = parts[2];
@@ -316,9 +323,10 @@ public class DanhSachGiaoVien implements IThongKe {
                     String soDienThoai = parts[5];
                     String chucVu = parts[6];
                     double luong = Double.parseDouble(parts[7]);
+
                     MonHoc monChuyenMon = null;
                     if(!parts[8].equalsIgnoreCase("Không")){
-                        monChuyenMon = new MonHoc("", parts[8].trim(), 1, true);
+                        monChuyenMon = new MonHoc("", parts[8], 1, true);
                     }
 
                     int soLop = Integer.parseInt(parts[9]);
@@ -331,11 +339,20 @@ public class DanhSachGiaoVien implements IThongKe {
                         }
                     }
                     GiaoVien gv = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, monChuyenMon, dsLopDay);
-                    if(soLuong < arrGV.length){
-                        arrGV[soLuong] = gv;
-                        soLuong++; 
+                    if (dsLopDay != null) {
+                        for (LopHoc lop : dsLopDay) {
+                            if (lop != null) {
+                            lop.setGiaoVien(gv);
+                            }
+                        }
                     }
-                }
+                    them(gv);
+                } catch (NumberFormatException e) {
+                    System.out.println("Dòng " + soDong + ": Lỗi định dạng số (lương/số lớp): " + line);
+                    soDongLoi++;
+                } catch (Exception e) {
+                    System.out.println("Dòng " + soDong + ": " + e.getMessage());
+                     soDongLoi++;
             }
             System.out.println("Doc file GiaoVien thanh cong! Tong so: " + soLuong + " giao vien.");
             return true;
