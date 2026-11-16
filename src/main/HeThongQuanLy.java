@@ -70,6 +70,9 @@ public class HeThongQuanLy {
                     case 0:
                         System.out.println(Color.GREEN + "Cam on ban da su dung phan mem! Tam biet!" + Color.RESET);
                         break;
+                    default:
+                        System.out.println(Color.RED + "Lua chon khong hop le!" + Color.RESET);
+                        break;
                 }
             } catch (NoSuchElementException | IllegalStateException e){
                 System.out.println(Color.RED + "\nKhong con du lieu nhap, thoat chuong trinh." + Color.RESET);
@@ -95,17 +98,6 @@ public class HeThongQuanLy {
 
     private int nhapLuaChon(int max) {
         return DataValidator.nhapSoNguyen(sc, "Nhap lua chon (0-" + max + "): ", 0, max);
-    }
-
-    private int nhapLuaChon() {
-        int luaChon = -1;
-        try {
-            System.out.print("Nhap lua chon cua ban: ");
-            luaChon = Integer.parseInt(sc.nextLine().trim());
-        } catch (NumberFormatException e) {
-            System.out.println(Color.RED + "Loi: Vui long nhap so hop le" + Color.RESET);
-        }
-        return luaChon;
     }
 
     private void menuQuanLyHoSo() {
@@ -589,7 +581,7 @@ public class HeThongQuanLy {
             System.out.println("3. Theo he (Chuyen / Dai tra)");
             System.out.println("4. Danh sach cac lop hoc");
             System.out.println("0. Quay lai");
-            chon = nhapLuaChon();
+            chon = nhapLuaChon(4);
 
             switch (chon) {
                 case 1:
@@ -667,7 +659,7 @@ public class HeThongQuanLy {
             System.out.println("4. Bang diem lop hoc");
             System.out.println("5. Bang diem ca nhan");
             System.out.println("0. Quay ve menu chinh");
-            chon=nhapLuaChon();
+            chon=nhapLuaChon(6);
 
             if(chon == 0) break;
             switch (chon) {
@@ -756,7 +748,7 @@ public class HeThongQuanLy {
             System.out.println("3. Xuat bao cao thu phi toan truong");
             System.out.println("4. Cap nhat trang thai thu tien & danh sach no hoc phi");
             System.out.println("0. Quay lai menu chinh");
-            chon=nhapLuaChon();
+            chon=nhapLuaChon(4);
 
             if(chon == 0) break;
         }
@@ -770,7 +762,7 @@ public class HeThongQuanLy {
             System.out.println("2. Top 5 hoc sinh xuat sac nhat");
             System.out.println("3. Bao cao thong ke tong hop");
             System.out.println("0. Quay lai menu chinh");
-            chon = nhapLuaChon();
+            chon = nhapLuaChon(3);
 
             if(chon == 0) break;
             switch (chon) {
@@ -802,7 +794,7 @@ public class HeThongQuanLy {
             System.out.println("3. Xem du lieu tong quan hien co");
             System.out.println("4. Xoa du lieu bo nho");
             System.out.println("0. Quay lai menu chinh");
-            chon=nhapLuaChon();
+            chon=nhapLuaChon(4);
 
             if(chon == 0) break;
             //Code tiep
@@ -815,7 +807,7 @@ public class HeThongQuanLy {
             System.out.println("1. Quan ly danh sach giao vien");
             System.out.println("2. Quan ly danh sach phu huynh");
             System.out.println("0. Quay lai menu chinh");
-            chon=nhapLuaChon();
+            chon=nhapLuaChon(2);
 
             if(chon == 0) break;
             //code tiếp ở đây
@@ -831,8 +823,8 @@ public class HeThongQuanLy {
             System.out.println("4. Tim theo he dao tao (Chuyen/Dai tra)");
             System.out.println("5. Tim theo gioi tinh (Nam/Nu)");
             System.out.println("6. Tim theo khoang diem GPA");
-            System.out.println("0. Quay lai menu chinh");
-            chon = nhapLuaChon();
+            System.out.println("0. Quay lai");
+            chon = nhapLuaChon(6);
 
             if (chon == 0) break;
             models.HocSinh[] kq = null;
@@ -852,22 +844,12 @@ public class HeThongQuanLy {
                     kq = dsHocSinh.timKiemTheoLop(sc.nextLine().trim());
                     break;
                 case 4:
-                    System.out.print("Chon he 1: Chuyen; 2: Dai tra ");
-                    int chonHe = nhapLuaChon();
-                    if (chonHe == 1 || chonHe == 2) {
-                        kq = dsHocSinh.timKiemTheoHe(chonHe == 1);
-                    } else {
-                        System.out.println("Lua chon he khong hop le!");
-                    }
+                    int chonHe = DataValidator.nhapSoNguyen(sc, "Chon he (1: Chuyen, 2: Dai tra): ", 1, 2);
+                    kq = dsHocSinh.timKiemTheoHe(chonHe == 1);
                     break;
                 case 5:
-                    System.out.print("Chon gioi tinh 1: Nam; 2: Nu. ");
-                    int chonGT = nhapLuaChon();
-                    if (chonGT == 1 || chonGT == 2) {
-                        kq = dsHocSinh.timKiemTheoGioiTinh(chonGT == 1); 
-                    } else {
-                        System.out.println("Lua chon gioi tinh khong hop le!");
-                    }
+                    int chonGT = DataValidator.nhapSoNguyen(sc, "Chon gioi tinh (1: Nam, 2: Nu): ", 1, 2);
+                    kq = dsHocSinh.timKiemTheoGioiTinh(chonGT == 1);
                     break;
                 case 6:
                     try {
