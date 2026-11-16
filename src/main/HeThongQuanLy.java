@@ -558,7 +558,7 @@ public class HeThongQuanLy {
         System.out.println("\n[NHAP N HOC SINH DAU TIEN]");
 
         if (dsLopHoc.getSoLuong() == 0) {
-            System.out.println(Color.RED + "Chua co lop hoc nao! Hay tao lop truoc (muc 5)." + Color.RESET);
+            System.out.println(Color.RED + "Chua co lop hoc nao! Hay tao lop truoc (muc 5>1. Them lop moi)." + Color.RESET);
             return;
         }
 
@@ -612,7 +612,7 @@ public class HeThongQuanLy {
             System.out.println("2. Theo lop");
             System.out.println("3. Theo he (Chuyen / Dai tra)");
             System.out.println("0. Quay lai");
-            chon = nhapLuaChon(4);
+            chon = nhapLuaChon(3);
 
             switch (chon) {
                 case 1:
@@ -879,7 +879,7 @@ public class HeThongQuanLy {
             System.out.println("4. Cap nhat trang thai thu tien");
             System.out.println("5. Danh sach hoc sinh no hoc phi");
             System.out.println("0. Quay lai menu chinh");
-            chon=nhapLuaChon(4);
+            chon=nhapLuaChon(5);
 
             if(chon == 0) break;
 
@@ -922,7 +922,7 @@ public class HeThongQuanLy {
                     dsHocSinh.inBaoCaoThongKe();
                     break;
                 default:
-                    System.out.println("Lua chon khong hop le, vui long nhap lai!");
+                    System.out.println(Color.RED + "Lua chon khong hop le, vui long nhap lai!" + Color.RESET);
                     break;
             }
         }
@@ -936,8 +936,9 @@ public class HeThongQuanLy {
             System.out.println("2. Tai du lieu tu file len he thong");
             System.out.println("3. Xem du lieu tong quan hien co");
             System.out.println("4. Xoa du lieu bo nho");
+            System.out.println("5. Xuat bao cao thong ke ra file baocao.txt");
             System.out.println("0. Quay lai menu chinh");
-            chon=nhapLuaChon(4);
+            chon=nhapLuaChon(5);
 
             if(chon == 0) break;
             switch (chon) {
