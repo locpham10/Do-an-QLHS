@@ -985,7 +985,204 @@ public class HeThongQuanLy {
         }
     }
     private void menuQuanLyGiaoVien() {
-        //Mai - M7 code vào đây
+        int chon = -1;
+    while (chon != 0) {
+        System.out.println("\n---- QUAN LY DANH SACH GIAO VIEN ----");
+        System.out.println("1. Xem danh sach giao vien");
+        System.out.println("2. Them giao vien moi");
+        System.out.println("3. Sua thong tin giao vien");
+        System.out.println("4. Xoa giao vien");
+        System.out.println("5. Tim kiem giao vien");
+        System.out.println("6. Bao cao thong ke giao vien");
+        System.out.println("7. Phan cong GVCN / Lop day");
+        System.out.println("0. Quay lai");
+        chon = nhapLuaChon(7);
+        if(chon == 0){break;}
+        switch (chon){
+            case 1:
+                dsGiaoVien.hienThiDanhSach();
+                break;
+            
+            case 2:
+                System.out.println("THEM GIAO VIEN MOI");
+                String maGV = DataValidator.nhapChuoiKhongRong(sc, "Nhap ma giao vien: ").toUpperCase();
+                if(dsGiaoVien.timKiem(maGV) != null){
+                    System.out.println(Color.RED + "Loi: Ma giao vien " + maGV + " da ton tai!" + Color.RESET);
+                    break;
+                }
+                String hoTen = DataValidator.nhapChuoiKhongRong(sc, "Nhap ho ten: ");
+                String ngaySinh = DataValidator.nhapNgaySinh(sc, "Nhap ngay sinh (DD/MM/YYYY): ");
+                boolean gioiTinh = DataValidator.nhapSoNguyen(sc, "Gioi tinh (1: Nam / 0: Nu): ", 0, 1) == 1;
+                String diaChi = DataValidator.nhapChuoiKhongRong(sc, "Nhap dia chi: ");
+                String sdt = DataValidator.nhapSoDienThoai(sc, "Nhap so dien thoai: ");
+                String chucVu = DataValidator.nhapChuoiKhongRong(sc, "Nhap chuc vu (VD: Giao vien, To truong): ");
+                
+                double luong = 0;
+                while (true) { 
+                    System.out.print("Nhap muc luong: ");
+                    try {
+                        luong = Double.parseDouble(sc.nextLine().trim());
+                        if (luong >= 0) break;
+                        System.out.println(Color.RED + "Loi: Luong khong duoc la so am" + Color.RESET);
+                    } catch (NumberFormatException e) {
+                        System.out.println(Color.RED + "Loi: Luong phai la so thuc hop le" + Color.RESET);
+                    }
+                }
+
+                System.out.println("--- Chon mon chuyen mon ---");
+                for (int i = 0; i < MonHoc.KHO_MON_HOC.length; i++) {
+                    System.out.println((i + 1) + ". " + MonHoc.KHO_MON_HOC[i].getTenMon() + " (" + MonHoc.KHO_MON_HOC[i].getMaMon() + ")");
+                }
+                System.out.println("0. Chua phan mon");
+                int chonMon = nhapLuaChon(MonHoc.KHO_MON_HOC.length);
+                MonHoc monChuyenMon = (chonMon > 0) ? MonHoc.KHO_MON_HOC[chonMon - 1] : null;
+
+                int maxLop = (dsLopHoc.getSoLuong() > 0) ? dsLopHoc.getSoLuong() : 20;
+                int soLop = DataValidator.nhapSoNguyen(sc, "Nhap so lop giang day ban dau (0 = chua co): ", 0, maxLop);
+                LopHoc[] dsLopDay = null;
+                if (soLop > 0) {
+                    dsLopDay = new LopHoc[soLop];
+                    for (int i = 0; i < soLop; i++) {
+                        System.out.print("  + Nhap ten lop thu " + (i + 1) + ": ");
+                        String tenLop = sc.nextLine().trim();
+                        LopHoc lopTim = dsLopHoc.timKiemLopTheoTen(tenLop);
+                        dsLopDay[i] = (lopTim != null) ? lopTim : new LopHoc(tenLop, "", null, null, false, "", 0.0);
+                    }
+                }
+                GiaoVien gvMoi = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, sdt, chucVu, luong, monChuyenMon, dsLopDay);
+                if(dsGiaoVien.them(gvMoi)){
+                    System.out.println(Color.GREEN + "Them giao vien thanh cong!" + Color.RESET);
+                }
+                else{
+                    System.out.println(Color.RED + "Them giao vien that bai!" + Color.RESET);
+                }
+                break;
+            
+            case 3:
+                System.out.print("Nhap ma giao vien can sua: ");
+                String maSua = sc.nextLine().trim();
+                if(dsGiaoVien.sua(maSua, sc)){
+                    System.out.println(Color.GREEN + "Cap nhat thong tin giao vien thanh cong!" + Color.RESET);
+                }else {
+                    System.out.println(Color.RED + "Khong tim thay giao vien co ma " + maSua + "!" + Color.RESET);
+                }
+                break;
+            
+            case 4:
+                System.out.print("Nhap ma giao vien can xoa: ");
+                String maXoa = sc.nextLine().trim();
+                GiaoVien gvXoa = dsGiaoVien.timKiem(maXoa);
+                if(gvXoa == null){
+                    System.out.println(Color.RED + "Khong tim thay giao vien co ma " + maXoa + "!" + Color.RESET);
+                    break;
+                }
+                System.out.print(Color.YELLOW + "Xac nhan xoa giao vien " + gvXoa.getHoTen() + "? (Y/N): " + Color.RESET);
+                if(sc.nextLine().trim().equalsIgnoreCase("Y")){
+                    if(dsGiaoVien.xoa(maXoa)){
+                        System.out.println(Color.GREEN + "Da xoa giao vien thanh cong!" + Color.RESET);
+                    }
+                }
+                else{
+                    System.out.println(Color.YELLOW + "Da huy lenh xoa." + Color.RESET);    
+                    }
+                break;
+            case 5:
+                System.out.println("\n--- TIM KIEM GIAO VIEN ---");
+                System.out.println("1. Tim chinh xac theo ma GV");
+                System.out.println("2. Tim gan dung theo ten");
+                System.out.println("3. Tim theo chuc vu");
+                System.out.println("0. Quay lai");
+                int loaiTim = nhapLuaChon(3);
+                
+                if (loaiTim == 1) {
+                    System.out.print("Nhap ma giao vien: ");
+                    GiaoVien gv = dsGiaoVien.timKiem(sc.nextLine().trim());
+                    if(gv != null){
+                        gv.hienThiThongTin();
+                    }
+                    else{
+                        System.out.println(Color.RED + "Khong tim thay giao vien!" + Color.RESET);
+                    }
+                }
+                else if (loaiTim == 2) {
+                    System.out.print("Nhap ten giao vien can tim: ");
+                    String tuKhoa = sc.nextLine().toLowerCase();
+                    GiaoVien[] arrGV = dsGiaoVien.getArrGV();
+                    boolean thay = false;
+                    for (int i = 0; i < dsGiaoVien.getSoLuong(); i++) {
+                        if(arrGV[i] != null && arrGV[i].getHoTen().toLowerCase().contains(tuKhoa)){
+                            arrGV[i].hienThiThongTin();
+                            System.out.println("-------------------------");
+                            thay = true;
+                        }
+                    }
+                    if(!thay){
+                        System.out.println(Color.RED + "Khong tim thay giao vien nao phu hop!" + Color.RESET);
+                    }
+                }
+                else if (loaiTim == 3) {
+                    System.out.print("Nhap chuc vu can tim (VD: Giao vien, To truong): ");
+                    String chucVuTim = sc.nextLine().trim().toLowerCase();
+                    GiaoVien[] arrGV = dsGiaoVien.getArrGV();
+                    boolean thay = false;
+                    for (int i = 0; i < dsGiaoVien.getSoLuong(); i++) {
+                        if(arrGV[i] != null && arrGV[i].getChucVu().toLowerCase().contains(chucVuTim)){
+                            arrGV[i].hienThiThongTin();
+                            System.out.println("-------------------------");
+                            thay = true;
+                        }
+                    }
+                    if(!thay){
+                        System.out.println(Color.RED + "Khong tim thay giao vien nao phu hop!" + Color.RESET);
+                    }
+                }
+                break;
+            case 6:
+                dsGiaoVien.inBaoCaoThongKe();
+                break;
+            case 7:
+                System.out.println("\n--- PHAN CONG GVCN / LOP DAY ---");
+                System.out.print("Nhap ma giao vien can phan cong: ");
+                String maPC = sc.nextLine().trim();
+                GiaoVien gvPC = dsGiaoVien.timKiem(maPC);
+                if (gvPC == null) {
+                    System.out.println(Color.RED + "Khong tim thay giao vien co ma " + maPC + "!" + Color.RESET);
+                    break;
+                }
+                System.out.println("Giao vien: " + Color.CYAN + gvPC.getHoTen() + Color.RESET);
+                System.out.println("1. Phan cong lam Giao vien chu nhiem (GVCN)");
+                System.out.println("2. Cap nhat danh sach lop giang day");
+                System.out.println("0. Huy");
+                int chonPC = nhapLuaChon(2);
+
+                if(chonPC == 1){
+                    System.out.print("Nhap ten lop chu nhiem: ");
+                    String tenLopCN = sc.nextLine().trim();
+                    LopHoc lopCN = dsLopHoc.timKiemLopTheoTen(tenLopCN);
+                    if(lopCN != null){
+                        lopCN.setGiaoVienChuNhiem(gvPC);
+                        System.out.println(Color.GREEN + "Da phan cong " + gvPC.getHoTen() + " lam GVCN lop " + lopCN.getTenLop() + "!" + Color.RESET);
+                    }
+                    else{
+                        System.out.println(Color.RED + "Khong tim thay lop " + tenLopCN + " trong he thong!" + Color.RESET);
+                    }
+                }
+                else if (chonPC == 2) {
+                    int maxLopMoi = (dsLopHoc.getSoLuong() > 0) ? dsLopHoc.getSoLuong() : 20;
+                    int soLopMoi = DataValidator.nhapSoNguyen(sc, "Nhap tong so lop day moi: ", 0, maxLopMoi);
+                    LopHoc[] dsLopMoi = new LopHoc[soLopMoi];
+                    for (int i = 0; i < soLopMoi; i++) {
+                        System.out.print("  + Nhap ten lop thu " + (i + 1) + ": ");
+                        String tenL = sc.nextLine().trim();
+                        LopHoc lopTim = dsLopHoc.timKiemLopTheoTen(tenL);
+                        dsLopMoi[i] = (lopTim != null) ? lopTim : new LopHoc(tenL, "", null, null, false, "", 0.0);
+                    }
+                    gvPC.setDsLopDay(dsLopMoi);
+                    System.out.println(Color.GREEN + "Da cap nhat danh sach lop day cho giao vien!" + Color.RESET);
+                }
+                break;
+            }
+        }
     }
     private void menuQuanLyPhuHuynh() {
         //Mai - M7 code vào đây
