@@ -243,7 +243,7 @@ public class DanhSachGiaoVien implements IThongKe {
                         break;
                     }
                 }
-                if(monTimDuoc =! null){
+                if(monTimDuoc != null){
                     gv.setMonChuyenMon(monTimDuoc);
                     break;
                 }
