@@ -149,7 +149,7 @@ public class DanhSachPhuHuynh implements IThongKe {
                             nhapThanhCong = false;
                             break;
                         }
-                        if(mshsMoi == null){
+                        if(mshsMoi.isEmpty()){
                             mshsMoi = maHS;
                         }
                         else{

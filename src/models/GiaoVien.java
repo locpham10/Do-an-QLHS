@@ -101,4 +101,17 @@ public class GiaoVien extends Nguoi{
             System.out.println("Danh sách lớp dạy: Chưa có lớp");
         }
     }
+    
+    public boolean coDayLop(String tenLop){
+        if(dsLopDay == null || tenLop == null || tenLop.trim().isEmpty()){
+            return false;
+        }
+        tenLop = tenLop.trim();
+        for (int i = 0; i < dsLopDay.length; i++) {
+            if(dsLopDay[i] != null && dsLopDay[i].getTenLop().equalsIgnoreCase(tenLop)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
