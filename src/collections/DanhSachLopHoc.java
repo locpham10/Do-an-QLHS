@@ -160,16 +160,36 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 continue;
             }
             String maMon = kv[0].trim();
+                        String maMon = kv[0].trim();
             MonHoc goc = MonHoc.timTheoMa(maMon);
             if (goc == null) {
                 System.out.println("Dong " + soDong + ": khong tim thay ma mon '" + maMon + "'");
                 continue;
             }
+
+            // chỉ thêm vào mảng khi đọc dc
+            int heSo;
             try {
-                tam[n++] = goc.copyVoiHeSo(Integer.parseInt(kv[1].trim()));  // copy, không sửa kho môn
+                heSo = Integer.parseInt(kv[1].trim());
             } catch (NumberFormatException e) {
                 System.out.println("Dong " + soDong + ": he so khong hop le '" + kv[1] + "'");
+                continue;
             }
+
+            // trùng mã môn: bỏ lần lặp
+            boolean lap = false;
+            for (int i = 0; i < n; i++) {
+                if (tam[i].getMaMon().equalsIgnoreCase(goc.getMaMon())) {
+                    lap = true;
+                    break;
+                }
+            }
+            if (lap) {
+                System.out.println("Dong " + soDong + ": ma mon '" + maMon + "' bi lap trong lop, bo qua");
+                continue;
+            }
+
+            tam[n++] = goc.copyVoiHeSo(heSo);  
         }
         return java.util.Arrays.copyOf(tam, n);
     }
