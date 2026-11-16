@@ -88,6 +88,7 @@ public class DanhSachLopHoc
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             int soDong = 0;
+            int soDongLoi = 0;
             this.soLuong = 0;
             while ((line = br.readLine()) != null) {
                 soDong++;
@@ -97,12 +98,16 @@ public class DanhSachLopHoc
                 String[] p = line.split(",", -1);
                 if (p.length < 6) {
                     System.out.println("Dong " + soDong + ": thieu cot (can it nhat 6, co " + p.length + ")");
-                    continue;
-                }
+                    soDongLoi++;
+                    continue;}
                 for (int i = 0; i < p.length; i++) p[i] = p[i].trim();
 
                 try {
                     String tenLop = p[0];
+                    if (timKiemLopTheoTen(tenLop) != null) {
+                        System.out.println("Dong " + soDong + ": ten lop '" + tenLop + "' bi trung, bo qua dong nay");
+                        soDongLoi++;
+                        continue;}
                     String khoaHoc = p[1];
                     String maGV = p[2];
                     boolean laChuyen = Boolean.parseBoolean(p[3]);
@@ -122,12 +127,17 @@ public class DanhSachLopHoc
                     if (p.length >= 7 && !p[6].isEmpty()) {
                         lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));
                     }
-                    themLop(lop);
+                    if (!themLop(lop)) {
+                        System.out.println("Dong " + soDong + ": danh sach lop da day (" + dsLop.length
+                                + "), khong them duoc lop '" + tenLop + "'");
+                        soDongLoi++;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
+                    soDongLoi++;
                 }
             }
-            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop.");
+            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop, " + soDongLoi + " dong loi.");
             return true;
         } catch (IOException e) {
             System.out.println("Loi khi doc file LopHoc: " + e.getMessage());
@@ -147,7 +157,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         }
     }
 
-        private MonHoc[] docChuongTrinh(String cot, int soDong) {
+            private MonHoc[] docChuongTrinh(String cot, int soDong) {
         String[] items = cot.split(";");
         MonHoc[] tam = new MonHoc[items.length];
         int n = 0;
@@ -160,14 +170,12 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 continue;
             }
             String maMon = kv[0].trim();
-                        String maMon = kv[0].trim();
             MonHoc goc = MonHoc.timTheoMa(maMon);
             if (goc == null) {
                 System.out.println("Dong " + soDong + ": khong tim thay ma mon '" + maMon + "'");
                 continue;
             }
 
-            // chỉ thêm vào mảng khi đọc dc
             int heSo;
             try {
                 heSo = Integer.parseInt(kv[1].trim());
@@ -176,7 +184,6 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 continue;
             }
 
-            // trùng mã môn: bỏ lần lặp
             boolean lap = false;
             for (int i = 0; i < n; i++) {
                 if (tam[i].getMaMon().equalsIgnoreCase(goc.getMaMon())) {
@@ -189,7 +196,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 continue;
             }
 
-            tam[n++] = goc.copyVoiHeSo(heSo);  
+            tam[n++] = goc.copyVoiHeSo(heSo);   
         }
         return java.util.Arrays.copyOf(tam, n);
     }
