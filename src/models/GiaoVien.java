@@ -75,7 +75,7 @@ public class GiaoVien extends Nguoi{
         System.out.println("Giới tính: " + (isGioiTinh() ? "Nam" : "Nữ"));
         System.out.println("Địa chỉ: " + getDiaChi());
         System.out.println("Số điện thoại: " + getSoDienThoai());
-        System.out.println("Môn chuyên môn: " + monChuyenMon.getTenMon() + " - Mã: " + monChuyenMon.getMaMon());
+        System.out.println("Môn chuyên môn: " + (monChuyenMon != null ? monChuyenMon.getTenMon()+ " - Mã: " + monChuyenMon.getMaMon() : "Chưa phân môn"));
         if (dsLopDay != null && dsLopDay.length > 0){
             System.out.println("Danh sách lớp dạy");
             for (int i = 0; i < dsLopDay.length; i ++){

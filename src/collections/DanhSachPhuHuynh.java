@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import models.PhuHuynh;
+import utils.Color;
 
 public class DanhSachPhuHuynh implements IThongKe {
     private PhuHuynh[] arrPH;
@@ -88,11 +89,31 @@ public class DanhSachPhuHuynh implements IThongKe {
         }
         PhuHuynh ph = arrPH[index];
         System.out.println("Cập nhật thông tin cho phụ huynh có SĐT khẩn cấp: " + sdt);
-        System.out.print("Nhập họ tên phụ huynh mới: ");
-        ph.setHoTenBoMe(sc.nextLine());
-        System.out.print("Nhập SĐT khẩn cấp mới: ");
-        ph.setSdtKhanCap(sc.nextLine());
-        System.out.println("Cập nhật thông tin phụ huynh thành công!");
+        System.out.println("Lưu ý nếu không muốn đổi thông tin mục nào vui lòng nhấn ENTER!");
+
+        String s;
+        
+        while (true) { 
+            System.out.print("Nhập họ tên mới: ");
+            s = sc.nextLine().trim();
+            if(s.isEmpty()){ break;}
+            if( !s.contains(",")){
+            ph.setHoTenBoMe(s);
+            break;
+            }
+        System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+        }
+
+        while (true) { 
+            System.out.print("Nhập số điện thoại khẩn cấp mới: ");
+            s= sc.nextLine().trim().replaceAll("[\\s.]", "");
+            if(s.isEmpty()){break;}
+            if(s.matches("^0\\d{9}$")){
+                ph.setSdtKhanCap(sdt);
+                break;
+            }
+            System.out.println(Color.RED + "Lỗi: Số điện thoại phải có 10 số và bắt đầu từ số 0" + Color.RESET);
+        }
         return true;
     }
 
