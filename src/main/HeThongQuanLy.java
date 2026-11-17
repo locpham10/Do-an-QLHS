@@ -1208,20 +1208,18 @@ public class HeThongQuanLy {
                     int chonMonTim = nhapLuaChon(MonHoc.KHO_MON_HOC.length);
                     if(chonMonTim > 0){
                         MonHoc monCanTim = MonHoc.KHO_MON_HOC[chonMonTim - 1];
-                        GiaoVien[] arrGV = dsGiaoVien.getArrGV();
-                        boolean thay = false;
-                        for (int i = 0; i < dsGiaoVien.getSoLuong(); i++) {
-                            if(arrGV[i] != null && arrGV[i].getMonChuyenMon() != null && arrGV[i].getMonChuyenMon().getMaMon().equalsIgnoreCase(monCanTim.getMaMon())){
-                                arrGV[i].hienThiThongTin();
+                        GiaoVien[] ketqua = dsGiaoVien.timKiemTheoMon(monCanTim.getTenMon());
+                        if(ketqua.length > 0){
+                            for (int i = 0; i < ketqua.length; i++) {
+                                ketqua[i].hienThiThongTin();
                                 System.out.println("-------------------------");
-                                thay = true;
                             }
-                        }
-                        if(!thay){
+                        } 
+                        else{
                             System.out.println(Color.RED + "Khong tim thay giao vien nao phu hop!" + Color.RESET);
-                        }
                     }
-                }
+                        }                 
+                    }
                 else if (loaiTim == 4) {
                     System.out.print("Nhap chuc vu can tim (VD: Giao vien, To truong): ");
                     String chucVuTim = sc.nextLine().trim().toLowerCase();
@@ -1287,7 +1285,25 @@ public class HeThongQuanLy {
         }
     }
     private void menuQuanLyPhuHuynh() {
-        //Mai - M7 code vào đây
+        int chon = -1;
+        while (chon != 0) {
+            System.out.println("\n---- QUAN LY DANH SACH PHU HUYNH ----");
+            System.out.println("1. Xem danh sach phu huynh");
+            System.out.println("2. Them phu huynh moi");
+            System.out.println("3. Sua thong tin phu huynh");
+            System.out.println("4. Xoa phu huynh");
+            System.out.println("5. Tim kiem phu huynh theo ten/sdt");
+            System.out.println("6. Tra cuu phu huynh cua hoc sinh (theo MSHS)");
+            System.out.println("0. Quay lai");
+            chon = nhapLuaChon(6);
+            switch (chon) {
+                case 1:
+                    dsPhuHuynh.hienThiDanhSach();
+                    break;
+                case 2:
+                    break;
+            }
+        }
     }
     private void menuTimKiem() {
         int chon = -1;
