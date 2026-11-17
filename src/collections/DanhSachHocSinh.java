@@ -583,3 +583,66 @@ public class DanhSachHocSinh implements IThongKe {
         return mh.getMaMon().equalsIgnoreCase(monChuyen) || mh.getTenMon().equalsIgnoreCase(monChuyen);
     }
 }
+// ================= BLOCK TÀI CHÍNH  =================
+
+    public void traCuuHocPhi(String mshs) {
+        HocSinh hs = timKiem(mshs);
+        if (hs == null) {
+            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+            return;
+        }
+        System.out.println("\n--- THÔNG TIN HỌC PHÍ CÁ NHÂN ---");
+        System.out.println("Mã HS: " + hs.getMshs() + " | Họ tên: " + hs.getHoTen());
+        System.out.println("Học phí phải đóng: " + hs.tinhHocPhi());
+        System.out.println("Trạng thái: " + (hs.isDaDongHocPhi() ? "Đã đóng" : "Chưa đóng"));
+    }
+
+    public void inDanhSachNoHocPhi() {
+        System.out.println("\n--- DANH SÁCH HỌC SINH CHƯA ĐÓNG HỌC PHÍ ---");
+        int count = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && !arrHS[i].isDaDongHocPhi()) {
+                System.out.printf("%d. MSHS: %s | Họ tên: %s | Lớp: %s | Số tiền: %.2f\n", 
+                    (count + 1), arrHS[i].getMshs(), arrHS[i].getHoTen(), arrHS[i].getTenLop(), arrHS[i].tinhHocPhi());
+                count++;
+            }
+        }
+        if (count == 0) {
+            System.out.println("Tuyệt vời! Không có học sinh nào nợ học phí.");
+        }
+    }
+
+    public double tongHocPhiPhaiThu() {
+        double tong = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null) {
+                tong += arrHS[i].tinhHocPhi();
+            }
+        }
+        return tong;
+    }
+
+    public double tongHocPhiDaThu() {
+        double tong = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && arrHS[i].isDaDongHocPhi()) {
+                tong += arrHS[i].tinhHocPhi();
+            }
+        }
+        return tong;
+    }
+
+    public void xetDuyetHocBong() {
+        System.out.println("\n--- XÉT DUYỆT HỌC BỔNG TOÀN TRƯỜNG ---");
+        int count = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && arrHS[i].xetHocBong()) {
+                count++;
+                System.out.printf("%d. MSHS: %s | Họ tên: %s | Lớp: %s | GPA: %.2f | Hạnh kiểm: %d\n",
+                    count, arrHS[i].getMshs(), arrHS[i].getHoTen(), arrHS[i].getTenLop(), arrHS[i].getGpa(), arrHS[i].getDiemHanhKiem());
+            }
+        }
+        if (count == 0) {
+            System.out.println("Không có học sinh nào đủ điều kiện nhận học bổng.");
+        }
+    }
