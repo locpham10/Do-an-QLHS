@@ -104,6 +104,11 @@ public class DanhSachLopHoc
 
                 try {
                     String tenLop = p[0];
+                    if (tenLop.isEmpty()) {
+                        System.out.println("Dong " + soDong + ": ten lop bi trong, bo qua dong nay");
+                        soDongLoi++;
+                        continue;
+                    }
                     if (timKiemLopTheoTen(tenLop) != null) {
                         System.out.println("Dong " + soDong + ": ten lop '" + tenLop + "' bi trung, bo qua dong nay");
                         soDongLoi++;
@@ -136,6 +141,7 @@ public class DanhSachLopHoc
                     System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
                     soDongLoi++;
                 }
+
             }
             System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop, " + soDongLoi + " dong loi.");
             return true;
@@ -181,6 +187,10 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 heSo = Integer.parseInt(kv[1].trim());
             } catch (NumberFormatException e) {
                 System.out.println("Dong " + soDong + ": he so khong hop le '" + kv[1] + "'");
+                continue;
+            }
+            if (heSo < 1) {
+                System.out.println("Dong " + soDong + ": he so cua mon '" + maMon + "' phai >= 1 (dang la " + heSo + ")");
                 continue;
             }
 
