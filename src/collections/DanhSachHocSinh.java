@@ -686,7 +686,7 @@ public class DanhSachHocSinh implements IThongKe {
         monChuyen = monChuyen.trim();
         return mh.getMaMon().equalsIgnoreCase(monChuyen) || mh.getTenMon().equalsIgnoreCase(monChuyen);
     }
-}
+
 // ================= BLOCK TÀI CHÍNH  =================
 
     public void traCuuHocPhi(String mshs) {
@@ -750,3 +750,4 @@ public class DanhSachHocSinh implements IThongKe {
             System.out.println("Không có học sinh nào đủ điều kiện nhận học bổng.");
         }
     }
+}

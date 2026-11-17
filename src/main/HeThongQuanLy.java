@@ -1162,7 +1162,6 @@ private void menuThongKeTheoKhoa() {
                     continue; 
             }
 
-            // --- IN KET QUA ---
             if (chon >= 1 && chon <= 6) {
                 if (kq == null || kq.length == 0) {
                     System.out.println(" Khong tim thay ket qua nao phu hop!");
