@@ -8,10 +8,10 @@ public class LopHoc
     private String khoaHoc;
     private GiaoVien giaoVienChuNhiem;
     private DanhSachHocSinh dsHocSinh;
-    boolean isLopChuyen;
+    private boolean isLopChuyen;
     private MonHoc[] chuongTrinhHoc;
-    String monChuyenCuaLop;
-    double phuPhiChung;
+    private String monChuyenCuaLop;
+    private double phuPhiChung;
 
     public LopHoc() {}
 

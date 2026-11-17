@@ -1,16 +1,15 @@
 package main;
 
-import collections.DanhSachHocSinh;
 import collections.DanhSachGiaoVien;
-import collections.DanhSachPhuHuynh;
+import collections.DanhSachHocSinh;
 import collections.DanhSachLopHoc;
+import collections.DanhSachPhuHuynh;
 import exceptions.TrungMaHocSinhException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import models.*;
 import utils.Color;
 import utils.DataValidator;
-
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class HeThongQuanLy {
     private DanhSachHocSinh dsHocSinh;
@@ -431,8 +430,7 @@ public class HeThongQuanLy {
         if (dsLopHoc.themLop(lopMoi)) {
             System.out.println(Color.GREEN + "Da tao lop " + tenLop + " thanh cong!" + Color.RESET);
         } else {
-            System.out.println(Color.RED + "Tao lop that bai: danh sach lop da day (toi da "
-                    + dsLopHoc.getDsLop().length + " lop)!" + Color.RESET);
+            System.out.println(Color.RED + "Tao lop that bai: danh sach lop da day!" + Color.RESET);
         }
     }
 
