@@ -1,14 +1,18 @@
 package collections;
 
-import models.LopHoc;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.text.Normalizer;
+import java.util.Arrays;
+import java.util.Scanner;
 import models.GiaoVien;
 import models.HocSinh;
+import models.HocSinhChuyen;
+import models.LopHoc;
 import models.MonHoc;
 
 public class DanhSachLopHoc
@@ -19,22 +23,17 @@ public class DanhSachLopHoc
 
 
     public DanhSachLopHoc() {
-        this.dsLop = new LopHoc[100];
+        this.dsLop = new LopHoc[0];
         this.soLuong = 0;
     }
 
-    public DanhSachLopHoc(int dungLuong) {
-        this.dsLop = new LopHoc[dungLuong];
-        this.soLuong = 0; }
-
     public boolean themLop(LopHoc lh) {
-        if(lh != null && soLuong < dsLop.length)
-        {
-            this.dsLop[soLuong] = lh;
-            soLuong++;
-            return true; //Thêm lớp thành công!!
-        }
-        return false; //Thêm lớp thất bại vì đối tượng null/mảng đã đầy.
+        if(lh == null) return false; //Them lop that bai vi doi tuong null
+
+        this.dsLop = java.util.Arrays.copyOf(dsLop, soLuong +1);
+        this.dsLop[soLuong] = lh;
+        soLuong++;
+        return true; //Them lop thanh cong!!
     }
 
     public LopHoc timKiemLopTheoTen(String tenLop) {
@@ -88,6 +87,8 @@ public class DanhSachLopHoc
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             int soDong = 0;
+            int soDongLoi = 0;
+            this.dsLop = new LopHoc[0];
             this.soLuong = 0;
             while ((line = br.readLine()) != null) {
                 soDong++;
@@ -97,12 +98,21 @@ public class DanhSachLopHoc
                 String[] p = line.split(",", -1);
                 if (p.length < 6) {
                     System.out.println("Dong " + soDong + ": thieu cot (can it nhat 6, co " + p.length + ")");
-                    continue;
-                }
+                    soDongLoi++;
+                    continue;}
                 for (int i = 0; i < p.length; i++) p[i] = p[i].trim();
 
                 try {
                     String tenLop = p[0];
+                    if (tenLop.isEmpty()) {
+                        System.out.println("Dong " + soDong + ": ten lop bi trong, bo qua dong nay");
+                        soDongLoi++;
+                        continue;
+                    }
+                    if (timKiemLopTheoTen(tenLop) != null) {
+                        System.out.println("Dong " + soDong + ": ten lop '" + tenLop + "' bi trung, bo qua dong nay");
+                        soDongLoi++;
+                        continue;}
                     String khoaHoc = p[1];
                     String maGV = p[2];
                     boolean laChuyen = Boolean.parseBoolean(p[3]);
@@ -122,12 +132,18 @@ public class DanhSachLopHoc
                     if (p.length >= 7 && !p[6].isEmpty()) {
                         lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));
                     }
-                    themLop(lop);
+                    if (!themLop(lop)) {
+                        System.out.println("Dong " + soDong + ": danh sach lop da day (" + dsLop.length
+                                + "), khong them duoc lop '" + tenLop + "'");
+                        soDongLoi++;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
+                    soDongLoi++;
                 }
+
             }
-            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop.");
+            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop, " + soDongLoi + " dong loi.");
             return true;
         } catch (IOException e) {
             System.out.println("Loi khi doc file LopHoc: " + e.getMessage());
@@ -147,7 +163,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         }
     }
 
-        private MonHoc[] docChuongTrinh(String cot, int soDong) {
+            private MonHoc[] docChuongTrinh(String cot, int soDong) {
         String[] items = cot.split(";");
         MonHoc[] tam = new MonHoc[items.length];
         int n = 0;
@@ -165,17 +181,372 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 System.out.println("Dong " + soDong + ": khong tim thay ma mon '" + maMon + "'");
                 continue;
             }
+
+            int heSo;
             try {
-                tam[n++] = goc.copyVoiHeSo(Integer.parseInt(kv[1].trim()));  // copy, không sửa kho môn
+                heSo = Integer.parseInt(kv[1].trim());
             } catch (NumberFormatException e) {
                 System.out.println("Dong " + soDong + ": he so khong hop le '" + kv[1] + "'");
+                continue;
             }
+            if (heSo < 1) {
+                System.out.println("Dong " + soDong + ": he so cua mon '" + maMon + "' phai >= 1 (dang la " + heSo + ")");
+                continue;
+            }
+
+            boolean lap = false;
+            for (int i = 0; i < n; i++) {
+                if (tam[i].getMaMon().equalsIgnoreCase(goc.getMaMon())) {
+                    lap = true;
+                    break;
+                }
+            }
+            if (lap) {
+                System.out.println("Dong " + soDong + ": ma mon '" + maMon + "' bi lap trong lop, bo qua");
+                continue;
+            }
+
+            tam[n++] = goc.copyVoiHeSo(heSo);   
         }
         return java.util.Arrays.copyOf(tam, n);
     }
 
+    // ================= b. SỬA =================
+    // Sửa: tên lớp, khóa học, GVCN. Enter = giữ nguyên.
+    // Hệ chuyên/đại trà, môn chuyên, phụ phí, chương trình học KHÔNG sửa ở đây
+    // vì ảnh hưởng tới điểm và học phí của học sinh trong lớp.
+    public boolean sua(String tenLop, Scanner sc, DanhSachGiaoVien dsGV, DanhSachHocSinh dsTruong) {
+        LopHoc lop = timKiemLopTheoTen(tenLop);
+        if(lop == null)
+        {
+            System.out.println("Khong tim thay lop: " + tenLop);
+            return false;
+        }
+
+        System.out.println("Dang sua thong tin lop: " + lop.getTenLop());
+        System.out.println("Luu y: Nhan Enter de bo qua neu khong muon doi truong do.");
+        boolean daDoi = false;
+
+        // 1. Tên lớp: không rỗng, không có dấu phẩy (file CSV), không trùng lớp khác
+        while(true)
+        {
+            System.out.print("Nhap ten lop moi (hien tai " + lop.getTenLop() + "): ");
+            String tenMoi = sc.nextLine().trim();
+            if(tenMoi.isEmpty()) break;
+            if(tenMoi.contains(","))
+            {
+                System.out.println("Loi: Ten lop khong duoc chua dau phay!");
+                continue;
+            }
+            LopHoc trung = timKiemLopTheoTen(tenMoi);
+            if(trung != null && trung != lop)
+            {
+                System.out.println("Loi: Lop " + tenMoi + " da ton tai trong he thong!");
+                continue;
+            }
+            if(!tenMoi.equals(lop.getTenLop()))
+            {
+                String tenCu = lop.getTenLop();
+                // Học sinh lưu tên lớp dạng chuỗi nên phải đổi theo, nếu không sẽ "mồ côi"
+                HocSinh[] dsHs = (dsTruong != null) ? dsTruong.timKiemTheoLop(tenCu) : new HocSinh[0];
+                lop.setTenLop(tenMoi);
+                for(HocSinh hs : dsHs)
+                    hs.setTenLop(tenMoi);
+                System.out.println("  -> Da doi ten lop " + tenCu + " thanh " + tenMoi
+                        + " (cap nhat " + dsHs.length + " hoc sinh)");
+                daDoi = true;
+            }
+            break;
+        }
+
+        // 2. Khóa học dạng yyyy-yyyy, năm sau lớn hơn năm đầu
+        while(true)
+        {
+            System.out.print("Nhap khoa hoc moi (hien tai " + lop.getKhoaHoc() + ", VD: 2026-2029): ");
+            String khoaMoi = sc.nextLine().trim();
+            if(khoaMoi.isEmpty()) break;
+            if(khoaMoi.matches("\\d{4}-\\d{4}")
+                    && Integer.parseInt(khoaMoi.substring(5)) > Integer.parseInt(khoaMoi.substring(0, 4)))
+            {
+                if(!khoaMoi.equals(lop.getKhoaHoc()))
+                {
+                    lop.setKhoaHoc(khoaMoi);
+                    System.out.println("  -> Da doi khoa hoc thanh " + khoaMoi);
+                    daDoi = true;
+                }
+                break;
+            }
+            System.out.println("Loi: Khoa hoc phai dung dang nam-nam (VD: 2026-2029)!");
+        }
+
+        // 3. Giáo viên chủ nhiệm: nhập mã GV, "-" để bỏ GVCN
+        while(true)
+        {
+            GiaoVien hienTai = lop.getGiaoVienChuNhiem();
+            System.out.print("Nhap ma GVCN moi (hien tai " + (hienTai != null ? hienTai.getMaGV() : "chua co")
+                    + ", Enter = giu nguyen, - = bo GVCN): ");
+            String ma = sc.nextLine().trim();
+            if(ma.isEmpty()) break;
+            if(ma.equals("-"))
+            {
+                if(hienTai != null)
+                {
+                    lop.setGiaoVienChuNhiem(null);
+                    System.out.println("  -> Da bo GVCN cua lop.");
+                    daDoi = true;
+                }
+                break;
+            }
+            GiaoVien gv = (dsGV != null) ? dsGV.timKiem(ma) : null;
+            if(gv == null)
+            {
+                System.out.println("Loi: Khong tim thay ma giao vien " + ma + "!");
+                continue;
+            }
+            lop.setGiaoVienChuNhiem(gv);
+            System.out.println("  -> Da doi GVCN thanh " + gv.getHoTen() + " (" + gv.getMaGV() + ")");
+            daDoi = true;
+            break;
+        }
+
+        System.out.println(daDoi ? "Cap nhat thong tin lop thanh cong!" : "Khong co thay doi nao duoc luu.");
+        return daDoi;
+    }
+
+    // ================= c. XÓA =================
+    // Lớp trống: xóa luôn. Lớp còn học sinh: phải xác nhận, và các học sinh đó bị xóa theo
+    // (học sinh không thể không thuộc lớp nào).
+    public boolean xoa(String tenLop, Scanner sc, DanhSachHocSinh dsTruong) {
+        int viTri = -1;
+        for(int i = 0; i < soLuong; i++)
+        {
+            if(dsLop[i] != null && dsLop[i].getTenLop().equalsIgnoreCase(tenLop))
+            {
+                viTri = i;
+                break;
+            }
+        }
+        if(viTri == -1)
+        {
+            System.out.println("Khong tim thay lop: " + tenLop);
+            return false;
+        }
+
+        LopHoc lop = dsLop[viTri];
+        HocSinh[] hsTrongLop = (dsTruong != null) ? dsTruong.timKiemTheoLop(lop.getTenLop()) : new HocSinh[0];
+
+        if(dsTruong != null && hsTrongLop.length > 0)
+        {
+            System.out.println("Lop " + lop.getTenLop() + " con " + hsTrongLop.length + " hoc sinh.");
+            System.out.println("Xoa lop se xoa luon cac hoc sinh nay khoi he thong!");
+            System.out.print("Xac nhan xoa lop va " + hsTrongLop.length + " hoc sinh? (Y/N): ");
+            if(!sc.nextLine().trim().equalsIgnoreCase("Y"))
+            {
+                System.out.println("Da huy lenh xoa.");
+                return false;
+            }
+            for(HocSinh hs : hsTrongLop)
+                dsTruong.xoa(hs.getMshs());
+        }
+
+        // Dồn các phần tử phía sau lên rồi co mảng lại đúng soLuong - 1
+        for(int i = viTri; i < soLuong - 1; i++)
+            dsLop[i] = dsLop[i + 1];
+        soLuong--;
+        dsLop = Arrays.copyOf(dsLop, soLuong);
+
+        System.out.println("Da xoa lop " + lop.getTenLop() + "!");
+        return true;
+    }
+
+    // ================= d. TÌM KIẾM =================
+    // Tìm gần đúng theo khóa học (VD: "2026" ra mọi lớp có khóa chứa 2026)
+    public LopHoc[] timKiemTheoKhoaHoc(String tuKhoa) {
+        String key = chuanHoa(tuKhoa);
+        boolean[] khop = new boolean[soLuong];
+        for(int i = 0; i < soLuong; i++)
+            khop[i] = dsLop[i] != null && chuanHoa(dsLop[i].getKhoaHoc()).contains(key);
+        return gom(khop);
+    }
+
+    // Tìm theo hệ: true = lớp chuyên, false = lớp đại trà
+    public LopHoc[] timKiemTheoHe(boolean laChuyen) {
+        boolean[] khop = new boolean[soLuong];
+        for(int i = 0; i < soLuong; i++)
+            khop[i] = dsLop[i] != null && dsLop[i].isLopChuyen() == laChuyen;
+        return gom(khop);
+    }
+
+    // Tìm gần đúng theo họ tên GVCN, gõ không dấu cũng ra ("duyen" khớp "Trần Mỹ Duyên")
+    public LopHoc[] timKiemTheoTenGVCN(String tuKhoa) {
+        String key = chuanHoa(tuKhoa);
+        boolean[] khop = new boolean[soLuong];
+        for(int i = 0; i < soLuong; i++)
+        {
+            GiaoVien gv = (dsLop[i] != null) ? dsLop[i].getGiaoVienChuNhiem() : null;
+            khop[i] = gv != null && chuanHoa(gv.getHoTen()).contains(key);
+        }
+        return gom(khop);
+    }
+
+    // ================= e. THỐNG KÊ =================
+    // Sĩ số lấy từ danh sách học sinh toàn trường (theo tên lớp của từng học sinh)
+    public int demSiSo(String tenLop, DanhSachHocSinh dsTruong) {
+        if(dsTruong == null) return 0;
+        return dsTruong.timKiemTheoLop(tenLop).length;
+    }
+
+    public int demLopChuyen() {
+        int dem = 0;
+        for(int i = 0; i < soLuong; i++)
+            if(dsLop[i] != null && dsLop[i].isLopChuyen()) dem++;
+        return dem;
+    }
+
+    public int demLopDaiTra() {
+        return soLuong - demLopChuyen();
+    }
+
+    public LopHoc[] timLopChuaCoGVCN() {
+        boolean[] khop = new boolean[soLuong];
+        for(int i = 0; i < soLuong; i++)
+            khop[i] = dsLop[i] != null && dsLop[i].getGiaoVienChuNhiem() == null;
+        return gom(khop);
+    }
+
+    public void inBaoCaoThongKe(DanhSachHocSinh dsTruong) {
+        if(soLuong == 0)
+        {
+            System.out.println("Danh sach lop hoc dang trong, chua co gi de thong ke.");
+            return;
+        }
+
+        System.out.println("\n===== THONG KE LOP HOC =====");
+        System.out.println("Tong so lop: " + soLuong
+                + " (chuyen: " + demLopChuyen() + ", dai tra: " + demLopDaiTra() + ")");
+
+        System.out.println("\n--- Si so tung lop ---");
+        int tongHs = 0;
+        for(int i = 0; i < soLuong; i++)
+        {
+            int siSo = demSiSo(dsLop[i].getTenLop(), dsTruong);
+            tongHs += siSo;
+            System.out.println((i + 1) + ". " + dsLop[i].getTenLop()
+                    + " (" + (dsLop[i].isLopChuyen() ? "chuyen" : "dai tra") + "): " + siSo + " hoc sinh");
+        }
+        System.out.println("Tong cong: " + tongHs + " hoc sinh");
+
+        System.out.println("\n--- Lop chua co GVCN ---");
+        LopHoc[] chuaCo = timLopChuaCoGVCN();
+        if(chuaCo.length == 0)
+            System.out.println("Tat ca cac lop deu da co GVCN.");
+        else
+            for(LopHoc l : chuaCo)
+                System.out.println("- " + l.getTenLop());
+    }
+
+    // ================= f. CHUYỂN LỚP =================
+    // Chuyển học sinh (theo MSHS) sang lớp mới. ds = danh sách học sinh toàn trường.
+    // - Chỉ chuyển trong cùng hệ (chuyên <-> chuyên, đại trà <-> đại trà), vì học sinh chuyên
+    //   có thêm môn chuyên và phụ phí mà học sinh đại trà không có.
+    // - Bảng điểm cũ được giữ nguyên; muốn tính theo chương trình lớp mới thì nhập lại điểm.
+    public boolean chuyenLop(String mshs, String tenLopMoi, DanhSachHocSinh ds) {
+        if(ds == null) return false;
+
+        HocSinh hs = ds.timKiem(mshs);
+        if(hs == null)
+        {
+            System.out.println("Khong tim thay hoc sinh ma: " + mshs);
+            return false;
+        }
+
+        LopHoc lopMoi = timKiemLopTheoTen(tenLopMoi);
+        if(lopMoi == null)
+        {
+            System.out.println("Khong tim thay lop: " + tenLopMoi);
+            return false;
+        }
+
+        String tenLopCu = hs.getTenLop();
+        if(lopMoi.getTenLop().equalsIgnoreCase(tenLopCu))
+        {
+            System.out.println("Hoc sinh " + hs.getHoTen() + " dang o lop " + tenLopCu + " roi!");
+            return false;
+        }
+
+        boolean laHsChuyen = hs instanceof HocSinhChuyen;
+        if(laHsChuyen != lopMoi.isLopChuyen())
+        {
+            System.out.println("Khong the chuyen: " + hs.getHoTen() + " la hoc sinh "
+                    + (laHsChuyen ? "chuyen" : "dai tra") + " nhung lop " + lopMoi.getTenLop()
+                    + " la lop " + (lopMoi.isLopChuyen() ? "chuyen" : "dai tra") + ".");
+            return false;
+        }
+
+        // Rút khỏi danh sách của lớp cũ (nếu có)
+        LopHoc lopCu = timKiemLopTheoTen(tenLopCu);
+        if(lopCu != null && lopCu.getDsHocSinh() != null && lopCu.getDsHocSinh().timKiem(hs.getMshs()) != null)
+            lopCu.getDsHocSinh().xoa(hs.getMshs());
+
+        // Thêm vào danh sách của lớp mới
+        if(lopMoi.getDsHocSinh() == null)
+            lopMoi.setDsHocSinh(new DanhSachHocSinh());
+        if(lopMoi.getDsHocSinh().timKiem(hs.getMshs()) == null)
+            lopMoi.getDsHocSinh().them(hs);
+
+        hs.setTenLop(lopMoi.getTenLop());
+
+        // Học sinh chuyên: cập nhật môn chuyên và phụ phí theo lớp mới
+        if(laHsChuyen)
+        {
+            HocSinhChuyen hsc = (HocSinhChuyen) hs;
+            String monMoi = (lopMoi.getMonChuyenCuaLop() != null) ? lopMoi.getMonChuyenCuaLop() : "";
+            if(!chuanHoa(monMoi).equals(chuanHoa(hsc.getMonChuyen())))
+            {
+                hsc.setDiemMonChuyen(0.0); // đổi môn chuyên thì điểm môn chuyên cũ không còn đúng
+                System.out.println("Luu y: doi mon chuyen " + hsc.getMonChuyen() + " -> " + monMoi
+                        + ", diem mon chuyen duoc dat ve 0.0, can nhap lai.");
+            }
+            hsc.setMonChuyen(monMoi);
+            hsc.setPhuPhiChuyenDe(lopMoi.getPhuPhiChung());
+        }
+
+        System.out.println("Da chuyen " + hs.getHoTen() + " tu lop " + tenLopCu + " sang lop " + lopMoi.getTenLop() + "!");
+        System.out.println("Luu y: bang diem cu van giu nguyen, hay nhap lai diem theo chuong trinh lop moi.");
+        return true;
+    }
+
     public LopHoc[] getDsLop() { return dsLop; }
-    public void setDsLop(LopHoc[] dsLop) { this.dsLop = dsLop; }
+    public void setDsLop(LopHoc[] dsLopMoi) {
+        if(dsLopMoi == null) dsLopMoi = new LopHoc[0];
+
+        LopHoc[] gon = new LopHoc[dsLopMoi.length];
+        int dem = 0;
+        for(LopHoc l : dsLopMoi)
+            if(l != null) gon[dem++] = l;
+        this.dsLop = java.util.Arrays.copyOf(gon, dem);
+        this.soLuong = dem;
+    }
 
     public int getSoLuong() { return soLuong; }
+
+    // ================= HÀM PHỤ (private) =================
+    // Gom các lớp có khop[i] = true thành mảng kết quả vừa khít
+    private LopHoc[] gom(boolean[] khop) {
+        int dem = 0;
+        for(boolean b : khop)
+            if(b) dem++;
+        LopHoc[] kq = new LopHoc[dem];
+        int k = 0;
+        for(int i = 0; i < soLuong; i++)
+            if(khop[i]) kq[k++] = dsLop[i];
+        return kq;
+    }
+
+    // Bỏ dấu + chữ thường để so sánh gần đúng ("Duyên" và "duyen" là một)
+    private static String chuanHoa(String s) {
+        if(s == null) return "";
+        String t = Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        return t.replace('đ', 'd').replace('Đ', 'D').toLowerCase().trim();
+    }
 }

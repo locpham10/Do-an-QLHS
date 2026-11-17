@@ -34,6 +34,14 @@ public class MonHoc
             new MonHoc("TD", "Thể Dục", 1, false)
     };
 
+    public static MonHoc timTheoMa(String maMon) {
+        if(maMon == null) return null;
+        for(MonHoc m : KHO_MON_HOC)
+            if(m.getMaMon().equalsIgnoreCase(maMon.trim()))
+                return m;
+        return null;
+    }
+
     public String getMaMon() { return maMon; }
     public void setMaMon(String maMon) { this.maMon = maMon; }
 

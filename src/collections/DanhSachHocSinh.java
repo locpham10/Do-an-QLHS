@@ -471,4 +471,115 @@ public class DanhSachHocSinh implements IThongKe {
         }
     }
 
+        public static final String DUONG_DAN_DIEM = "src/data/diem.txt";
+
+    // Ghi bảng điểm của mọi học sinh, mỗi dòng: MSHS,maMon,TX,GK,CK
+    public boolean ghiDiem() {
+        File f = new File(DUONG_DAN_DIEM);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) {
+            thuMucCha.mkdirs();
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+            for (int i = 0; i < soLuong; i++) {
+                if (arrHS[i] == null || arrHS[i].getDanhSachDiem() == null) continue;
+                for (DiemMonHoc d : arrHS[i].getDanhSachDiem()) {
+                    if (d == null) continue;
+                    bw.write(arrHS[i].getMshs() + "," + d.toFileString());
+                    bw.newLine();
+                }
+            }
+            System.out.println("Ghi file diem thanh cong!");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file diem: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // đọc diem.txt vào bảng điểm từng hs
+    public boolean docDiem() {
+        // phải đọc hocsinh.txt trước thì mới có học sinh để gắn điểm
+        if (soLuong == 0) {
+            System.out.println("Chua co hoc sinh nao, hay doc hocsinh.txt truoc khi doc diem.");
+            return false;
+        }
+        int soDong = 0, soLoi = 0, soDiem = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_DIEM))) {
+            // làm mới để k bị nhân đôi
+            for (int i = 0; i < soLuong; i++) {
+                if (arrHS[i] != null) {
+                    arrHS[i].setDanhSachDiem(new DiemMonHoc[0]);
+                    arrHS[i].setSoLuongMon(0);
+                }
+            }
+            String line;
+            while ((line = br.readLine()) != null) {
+                soDong++;
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] p = line.split(",", -1);
+                if (p.length != 5) {
+                    System.out.println("Dong " + soDong + ": can dung 5 cot (MSHS,maMon,TX,GK,CK), co " + p.length);
+                    soLoi++;
+                    continue;
+                }
+                HocSinh hs = timKiem(p[0].trim());
+                if (hs == null) {
+                    System.out.println("Dong " + soDong + ": khong tim thay MSHS '" + p[0].trim() + "'");
+                    soLoi++;
+                    continue;
+                }
+                try {
+                    DiemMonHoc d = DiemMonHoc.tuChuoi(line);
+                    if (laMonChuyenCua(hs, d.getMonHoc())) {
+                        d.setMonHoc(d.getMonHoc().copyVoiHeSo(2));
+                    }
+                    DiemMonHoc[] cu = hs.getDanhSachDiem();
+                    boolean trung = false;
+                    for (DiemMonHoc x : cu) {
+                        if (x.getMonHoc().getMaMon().equals(d.getMonHoc().getMaMon())) {
+                            trung = true;
+                            break;
+                        }
+                    }
+                    if (trung) {
+                        System.out.println("Dong " + soDong + ": hoc sinh " + hs.getMshs()
+                                + " da co diem mon " + d.getMonHoc().getMaMon() + ", bo qua");
+                        soLoi++;
+                        continue;
+                    }
+                    DiemMonHoc[] moi = Arrays.copyOf(cu, cu.length + 1);
+                    moi[cu.length] = d;
+                    hs.setDanhSachDiem(moi);
+                    soDiem++;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Dong " + soDong + ": " + e.getMessage());
+                    soLoi++;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file diem: " + e.getMessage());
+            return false;
+        }
+
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            DiemMonHoc[] ds = arrHS[i].getDanhSachDiem();
+            if (ds != null && ds.length > 0) {
+                arrHS[i].setSoLuongMon(ds.length);
+                arrHS[i].setGpa(DiemMonHoc.tinhGPATongHop(ds));
+            }
+        }
+        System.out.println("Doc file diem thanh cong! " + soDiem + " diem, " + soLoi + " dong loi.");
+        return true;
+    }
+    private boolean laMonChuyenCua(HocSinh hs, MonHoc mh) {
+        if (!(hs instanceof HocSinhChuyen) || mh == null) return false;
+        String monChuyen = ((HocSinhChuyen) hs).getMonChuyen();
+        if (monChuyen == null) return false;
+        monChuyen = monChuyen.trim();
+        return mh.getMaMon().equalsIgnoreCase(monChuyen) || mh.getTenMon().equalsIgnoreCase(monChuyen);
+    }
 }
