@@ -499,11 +499,19 @@ public class DanhSachHocSinh implements IThongKe {
 
     // đọc diem.txt vào bảng điểm từng hs
     public boolean docDiem() {
+        // phải đọc hocsinh.txt trước thì mới có học sinh để gắn điểm
+        if (soLuong == 0) {
+            System.out.println("Chua co hoc sinh nao, hay doc hocsinh.txt truoc khi doc diem.");
+            return false;
+        }
         int soDong = 0, soLoi = 0, soDiem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_DIEM))) {
             // làm mới để k bị nhân đôi
             for (int i = 0; i < soLuong; i++) {
-                if (arrHS[i] != null) arrHS[i].setDanhSachDiem(new DiemMonHoc[0]);
+                if (arrHS[i] != null) {
+                    arrHS[i].setDanhSachDiem(new DiemMonHoc[0]);
+                    arrHS[i].setSoLuongMon(0);
+                }
             }
             String line;
             while ((line = br.readLine()) != null) {
@@ -525,6 +533,9 @@ public class DanhSachHocSinh implements IThongKe {
                 }
                 try {
                     DiemMonHoc d = DiemMonHoc.tuChuoi(line);
+                    if (laMonChuyenCua(hs, d.getMonHoc())) {
+                        d.setMonHoc(d.getMonHoc().copyVoiHeSo(2));
+                    }
                     DiemMonHoc[] cu = hs.getDanhSachDiem();
                     boolean trung = false;
                     for (DiemMonHoc x : cu) {
@@ -564,5 +575,11 @@ public class DanhSachHocSinh implements IThongKe {
         System.out.println("Doc file diem thanh cong! " + soDiem + " diem, " + soLoi + " dong loi.");
         return true;
     }
-
+    private boolean laMonChuyenCua(HocSinh hs, MonHoc mh) {
+        if (!(hs instanceof HocSinhChuyen) || mh == null) return false;
+        String monChuyen = ((HocSinhChuyen) hs).getMonChuyen();
+        if (monChuyen == null) return false;
+        monChuyen = monChuyen.trim();
+        return mh.getMaMon().equalsIgnoreCase(monChuyen) || mh.getTenMon().equalsIgnoreCase(monChuyen);
+    }
 }
