@@ -50,7 +50,7 @@ public class HocSinhChuyen extends HocSinh {
 
     @Override
     public String toFileString() {
-        return String.format("Chuyen,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b,%s,%.2f,%.2f",
+        return String.format(java.util.Locale.US, "Chuyen,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b,%s,%.2f,%.2f",
                 mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai,
                 tenLop, gpa, diemHanhKiem, daDongHocPhi,
                 monChuyen, diemMonChuyen, phuPhiChuyenDe);

@@ -49,9 +49,9 @@ public abstract class HocSinh extends Nguoi {
         this.diemHanhKiem = diemHanhKiem;
         this.daDongHocPhi = daDongHocPhi;
         this.phuHuynh = null;
-        this.danhSachDiem = null;
+        this.danhSachDiem = new DiemMonHoc[0];
         this.soLuongMon = 0;
-        this.lichSuHoatDong = new HoatDong[100];
+        this.lichSuHoatDong = new HoatDong[0];
         tongSoHocSinh++;
     }
 
@@ -92,25 +92,17 @@ public abstract class HocSinh extends Nguoi {
 
     @Override
     public void hienThiThongTin() {
-        super.hienThiThongTin();
+        System.out.println("Họ tên: " + hoTen + " | Ngày sinh: " + ngaySinh + " | SĐT: " + soDienThoai);
         System.out.println("MSHS: " + mshs + " | Lớp: " + tenLop + " | GPA: " + String.format("%.2f", gpa) + " | Hạnh kiểm: " + diemHanhKiem);
         System.out.println("Đã đóng học phí: " + (daDongHocPhi ? "Rồi" : "Chưa"));
     }
 
     public void ghiNhanHoatDong(HoatDong hd) {
-        if (lichSuHoatDong == null) {
-            lichSuHoatDong = new HoatDong[100];
-        }
-        for (int i = 0; i < lichSuHoatDong.length; i++) {
-            if (lichSuHoatDong[i] == null) {
-                lichSuHoatDong[i] = hd;
-                // Cộng trừ điểm hạnh kiểm dựa trên hoạt động (giới hạn 0 - 100)
-                this.diemHanhKiem += hd.getDiemCongTru();
-                if (this.diemHanhKiem > 100) this.diemHanhKiem = 100;
-                if (this.diemHanhKiem < 0) this.diemHanhKiem = 0;
-                break;
-            }
-        }
+        if (hd == null) return;
+        if (lichSuHoatDong == null) lichSuHoatDong = new HoatDong[0];
+        // nới mảng thêm 1 ô rồi gắn hoạt động mới vào cuối
+        lichSuHoatDong = java.util.Arrays.copyOf(lichSuHoatDong, lichSuHoatDong.length + 1);
+        lichSuHoatDong[lichSuHoatDong.length - 1] = hd;
     }
 
     public String xepLoaiHanhKiem() {
