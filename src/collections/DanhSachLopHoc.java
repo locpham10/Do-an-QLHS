@@ -1,14 +1,14 @@
 package collections;
 
-import models.LopHoc;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import models.GiaoVien;
 import models.HocSinh;
+import models.LopHoc;
 import models.MonHoc;
 
 public class DanhSachLopHoc
@@ -19,7 +19,7 @@ public class DanhSachLopHoc
 
 
     public DanhSachLopHoc() {
-        this.dsLop = new LopHoc[100];
+        this.dsLop = new LopHoc[0];
         this.soLuong = 0;
     }
 
@@ -28,13 +28,12 @@ public class DanhSachLopHoc
         this.soLuong = 0; }
 
     public boolean themLop(LopHoc lh) {
-        if(lh != null && soLuong < dsLop.length)
-        {
-            this.dsLop[soLuong] = lh;
-            soLuong++;
-            return true; //Thêm lớp thành công!!
-        }
-        return false; //Thêm lớp thất bại vì đối tượng null/mảng đã đầy.
+        if(lh == null) return false; //Them lop that bai vi doi tuong null
+
+        this.dsLop = java.util.Arrays.copyOf(dsLop, soLuong +1);
+        this.dsLop[soLuong] = lh;
+        soLuong++;
+        return true; //Them lop thanh cong!!
     }
 
     public LopHoc timKiemLopTheoTen(String tenLop) {
@@ -88,6 +87,7 @@ public class DanhSachLopHoc
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             int soDong = 0;
+            this.dsLop = new LopHoc[0];
             this.soLuong = 0;
             while ((line = br.readLine()) != null) {
                 soDong++;
@@ -175,7 +175,16 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
     }
 
     public LopHoc[] getDsLop() { return dsLop; }
-    public void setDsLop(LopHoc[] dsLop) { this.dsLop = dsLop; }
+    public void setDsLop(LopHoc[] dsLopMoi) {
+        if(dsLopMoi == null) dsLopMoi = new LopHoc[0];
+
+        LopHoc[] gon = new LopHoc[dsLopMoi.length];
+        int dem = 0;
+        for(LopHoc l : dsLopMoi)
+            if(l != null) gon[dem++] = l;
+        this.dsLop = java.util.Arrays.copyOf(gon, dem);
+        this.soLuong = dem;
+    }
 
     public int getSoLuong() { return soLuong; }
 }
