@@ -87,24 +87,6 @@ public class DanhSachHocSinh implements IThongKe {
 
         System.out.println("Dang sua thong tin cho hoc sinh: " + hs.getHoTen());
         System.out.println("Luu y: Nhan Enter de bo qua neu khong muon doi truong do.");
-        // System.out.print("Nhap ho ten moi: ");
-        // String hoTen = sc.nextLine();
-        // if (!hoTen.trim().isEmpty()) hs.setHoTen(hoTen);
-        // System.out.print("Nhap ngay sinh moi (dd/MM/yyyy): ");
-        // String ngaySinh = sc.nextLine();
-        // if (!ngaySinh.trim().isEmpty()) hs.setNgaySinh(ngaySinh);
-        // System.out.print("Nhap gioi tinh moi: ");
-        // String gioiTinh = sc.nextLine();
-        // if (!gioiTinh.trim().isEmpty()) {
-        //     hs.setGioiTinh(Boolean.parseBoolean(gioiTinh));
-        // }
-        // System.out.print("Nhap Dia Chi Moi: ");
-        // String diaChi = sc.nextLine();
-        // if (!diaChi.trim().isEmpty()) hs.setDiaChi(diaChi);
-        // System.out.print("Nhap so dien thoai moi: ");
-        // String sdt = sc.nextLine();
-        // if (!sdt.trim().isEmpty()) hs.setSoDienThoai(sdt);
-        // System.out.println("Cap nhat thong tin thanh cong!");
         String s;
         while (true) {                           
             System.out.print("Nhap ho ten moi: ");
@@ -363,6 +345,128 @@ public class DanhSachHocSinh implements IThongKe {
         System.out.println(" So luong hoc sinh con no hoc phi: " + noHocPhi);
  
         this.tinhTyLeDat();
+    }
+
+    private void inDongThongKe(String nhan, int soHs) {
+        double tyLe = (soLuong == 0) ? 0 : soHs * 100.0 / soLuong;
+        System.out.printf("  %-22s: %3d hoc sinh (%5.1f%%)%n", nhan, soHs, tyLe);
+    }
+
+    private boolean khongCoDuLieu() {
+        if (soLuong == 0) {
+            System.out.println("Khong co du lieu hoc sinh de thong ke.");
+            return true;
+        }
+        return false;
+    }
+
+
+    public void thongKeTheoLop() {
+        System.out.println("\n--- THONG KE THEO LOP ---");
+        if (khongCoDuLieu()) return;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            String tenLop = arrHS[i].getTenLop();
+            boolean daDem = false;
+            for (int j = 0; j < i; j++) {
+                if (arrHS[j] != null && arrHS[j].getTenLop().equalsIgnoreCase(tenLop)) {
+                    daDem = true;
+                    break;
+                }
+            }
+            if (daDem) continue;
+            int dem = 0;
+            for (int j = i; j < soLuong; j++) {
+                if (arrHS[j] != null && arrHS[j].getTenLop().equalsIgnoreCase(tenLop)) dem++;
+            }
+            inDongThongKe("Lop " + tenLop, dem);
+        }
+    }
+
+   
+    public void thongKeTheoHe() {
+        System.out.println("\n--- THONG KE THEO HE ---");
+        if (khongCoDuLieu()) return;
+        int chuyen = 0, daiTra = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] instanceof HocSinhChuyen) chuyen++;
+            else if (arrHS[i] instanceof HocSinhDaiTra) daiTra++;
+        }
+        inDongThongKe("Chuyen", chuyen);
+        inDongThongKe("Dai tra", daiTra);
+    }
+
+   
+    public void thongKeTheoGioiTinh() {
+        System.out.println("\n--- THONG KE THEO GIOI TINH ---");
+        if (khongCoDuLieu()) return;
+        int nam = 0, nu = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            if (arrHS[i].isGioiTinh()) nam++;
+            else nu++;
+        }
+        inDongThongKe("Nam", nam);
+        inDongThongKe("Nu", nu);
+    }
+
+
+    private int[] demTheoXepLoai(String[] mucXepLoai, boolean laHocLuc) {
+        int[] dem = new int[mucXepLoai.length];
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            String xl = laHocLuc ? arrHS[i].xepLoaiHocLuc() : arrHS[i].xepLoaiHanhKiem();
+            for (int k = 0; k < mucXepLoai.length; k++) {
+                if (mucXepLoai[k].equals(xl)) {
+                    dem[k]++;
+                    break;
+                }
+            }
+        }
+        return dem;
+    }
+
+    public void thongKeTheoHocLuc() {
+        System.out.println("\n--- THONG KE THEO HOC LUC (GPA) ---");
+        if (khongCoDuLieu()) return;
+        String[] muc = {"Gioi", "Kha", "Trung binh", "Yeu"};
+        String[] nhan = {"Gioi (>= 8.0)", "Kha (6.5 - 7.9)", "Trung binh (5.0 - 6.4)", "Yeu (< 5.0)"};
+        int[] dem = demTheoXepLoai(muc, true);
+        for (int k = 0; k < muc.length; k++) inDongThongKe(nhan[k], dem[k]);
+    }
+
+
+    public void thongKeTheoHanhKiem() {
+        System.out.println("\n--- THONG KE THEO HANH KIEM ---");
+        if (khongCoDuLieu()) return;
+        String[] muc = {"Tot", "Kha", "Trung binh", "Yeu"};
+        String[] nhan = {"Tot (>= 80)", "Kha (65 - 79)", "Trung binh (50 - 64)", "Yeu (< 50)"};
+        int[] dem = demTheoXepLoai(muc, false);
+        for (int k = 0; k < muc.length; k++) inDongThongKe(nhan[k], dem[k]);
+    }
+
+
+    public void thongKeHocBongVaNoHocPhi() {
+        System.out.println("\n--- THONG KE HOC BONG VA NO HOC PHI ---");
+        if (khongCoDuLieu()) return;
+        int hbChuyen = 0, hbDaiTra = 0, soNo = 0;
+        double tongNo = 0;
+        for (int i = 0; i < soLuong; i++) {
+            HocSinh hs = arrHS[i];
+            if (hs == null) continue;
+            if (hs.xetHocBong()) {
+                if (hs instanceof HocSinhChuyen) hbChuyen++;
+                else hbDaiTra++;
+            }
+            if (!hs.isDaDongHocPhi()) {
+                soNo++;
+                tongNo += hs.tinhHocPhi();
+            }
+        }
+        inDongThongKe("Hoc bong - Chuyen", hbChuyen);
+        inDongThongKe("Hoc bong - Dai tra", hbDaiTra);
+        inDongThongKe("Con no hoc phi", soNo);
+        System.out.printf("  %-22s: %,.0f VND%n", "Tong tien con no", tongNo);
     }
 
     public boolean ghiFile() {
