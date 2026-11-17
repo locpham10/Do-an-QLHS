@@ -1001,27 +1001,35 @@ public class HeThongQuanLy {
             }
         }
     }
+
+    // Ham dung chung cho muc 4.3 (in ra man hinh) va muc 5.5 (ghi ra file)
+    private void inBaoCaoTongHop() {
+        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
+        for (int i = 0; i < dsThongKe.length; i++) {
+            if (dsThongKe[i] != null) {
+                dsThongKe[i].inBaoCaoThongKe();
+                System.out.println();
+            }
+        }
+    }
+
     // Muc 5.5 (Lieu - Le8): ghi bao cao tong hop ra file baocao.txt
     public static final String DUONG_DAN_BAO_CAO = "src/data/baocao.txt";
 
     private void xuatBaoCaoRaFile() {
-        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
         PrintStream manHinh = System.out;
         ByteArrayOutputStream boDem = new ByteArrayOutputStream();
         String noiDung;
         try {
             System.setOut(new PrintStream(boDem, true, "UTF-8"));
-            for (int i = 0; i < dsThongKe.length; i++) {
-                dsThongKe[i].inBaoCaoThongKe();  
-                System.out.println();
-            }
+            inBaoCaoTongHop();
             System.out.flush();
             noiDung = boDem.toString("UTF-8");
         } catch (IOException e) {
             System.out.println(Color.RED + "Loi khi xuat bao cao: " + e.getMessage() + Color.RESET);
             return;
         } finally {
-            System.setOut(manHinh);             
+            System.setOut(manHinh);
         }
 
         noiDung = noiDung.replaceAll("\\u001B\\[[;\\d]*m", "");
