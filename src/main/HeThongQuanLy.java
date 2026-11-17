@@ -948,6 +948,7 @@ public class HeThongQuanLy {
             System.out.println("1. Thong ke ty le len lop / o lai lop");
             System.out.println("2. Top 5 hoc sinh xuat sac nhat");
             System.out.println("3. Bao cao thong ke tong hop");
+            System.out.println("4. Thong ke theo khoa");
             System.out.println("0. Quay lai menu chinh");
             chon = nhapLuaChon(3);
 
@@ -963,7 +964,10 @@ public class HeThongQuanLy {
                     dsHocSinh.inTop5XuatSac();
                     break;
                 case 3:
-                    dsHocSinh.inBaoCaoThongKe();
+                    inBaoCaoTongHop();
+                    break;
+                case 4:
+                    menuThongKeTheoKhoa();
                     break;
                 default:
                     System.out.println(Color.RED + "Lua chon khong hop le, vui long nhap lai!" + Color.RESET);
@@ -972,6 +976,41 @@ public class HeThongQuanLy {
         }
     }
 
+    private void inBaoCaoTongHop(){
+        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
+        for (int i=0; i< dsThongKe.length; i++) {
+            dsThongKe[i].inBaoCaoThongKe();
+            System.out.println();
+        }
+    }
+
+private void menuThongKeTheoKhoa() {
+        int chon = -1;
+        while (chon != 0) {
+            System.out.println("\n---- 4.4 THONG KE THEO KHOA ----");
+            System.out.println("1. Theo lop");
+            System.out.println("2. Theo he (Chuyen / Dai tra)");
+            System.out.println("3. Theo gioi tinh");
+            System.out.println("4. Theo hoc luc");
+            System.out.println("5. Theo hanh kiem");
+            System.out.println("6. Hoc bong va no hoc phi");
+            System.out.println("0. Quay lai");
+            chon = nhapLuaChon(6);
+
+            if (chon == 0) break;
+            switch (chon) {
+                case 1: dsHocSinh.thongKeTheoLop();            break;
+                case 2: dsHocSinh.thongKeTheoHe();             break;
+                case 3: dsHocSinh.thongKeTheoGioiTinh();       break;
+                case 4: dsHocSinh.thongKeTheoHocLuc();         break;
+                case 5: dsHocSinh.thongKeTheoHanhKiem();       break;
+                case 6: dsHocSinh.thongKeHocBongVaNoHocPhi();  break;
+                default:
+                    System.out.println(Color.RED + "Lua chon khong hop le!" + Color.RESET);
+                    break;
+            }
+        }
+    }
     private void menuQuanLyDuLieu(){
         int chon = -1;
         while (chon != 0){
