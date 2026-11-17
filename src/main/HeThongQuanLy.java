@@ -11,6 +11,17 @@ import models.*;
 import utils.Color;
 import utils.DataValidator;
 
+import interfaces.IThongKe;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+
+
+
 public class HeThongQuanLy {
     private DanhSachHocSinh dsHocSinh;
     private DanhSachGiaoVien dsGiaoVien;
@@ -956,9 +967,44 @@ public class HeThongQuanLy {
         }
     }
     // Muc 5.5 (Lieu - Le8): ghi bao cao tong hop ra file baocao.txt
+    public static final String DUONG_DAN_BAO_CAO = "src/data/baocao.txt";
+
     private void xuatBaoCaoRaFile() {
-        //Liểu viết code vào đây
+        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
+        PrintStream manHinh = System.out;
+        ByteArrayOutputStream boDem = new ByteArrayOutputStream();
+        String noiDung;
+        try {
+            System.setOut(new PrintStream(boDem, true, "UTF-8"));
+            for (int i = 0; i < dsThongKe.length; i++) {
+                dsThongKe[i].inBaoCaoThongKe();  
+                System.out.println();
+            }
+            System.out.flush();
+            noiDung = boDem.toString("UTF-8");
+        } catch (IOException e) {
+            System.out.println(Color.RED + "Loi khi xuat bao cao: " + e.getMessage() + Color.RESET);
+            return;
+        } finally {
+            System.setOut(manHinh);             
+        }
+
+        noiDung = noiDung.replaceAll("\\u001B\\[[;\\d]*m", "");
+
+        File f = new File(DUONG_DAN_BAO_CAO);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) {
+            thuMucCha.mkdirs();
+        }
+        try (BufferedWriter bw = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(f), "UTF-8"))) {
+            bw.write(noiDung);
+            System.out.println(Color.GREEN + "Da xuat bao cao ra " + DUONG_DAN_BAO_CAO + Color.RESET);
+        } catch (IOException e) {
+            System.out.println(Color.RED + "Loi khi ghi bao cao: " + e.getMessage() + Color.RESET);
+        }
     }
+
     private void menuQuanLyNhanSuVaPH(){
         int chon=-1;
         while(chon != 0) {
