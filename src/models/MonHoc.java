@@ -34,47 +34,28 @@ public class MonHoc
             new MonHoc("TD", "Thể Dục", 1, false)
     };
 
-    public String getMaMon() 
-    {
-        return maMon;
-    }
-    public void setMaMon(String maMon) 
-    {
-        this.maMon = maMon;
-    }
-
-    public String getTenMon() 
-    {
-        return tenMon;
-    }
-    public void setTenMon(String tenMon) 
-    {
-        this.tenMon = tenMon;
+    public static MonHoc timTheoMa(String maMon) {
+        if(maMon == null) return null;
+        for(MonHoc m : KHO_MON_HOC)
+            if(m.getMaMon().equalsIgnoreCase(maMon.trim()))
+                return m;
+        return null;
     }
 
-    public int getHeSo() 
-    {
-        return heSo;
-    }
-    public void setHeSo(int heSo) 
-    {
-        this.heSo = heSo;
-    }
+    public String getMaMon() { return maMon; }
+    public void setMaMon(String maMon) { this.maMon = maMon; }
 
-    public boolean isTinhVaoGPA() 
-    {
-        return tinhVaoGPA;
-    }
-    public void setTinhVaoGPA(boolean tinhVaoGPA) 
-    {
-        this.tinhVaoGPA = tinhVaoGPA;
-    }
+    public String getTenMon() { return tenMon; }
+    public void setTenMon(String tenMon) { this.tenMon = tenMon; }
 
-    public
+    public int getHeSo() { return heSo; }
+    public void setHeSo(int heSo) { this.heSo = heSo; }
+
+    public boolean isTinhVaoGPA() { return tinhVaoGPA; }
+    public void setTinhVaoGPA(boolean tinhVaoGPA)  { this.tinhVaoGPA = tinhVaoGPA; }
 
     @Override
-    public String toString() 
-    {
+    public String toString() {
         return "Môn: " + tenMon + " (" + maMon + ") | Hệ số: " + heSo + " | Tính GPA: " + (tinhVaoGPA ? "Có" : "Không");
     }
 }
