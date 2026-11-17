@@ -1,14 +1,14 @@
 package collections;
 
-import models.LopHoc;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import models.GiaoVien;
 import models.HocSinh;
+import models.LopHoc;
 import models.MonHoc;
 
 public class DanhSachLopHoc
@@ -19,7 +19,7 @@ public class DanhSachLopHoc
 
 
     public DanhSachLopHoc() {
-        this.dsLop = new LopHoc[100];
+        this.dsLop = new LopHoc[0];
         this.soLuong = 0;
     }
 
@@ -28,13 +28,12 @@ public class DanhSachLopHoc
         this.soLuong = 0; }
 
     public boolean themLop(LopHoc lh) {
-        if(lh != null && soLuong < dsLop.length)
-        {
-            this.dsLop[soLuong] = lh;
-            soLuong++;
-            return true; //Thêm lớp thành công!!
-        }
-        return false; //Thêm lớp thất bại vì đối tượng null/mảng đã đầy.
+        if(lh == null) return false; //Them lop that bai vi doi tuong null
+
+        this.dsLop = java.util.Arrays.copyOf(dsLop, soLuong +1);
+        this.dsLop[soLuong] = lh;
+        soLuong++;
+        return true; //Them lop thanh cong!!
     }
 
     public LopHoc timKiemLopTheoTen(String tenLop) {
@@ -88,6 +87,8 @@ public class DanhSachLopHoc
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             int soDong = 0;
+            int soDongLoi = 0;
+            this.dsLop = new LopHoc[0];
             this.soLuong = 0;
             while ((line = br.readLine()) != null) {
                 soDong++;
@@ -97,12 +98,21 @@ public class DanhSachLopHoc
                 String[] p = line.split(",", -1);
                 if (p.length < 6) {
                     System.out.println("Dong " + soDong + ": thieu cot (can it nhat 6, co " + p.length + ")");
-                    continue;
-                }
+                    soDongLoi++;
+                    continue;}
                 for (int i = 0; i < p.length; i++) p[i] = p[i].trim();
 
                 try {
                     String tenLop = p[0];
+                    if (tenLop.isEmpty()) {
+                        System.out.println("Dong " + soDong + ": ten lop bi trong, bo qua dong nay");
+                        soDongLoi++;
+                        continue;
+                    }
+                    if (timKiemLopTheoTen(tenLop) != null) {
+                        System.out.println("Dong " + soDong + ": ten lop '" + tenLop + "' bi trung, bo qua dong nay");
+                        soDongLoi++;
+                        continue;}
                     String khoaHoc = p[1];
                     String maGV = p[2];
                     boolean laChuyen = Boolean.parseBoolean(p[3]);
@@ -122,12 +132,18 @@ public class DanhSachLopHoc
                     if (p.length >= 7 && !p[6].isEmpty()) {
                         lop.setChuongTrinhHoc(docChuongTrinh(p[6], soDong));
                     }
-                    themLop(lop);
+                    if (!themLop(lop)) {
+                        System.out.println("Dong " + soDong + ": danh sach lop da day (" + dsLop.length
+                                + "), khong them duoc lop '" + tenLop + "'");
+                        soDongLoi++;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Dong " + soDong + ": loi dinh dang so: " + line);
+                    soDongLoi++;
                 }
+
             }
-            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop.");
+            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop, " + soDongLoi + " dong loi.");
             return true;
         } catch (IOException e) {
             System.out.println("Loi khi doc file LopHoc: " + e.getMessage());
@@ -147,7 +163,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         }
     }
 
-        private MonHoc[] docChuongTrinh(String cot, int soDong) {
+            private MonHoc[] docChuongTrinh(String cot, int soDong) {
         String[] items = cot.split(";");
         MonHoc[] tam = new MonHoc[items.length];
         int n = 0;
@@ -165,17 +181,47 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 System.out.println("Dong " + soDong + ": khong tim thay ma mon '" + maMon + "'");
                 continue;
             }
+
+            int heSo;
             try {
-                tam[n++] = goc.copyVoiHeSo(Integer.parseInt(kv[1].trim()));  // copy, không sửa kho môn
+                heSo = Integer.parseInt(kv[1].trim());
             } catch (NumberFormatException e) {
                 System.out.println("Dong " + soDong + ": he so khong hop le '" + kv[1] + "'");
+                continue;
             }
+            if (heSo < 1) {
+                System.out.println("Dong " + soDong + ": he so cua mon '" + maMon + "' phai >= 1 (dang la " + heSo + ")");
+                continue;
+            }
+
+            boolean lap = false;
+            for (int i = 0; i < n; i++) {
+                if (tam[i].getMaMon().equalsIgnoreCase(goc.getMaMon())) {
+                    lap = true;
+                    break;
+                }
+            }
+            if (lap) {
+                System.out.println("Dong " + soDong + ": ma mon '" + maMon + "' bi lap trong lop, bo qua");
+                continue;
+            }
+
+            tam[n++] = goc.copyVoiHeSo(heSo);   
         }
         return java.util.Arrays.copyOf(tam, n);
     }
 
     public LopHoc[] getDsLop() { return dsLop; }
-    public void setDsLop(LopHoc[] dsLop) { this.dsLop = dsLop; }
+    public void setDsLop(LopHoc[] dsLopMoi) {
+        if(dsLopMoi == null) dsLopMoi = new LopHoc[0];
+
+        LopHoc[] gon = new LopHoc[dsLopMoi.length];
+        int dem = 0;
+        for(LopHoc l : dsLopMoi)
+            if(l != null) gon[dem++] = l;
+        this.dsLop = java.util.Arrays.copyOf(gon, dem);
+        this.soLuong = dem;
+    }
 
     public int getSoLuong() { return soLuong; }
 }

@@ -1,16 +1,15 @@
 package main;
 
-import collections.DanhSachHocSinh;
 import collections.DanhSachGiaoVien;
-import collections.DanhSachPhuHuynh;
+import collections.DanhSachHocSinh;
 import collections.DanhSachLopHoc;
+import collections.DanhSachPhuHuynh;
 import exceptions.TrungMaHocSinhException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import models.*;
 import utils.Color;
 import utils.DataValidator;
-
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import interfaces.IThongKe;
 import java.io.BufferedWriter;
@@ -20,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+
+
 
 public class HeThongQuanLy {
     private DanhSachHocSinh dsHocSinh;
@@ -98,7 +99,7 @@ public class HeThongQuanLy {
         try { dsLopHoc.docFile(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
         try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
         try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
-        dsLopHoc.phanHocSinhVaoLop(dsHocSinh);
+        try { dsLopHoc.phanHocSinhVaoLop(dsHocSinh); } catch (RuntimeException e) { baoLoiTai("lophoc.txt (phan hoc sinh vao lop)", e); }
     }
 
     private void baoLoiTai(String tenFile, RuntimeException e) {
@@ -440,8 +441,7 @@ public class HeThongQuanLy {
         if (dsLopHoc.themLop(lopMoi)) {
             System.out.println(Color.GREEN + "Da tao lop " + tenLop + " thanh cong!" + Color.RESET);
         } else {
-            System.out.println(Color.RED + "Tao lop that bai: danh sach lop da day (toi da "
-                    + dsLopHoc.getDsLop().length + " lop)!" + Color.RESET);
+            System.out.println(Color.RED + "Tao lop that bai: danh sach lop da day!" + Color.RESET);
         }
     }
 
