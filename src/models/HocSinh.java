@@ -90,12 +90,24 @@ public abstract class HocSinh extends Nguoi {
     }
 
     public void ghiNhanHoatDong(HoatDong hd) {
-        if (hd == null) return;
-        if (lichSuHoatDong == null) lichSuHoatDong = new HoatDong[0];
-        // nới mảng thêm 1 ô rồi gắn hoạt động mới vào cuối
-        lichSuHoatDong = java.util.Arrays.copyOf(lichSuHoatDong, lichSuHoatDong.length + 1);
-        lichSuHoatDong[lichSuHoatDong.length - 1] = hd;
+        if (this.lichSuHoatDong == null) {
+        this.lichSuHoatDong = new DanhSachHoatDong();
     }
+    this.lichSuHoatDong.themHoatDong(hd);
+    // Cộng trừ trực tiếp vào điểm hạnh kiểm, giữ trong khoảng 0 - 100
+    this.diemHanhKiem += hd.getDiemCongTru();
+    if (this.diemHanhKiem > 100) this.diemHanhKiem = 100;
+    if (this.diemHanhKiem < 0) this.diemHanhKiem = 0;
+    }
+
+    public void hienThiLichSuHoatDong() {
+    System.out.println("\n--- LỊCH SỬ HOẠT ĐỘNG ---");
+    if (this.lichSuHoatDong != null) {
+        this.lichSuHoatDong.hienThiDSHoatDong();
+    } else {
+        System.out.println("Chưa có lịch sử hoạt động.");
+    }
+}
 
     public String xepLoaiHanhKiem() {
         if (diemHanhKiem >= 80) return "Tốt";
