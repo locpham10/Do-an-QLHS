@@ -13,9 +13,14 @@ public class HocSinhDaiTra extends HocSinh {
               daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
     }
 
+    public HocSinhDaiTra(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
+                         String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi) {
+        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi);
+    }
+
     @Override
     public double tinhHocPhi() {
-        return 150000.0;
+        return HocSinh.HOC_PHI_CO_BAN;
     }
 
     @Override
@@ -25,8 +30,8 @@ public class HocSinhDaiTra extends HocSinh {
 
     @Override
     public String toFileString() {
-        return String.format("DAITRA,%s,%s,%s,%b,%s,%s,%.2f,%d,%b", 
-                getMshs(), getHoTen(), getTenLop(), isGioiTinh(), getNgaySinh(), 
-                getSoDienThoai(), getGpa(), getDiemHanhKiem(), isDaDongHocPhi());
+        return String.format(java.util.Locale.US,"DAITRA,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b",
+                getMshs(), getHoTen(), getNgaySinh(), isGioiTinh(), getDiaChi(), 
+                getSoDienThoai(), getTenLop(), getGpa(), getDiemHanhKiem(), isDaDongHocPhi());
     }
 }

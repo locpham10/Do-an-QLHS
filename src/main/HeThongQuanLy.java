@@ -99,6 +99,7 @@ public class HeThongQuanLy {
         try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
         try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
         try { dsLopHoc.phanHocSinhVaoLop(dsHocSinh); } catch (RuntimeException e) { baoLoiTai("lophoc.txt (phan hoc sinh vao lop)", e); }
+        try { dsLopHoc.docThoiKhoaBieu(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("thoikhoabieu.txt", e); }
     }
 
     private void baoLoiTai(String tenFile, RuntimeException e) {
@@ -736,10 +737,17 @@ public class HeThongQuanLy {
                     nhapDiemHocSinh();
                     break;
                 case 2:   // Linh (Li3, Li4): danh gia hanh kiem & ghi nhan hoat dong
-                case 3:   // Nam (N3): bang diem lop hoc (GPA giam dan)
-                case 4:   // Nam (N3): bang diem ca nhan
-                case 5:   // Nam (N5): quan ly thoi khoa bieu
-
+                    System.out.println(Color.YELLOW + "Chuc nang dang duoc xay dung." + Color.RESET);
+                    break;
+                case 3:
+                    bangDiemLopHoc();
+                    break;
+                case 4:
+                    bangDiemCaNhan();
+                    break;
+                case 5:
+                    menuThoiKhoaBieu();
+                    break;
                 default:
                     System.out.println(Color.RED + "Lua chon khong hop le!" + Color.RESET);
                     break;
@@ -834,6 +842,185 @@ public class HeThongQuanLy {
         System.out.println("\n" + Color.GREEN + "Da cap nhat bang diem thanh cong!" + Color.RESET);
         inBangDiem(bangDiem, soMon);
         System.out.println("=> GPA moi cua " + hs.getHoTen() + ": " + gpaMoi);
+    }
+
+    private void bangDiemLopHoc() {
+        System.out.println("\n[BANG DIEM LOP HOC]");
+        System.out.print("Nhap ten lop (nhap 0 de huy): ");
+        String tenLop = sc.nextLine().trim();
+        if (tenLop.equals("0")) return;
+ 
+        HocSinh[] dsLop = dsHocSinh.timKiemTheoLop(tenLop);
+        if (dsLop.length == 0) {
+            System.out.println(Color.RED + "Lop " + tenLop + " khong co hoc sinh nao (hoac khong ton tai)!" + Color.RESET);
+            return;
+        }
+ 
+        // Ban sao: sap xep khong lam doi thu tu mang goc trong DanhSachHocSinh
+        HocSinh[] banSao = java.util.Arrays.copyOf(dsLop, dsLop.length);
+        for (int i = 0; i < banSao.length - 1; i++) {
+            for (int j = 0; j < banSao.length - 1 - i; j++) {
+                if (banSao[j].getGpa() < banSao[j + 1].getGpa()) {
+                    HocSinh tam = banSao[j];
+                    banSao[j] = banSao[j + 1];
+                    banSao[j + 1] = tam;
+                }
+            }
+        }
+ 
+        System.out.println("\n" + Color.CYAN + "BANG DIEM LOP " + tenLop.toUpperCase()
+                + " (GPA giam dan)" + Color.RESET);
+        System.out.printf("%-5s %-8s %-25s %-6s %-6s%n", "Hang", "MSHS", "Ho ten", "GPA", "So mon");
+        for (int i = 0; i < banSao.length; i++) {
+            HocSinh hs = banSao[i];
+            System.out.printf("%-5d %-8s %-25s %-6.2f %-6d%n",
+                    i + 1, hs.getMshs(), hs.getHoTen(), hs.getGpa(), hs.getSoLuongMon());
+        }
+    }
+
+    private void bangDiemCaNhan() {
+        System.out.println("\n[BANG DIEM CA NHAN]");
+        System.out.print("Nhap MSHS (nhap 0 de huy): ");
+        String mshs = sc.nextLine().trim();
+        if (mshs.equals("0")) return;
+ 
+        HocSinh hs = dsHocSinh.timKiem(mshs);
+        if (hs == null) {
+            System.out.println(Color.RED + "Khong tim thay hoc sinh co ma " + mshs + "!" + Color.RESET);
+            return;
+        }
+ 
+        DiemMonHoc[] bangDiem = hs.getDanhSachDiem();
+        int soMon = hs.getSoLuongMon();
+        if (bangDiem == null || soMon == 0) {
+            System.out.println(Color.YELLOW + "Hoc sinh " + hs.getHoTen() + " chua co diem. Hay nhap o muc 2.1." + Color.RESET);
+            return;
+        }
+ 
+        System.out.println("\n" + Color.CYAN + "BANG DIEM: " + hs.getHoTen() + " (" + hs.getMshs()
+                + ") - Lop " + hs.getTenLop() + Color.RESET);
+        System.out.printf("%-12s %-6s %-8s %-8s %-8s %-8s%n",
+                "Mon", "HS mon", "TX (x1)", "GK (x2)", "CK (x3)", "DTB mon");
+        for (int i = 0; i < soMon; i++) {
+            DiemMonHoc d = bangDiem[i];
+            if (d == null || d.getMonHoc() == null) continue;
+            MonHoc mh = d.getMonHoc();
+            String ghiChu = mh.isTinhVaoGPA() ? "" : " (khong tinh GPA)";
+            System.out.printf("%-12s %-6d %-8.1f %-8.1f %-8.1f %-8.2f%s%n",
+                    mh.getTenMon(), mh.getHeSo(), d.getDiemTX(), d.getDiemGK(), d.getDiemCK(),
+                    d.tinhDiemTBMon(), ghiChu);
+        }
+        System.out.println("=> GPA: " + DiemMonHoc.tinhGPATongHop(java.util.Arrays.copyOf(bangDiem, soMon)));
+    }
+
+    private void menuThoiKhoaBieu() {
+        int chon = -1;
+        while (chon != 0) {
+            System.out.println("\n---- 2.5 QUAN LY THOI KHOA BIEU ----");
+            System.out.println("1. Xem thoi khoa bieu cua lop");
+            System.out.println("2. Xep tiet");
+            System.out.println("3. Xoa tiet");
+            System.out.println("4. Xem lich day cua giao vien");
+            System.out.println("0. Quay lai");
+            chon = nhapLuaChon(4);
+ 
+            switch (chon) {
+                case 1:
+                    LopHoc lopXem = hoiLopTKB();
+                    if (lopXem != null) lopXem.inThoiKhoaBieu();
+                    break;
+                case 2:
+                    xepTietHoc();
+                    break;
+                case 3:
+                    xoaTietHoc();
+                    break;
+                case 4:
+                    System.out.print("Nhap ma giao vien (0 = quay lai): ");
+                    String maGV = sc.nextLine().trim();
+                    if (maGV.equals("0")) break;
+                    if (dsGiaoVien.timKiem(maGV) == null) {
+                        System.out.println(Color.RED + "Khong tim thay giao vien " + maGV + "!" + Color.RESET);
+                        break;
+                    }
+                    dsLopHoc.inLichDay(maGV);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+ 
+    // Hoi ten lop; tra ve null neu huy hoac khong tim thay
+    private LopHoc hoiLopTKB() {
+        System.out.print("Nhap ten lop (0 = quay lai): ");
+        String tenLop = sc.nextLine().trim();
+        if (tenLop.equals("0")) return null;
+        LopHoc lop = dsLopHoc.timKiemLopTheoTen(tenLop);
+        if (lop == null)
+            System.out.println(Color.RED + "Khong tim thay lop " + tenLop + "!" + Color.RESET);
+        return lop;
+    }
+ 
+    private void xepTietHoc() {
+        LopHoc lop = hoiLopTKB();
+        if (lop == null) return;
+ 
+        MonHoc[] ct = lop.getChuongTrinhHoc();
+        int soMon = demMonHoc(ct);
+        if (soMon == 0) {
+            System.out.println(Color.RED + "Lop " + lop.getTenLop() + " chua co chuong trinh hoc, khong xep tiet duoc!" + Color.RESET);
+            return;
+        }
+ 
+        lop.inThoiKhoaBieu();
+        int thu = DataValidator.nhapSoNguyen(sc, "Xep vao thu (2-7): ", 2, LopHoc.SO_NGAY + 1);
+        int tiet = DataValidator.nhapSoNguyen(sc, "Xep vao tiet (1-" + LopHoc.SO_TIET + "): ", 1, LopHoc.SO_TIET);
+ 
+        System.out.println("Cac mon trong chuong trinh lop " + lop.getTenLop() + ":");
+        MonHoc[] dsMon = new MonHoc[soMon];
+        int dem = 0;
+        for (MonHoc mh : ct) {
+            if (mh == null) continue;
+            dsMon[dem++] = mh;
+            System.out.println(dem + ". " + mh.getTenMon() + " (" + mh.getMaMon() + ")");
+        }
+        MonHoc mon = dsMon[DataValidator.nhapSoNguyen(sc, "Chon mon (1-" + dem + "): ", 1, dem) - 1];
+ 
+        GiaoVien[] goiY = dsGiaoVien.timKiemTheoMon(mon.getTenMon());
+        if (goiY.length > 0) {
+            System.out.println("Giao vien day mon " + mon.getTenMon() + ":");
+            for (GiaoVien g : goiY)
+                System.out.println("  - " + g.getMaGV() + ": " + g.getHoTen());
+        }
+        System.out.print("Nhap ma giao vien: ");
+        String maGV = sc.nextLine().trim();
+        GiaoVien gv = dsGiaoVien.timKiem(maGV);
+        if (gv == null) {
+            System.out.println(Color.RED + "Khong tim thay giao vien " + maGV + "!" + Color.RESET);
+            return;
+        }
+ 
+        try {
+            dsLopHoc.xepTiet(lop.getTenLop(), thu, tiet, mon, gv);
+            System.out.println(Color.GREEN + "Da xep " + mon.getTenMon() + " (" + gv.getMaGV()
+                    + ") vao thu " + thu + " tiet " + tiet + " lop " + lop.getTenLop() + Color.RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(Color.RED + "Khong xep duoc: " + e.getMessage() + Color.RESET);
+        }
+    }
+ 
+    private void xoaTietHoc() {
+        LopHoc lop = hoiLopTKB();
+        if (lop == null) return;
+ 
+        lop.inThoiKhoaBieu();
+        int thu = DataValidator.nhapSoNguyen(sc, "Xoa tiet o thu (2-7): ", 2, LopHoc.SO_NGAY + 1);
+        int tiet = DataValidator.nhapSoNguyen(sc, "Xoa tiet o tiet (1-" + LopHoc.SO_TIET + "): ", 1, LopHoc.SO_TIET);
+        if (lop.xoaTiet(thu, tiet))
+            System.out.println(Color.GREEN + "Da xoa tiet thu " + thu + " tiet " + tiet + " cua lop " + lop.getTenLop() + Color.RESET);
+        else
+            System.out.println(Color.YELLOW + "O thu " + thu + " tiet " + tiet + " dang trong, khong co gi de xoa." + Color.RESET);
     }
 
     private int demMonHoc(MonHoc[] chuongTrinh) {
@@ -947,6 +1134,7 @@ public class HeThongQuanLy {
             System.out.println("1. Thong ke ty le len lop / o lai lop");
             System.out.println("2. Top 5 hoc sinh xuat sac nhat");
             System.out.println("3. Bao cao thong ke tong hop");
+            System.out.println("4. Thong ke theo khoa");
             System.out.println("0. Quay lai menu chinh");
             chon = nhapLuaChon(3);
 
@@ -962,7 +1150,10 @@ public class HeThongQuanLy {
                     dsHocSinh.inTop5XuatSac();
                     break;
                 case 3:
-                    dsHocSinh.inBaoCaoThongKe();
+                    inBaoCaoTongHop();
+                    break;
+                case 4:
+                    menuThongKeTheoKhoa();
                     break;
                 default:
                     System.out.println(Color.RED + "Lua chon khong hop le, vui long nhap lai!" + Color.RESET);
@@ -971,6 +1162,41 @@ public class HeThongQuanLy {
         }
     }
 
+    private void inBaoCaoTongHop(){
+        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
+        for (int i=0; i< dsThongKe.length; i++) {
+            dsThongKe[i].inBaoCaoThongKe();
+            System.out.println();
+        }
+    }
+
+private void menuThongKeTheoKhoa() {
+        int chon = -1;
+        while (chon != 0) {
+            System.out.println("\n---- 4.4 THONG KE THEO KHOA ----");
+            System.out.println("1. Theo lop");
+            System.out.println("2. Theo he (Chuyen / Dai tra)");
+            System.out.println("3. Theo gioi tinh");
+            System.out.println("4. Theo hoc luc");
+            System.out.println("5. Theo hanh kiem");
+            System.out.println("6. Hoc bong va no hoc phi");
+            System.out.println("0. Quay lai");
+            chon = nhapLuaChon(6);
+
+            if (chon == 0) break;
+            switch (chon) {
+                case 1: dsHocSinh.thongKeTheoLop();            break;
+                case 2: dsHocSinh.thongKeTheoHe();             break;
+                case 3: dsHocSinh.thongKeTheoGioiTinh();       break;
+                case 4: dsHocSinh.thongKeTheoHocLuc();         break;
+                case 5: dsHocSinh.thongKeTheoHanhKiem();       break;
+                case 6: dsHocSinh.thongKeHocBongVaNoHocPhi();  break;
+                default:
+                    System.out.println(Color.RED + "Lua chon khong hop le!" + Color.RESET);
+                    break;
+            }
+        }
+    }
     private void menuQuanLyDuLieu(){
         int chon = -1;
         while (chon != 0){
@@ -1000,27 +1226,28 @@ public class HeThongQuanLy {
             }
         }
     }
+
     // Muc 5.5 (Lieu - Le8): ghi bao cao tong hop ra file baocao.txt
     public static final String DUONG_DAN_BAO_CAO = "src/data/baocao.txt";
 
     private void xuatBaoCaoRaFile() {
-        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
         PrintStream manHinh = System.out;
         ByteArrayOutputStream boDem = new ByteArrayOutputStream();
         String noiDung;
         try {
             System.setOut(new PrintStream(boDem, true, "UTF-8"));
-            for (int i = 0; i < dsThongKe.length; i++) {
-                dsThongKe[i].inBaoCaoThongKe();  
-                System.out.println();
-            }
+
+            inBaoCaoTongHop();
+
             System.out.flush();
             noiDung = boDem.toString("UTF-8");
         } catch (IOException e) {
             System.out.println(Color.RED + "Loi khi xuat bao cao: " + e.getMessage() + Color.RESET);
             return;
         } finally {
-            System.setOut(manHinh);             
+
+            System.setOut(manHinh);
+
         }
 
         noiDung = noiDung.replaceAll("\\u001B\\[[;\\d]*m", "");
@@ -1286,6 +1513,8 @@ public class HeThongQuanLy {
             System.out.println("6. Tra cuu phu huynh cua hoc sinh (theo MSHS)");
             System.out.println("0. Quay lai");
             chon = nhapLuaChon(6);
+
+            if (chon == 0) break;
             switch (chon) {
                 case 1:
                     dsPhuHuynh.hienThiDanhSach();
@@ -1483,7 +1712,6 @@ public class HeThongQuanLy {
                     continue; 
             }
 
-            // --- IN KET QUA ---
             if (chon >= 1 && chon <= 6) {
                 if (kq == null || kq.length == 0) {
                     System.out.println(" Khong tim thay ket qua nao phu hop!");
