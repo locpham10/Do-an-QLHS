@@ -64,6 +64,23 @@ public class DanhSachPhuHuynh implements IThongKe {
         return null;
     }
 
+    public PhuHuynh[] timKiemTheoTen(String tuKhoa){
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrPH[i] != null && arrPH[i].getHoTenBoMe().toLowerCase().contains(tuKhoa.trim().toLowerCase())){
+                dem++;
+            }      
+        }
+        PhuHuynh[] ketQua = new PhuHuynh[dem];
+        int index = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if(arrPH[i] != null && arrPH[i].getHoTenBoMe().toLowerCase().contains(tuKhoa.trim().toLowerCase())){
+                ketQua[index++] = arrPH[i];
+            }   
+        }
+        return ketQua;
+    }
+
     public PhuHuynh timtheoMSHS (String mshs){
         if(mshs == null || mshs.trim().isEmpty()){
             return null;

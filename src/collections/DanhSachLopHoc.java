@@ -14,6 +14,7 @@ import models.HocSinh;
 import models.HocSinhChuyen;
 import models.LopHoc;
 import models.MonHoc;
+import models.TietHoc;
 
 public class DanhSachLopHoc
 {
@@ -608,6 +609,158 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
     }
 
     public LopHoc[] getDsLop() { return dsLop; }
+
+    // THOI KHOA BIEU
+    public static final String DUONG_DAN_TKB = "src/data/thoikhoabieu.txt";
+ 
+    // Trả về lớp KHÁC (không tính boQua) đang có chính GV này dạy ở thu/tiet đó; không có thì null
+    public LopHoc kiemTraTrungTiet(GiaoVien gv, int thu, int tiet, LopHoc boQua) {
+        if (gv == null || !LopHoc.hopLeViTri(thu, tiet)) return null;
+        for (int i = 0; i < soLuong; i++) {
+            LopHoc l = dsLop[i];
+            if (l == null || l == boQua) continue;
+            TietHoc t = l.getTiet(thu, tiet);
+            if (t != null && t.getGv() != null
+                    && t.getGv().getMaGV().equalsIgnoreCase(gv.getMaGV()))
+                return l;
+        }
+        return null;
+    }
+ 
+    // Xếp tiết cho lớp tenLop, kiểm tra đủ ràng buộc (ném IllegalArgumentException nếu sai)
+    public void xepTiet(String tenLop, int thu, int tiet, MonHoc mon, GiaoVien gv) {
+        LopHoc lop = timKiemLopTheoTen(tenLop);
+        if (lop == null)
+            throw new IllegalArgumentException("Khong tim thay lop " + tenLop);
+ 
+        LopHoc trung = kiemTraTrungTiet(gv, thu, tiet, lop);
+        if (trung != null)
+            throw new IllegalArgumentException("Giao vien " + gv.getHoTen() + " ("
+                    + gv.getMaGV() + ") da day lop " + trung.getTenLop()
+                    + " vao thu " + thu + " tiet " + tiet);
+ 
+        lop.xepTiet(thu, tiet, mon, gv);
+    }
+ 
+    // In lịch dạy trong tuần của một giáo viên (tổng hợp từ thời khóa biểu mọi lớp)
+    public void inLichDay(String maGV) {
+        String[][] o = new String[LopHoc.SO_NGAY][LopHoc.SO_TIET];
+        String tenGV = null;
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (dsLop[i] == null) continue;
+            for (int n = 0; n < LopHoc.SO_NGAY; n++) {
+                for (int t = 0; t < LopHoc.SO_TIET; t++) {
+                    TietHoc th = dsLop[i].getLichHoc()[n][t];
+                    if (th != null && th.getGv() != null
+                            && th.getGv().getMaGV().equalsIgnoreCase(maGV.trim())) {
+                        o[n][t] = dsLop[i].getTenLop() + "-" + th.getMon().getMaMon();
+                        tenGV = th.getGv().getHoTen();
+                        dem++;
+                    }
+                }
+            }
+        }
+ 
+        if (dem == 0) {
+            System.out.println("Giao vien " + maGV + " chua co tiet day nao.");
+            return;
+        }
+ 
+        String vien = "+-------";
+        for (int n = 0; n < LopHoc.SO_NGAY; n++) vien += "+------------";
+        vien += "+";
+        System.out.println("\nLICH DAY: " + tenGV + " (" + maGV.trim().toUpperCase() + ")");
+        System.out.println(vien);
+        String dong = String.format("| %-5s ", "Tiet");
+        for (int n = 0; n < LopHoc.SO_NGAY; n++) dong += String.format("| %-10s ", "Thu " + (n + 2));
+        System.out.println(dong + "|");
+        System.out.println(vien);
+        for (int t = 0; t < LopHoc.SO_TIET; t++) {
+            dong = String.format("| %-5d ", t + 1);
+            for (int n = 0; n < LopHoc.SO_NGAY; n++)
+                dong += String.format("| %-10s ", o[n][t] == null ? "-" : o[n][t]);
+            System.out.println(dong + "|");
+        }
+        System.out.println(vien);
+        System.out.println("Tong so tiet day trong tuan: " + dem);
+    }
+ 
+    // Ghi thoikhoabieu.txt: mỗi dòng  tenLop,thu,tiet,maMon,maGV
+    public boolean ghiThoiKhoaBieu() {
+        File f = new File(DUONG_DAN_TKB);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) thuMucCha.mkdirs();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+            for (int i = 0; i < soLuong; i++) {
+                if (dsLop[i] == null) continue;
+                for (int n = 0; n < LopHoc.SO_NGAY; n++) {
+                    for (int t = 0; t < LopHoc.SO_TIET; t++) {
+                        TietHoc th = dsLop[i].getLichHoc()[n][t];
+                        if (th == null) continue;
+                        bw.write(dsLop[i].getTenLop() + "," + (n + 2) + "," + (t + 1) + ","
+                                + th.getMon().getMaMon() + "," + th.getGv().getMaGV());
+                        bw.newLine();
+                    }
+                }
+            }
+            System.out.println("Ghi file thoi khoa bieu thanh cong!");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file thoi khoa bieu: " + e.getMessage());
+            return false;
+        }
+    }
+ 
+    // Đọc thoikhoabieu.txt (phải đọc lophoc.txt và giaovien.txt trước). Mỗi dòng đi qua xepTiet()
+    // nên cũng bị kiểm tra đủ ràng buộc; dòng sai chỉ báo lỗi rồi bỏ qua.
+    public boolean docThoiKhoaBieu(DanhSachGiaoVien dsGV) {
+        if (soLuong == 0) {
+            System.out.println("Chua co lop nao, hay doc lophoc.txt truoc khi doc thoi khoa bieu.");
+            return false;
+        }
+        for (int i = 0; i < soLuong; i++)
+            if (dsLop[i] != null) dsLop[i].xoaTatCaTiet();
+ 
+        int soDong = 0, soLoi = 0, soTiet = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_TKB))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                soDong++;
+                line = line.trim();
+                if (line.isEmpty()) continue;
+ 
+                String[] p = line.split(",", -1);
+                if (p.length != 5) {
+                    System.out.println("Dong " + soDong + ": can dung 5 cot (tenLop,thu,tiet,maMon,maGV), co " + p.length);
+                    soLoi++;
+                    continue;
+                }
+                try {
+                    int thu = Integer.parseInt(p[1].trim());
+                    int tiet = Integer.parseInt(p[2].trim());
+                    MonHoc mon = MonHoc.timTheoMa(p[3]);
+                    GiaoVien gv = (dsGV != null) ? dsGV.timKiem(p[4].trim()) : null;
+                    if (mon == null) throw new IllegalArgumentException("Khong tim thay ma mon '" + p[3].trim() + "'");
+                    if (gv == null) throw new IllegalArgumentException("Khong tim thay ma GV '" + p[4].trim() + "'");
+                    xepTiet(p[0].trim(), thu, tiet, mon, gv);
+                    soTiet++;
+                } catch (NumberFormatException e) {
+                    System.out.println("Dong " + soDong + ": thu/tiet phai la so nguyen: " + line);
+                    soLoi++;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Dong " + soDong + ": " + e.getMessage());
+                    soLoi++;
+                }
+            }
+            System.out.println("Doc file thoi khoa bieu thanh cong! " + soTiet + " tiet, " + soLoi + " dong loi.");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file thoi khoa bieu: " + e.getMessage());
+            return false;
+        }
+    }
+
     public void setDsLop(LopHoc[] dsLopMoi) {
         if(dsLopMoi == null) dsLopMoi = new LopHoc[0];
 

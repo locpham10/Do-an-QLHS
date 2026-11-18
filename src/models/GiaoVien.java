@@ -24,8 +24,9 @@ public class GiaoVien extends Nguoi{
         this.dsLopDay = dsLopDay;
     }
 
+
     public String toFileString() {
-        String tenMon = (monChuyenMon != null) ? monChuyenMon.getTenMon() : "Không";
+        String tenMon = (monChuyenMon != null) ? monChuyenMon.getMaMon() : "Khong";
         int soLop = (dsLopDay != null) ? dsLopDay.length : 0;
         String kq = String.format(java.util.Locale.US, "%s,%s,%s,%b,%s,%s,%s,%.0f,%s,%d",
             maGV, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, chucVu, luong, tenMon, soLop);

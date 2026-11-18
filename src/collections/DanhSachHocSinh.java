@@ -87,24 +87,6 @@ public class DanhSachHocSinh implements IThongKe {
 
         System.out.println("Dang sua thong tin cho hoc sinh: " + hs.getHoTen());
         System.out.println("Luu y: Nhan Enter de bo qua neu khong muon doi truong do.");
-        // System.out.print("Nhap ho ten moi: ");
-        // String hoTen = sc.nextLine();
-        // if (!hoTen.trim().isEmpty()) hs.setHoTen(hoTen);
-        // System.out.print("Nhap ngay sinh moi (dd/MM/yyyy): ");
-        // String ngaySinh = sc.nextLine();
-        // if (!ngaySinh.trim().isEmpty()) hs.setNgaySinh(ngaySinh);
-        // System.out.print("Nhap gioi tinh moi: ");
-        // String gioiTinh = sc.nextLine();
-        // if (!gioiTinh.trim().isEmpty()) {
-        //     hs.setGioiTinh(Boolean.parseBoolean(gioiTinh));
-        // }
-        // System.out.print("Nhap Dia Chi Moi: ");
-        // String diaChi = sc.nextLine();
-        // if (!diaChi.trim().isEmpty()) hs.setDiaChi(diaChi);
-        // System.out.print("Nhap so dien thoai moi: ");
-        // String sdt = sc.nextLine();
-        // if (!sdt.trim().isEmpty()) hs.setSoDienThoai(sdt);
-        // System.out.println("Cap nhat thong tin thanh cong!");
         String s;
         while (true) {                           
             System.out.print("Nhap ho ten moi: ");
@@ -363,6 +345,128 @@ public class DanhSachHocSinh implements IThongKe {
         System.out.println(" So luong hoc sinh con no hoc phi: " + noHocPhi);
  
         this.tinhTyLeDat();
+    }
+
+    private void inDongThongKe(String nhan, int soHs) {
+        double tyLe = (soLuong == 0) ? 0 : soHs * 100.0 / soLuong;
+        System.out.printf("  %-22s: %3d hoc sinh (%5.1f%%)%n", nhan, soHs, tyLe);
+    }
+
+    private boolean khongCoDuLieu() {
+        if (soLuong == 0) {
+            System.out.println("Khong co du lieu hoc sinh de thong ke.");
+            return true;
+        }
+        return false;
+    }
+
+
+    public void thongKeTheoLop() {
+        System.out.println("\n--- THONG KE THEO LOP ---");
+        if (khongCoDuLieu()) return;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            String tenLop = arrHS[i].getTenLop();
+            boolean daDem = false;
+            for (int j = 0; j < i; j++) {
+                if (arrHS[j] != null && arrHS[j].getTenLop().equalsIgnoreCase(tenLop)) {
+                    daDem = true;
+                    break;
+                }
+            }
+            if (daDem) continue;
+            int dem = 0;
+            for (int j = i; j < soLuong; j++) {
+                if (arrHS[j] != null && arrHS[j].getTenLop().equalsIgnoreCase(tenLop)) dem++;
+            }
+            inDongThongKe("Lop " + tenLop, dem);
+        }
+    }
+
+   
+    public void thongKeTheoHe() {
+        System.out.println("\n--- THONG KE THEO HE ---");
+        if (khongCoDuLieu()) return;
+        int chuyen = 0, daiTra = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] instanceof HocSinhChuyen) chuyen++;
+            else if (arrHS[i] instanceof HocSinhDaiTra) daiTra++;
+        }
+        inDongThongKe("Chuyen", chuyen);
+        inDongThongKe("Dai tra", daiTra);
+    }
+
+   
+    public void thongKeTheoGioiTinh() {
+        System.out.println("\n--- THONG KE THEO GIOI TINH ---");
+        if (khongCoDuLieu()) return;
+        int nam = 0, nu = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            if (arrHS[i].isGioiTinh()) nam++;
+            else nu++;
+        }
+        inDongThongKe("Nam", nam);
+        inDongThongKe("Nu", nu);
+    }
+
+
+    private int[] demTheoXepLoai(String[] mucXepLoai, boolean laHocLuc) {
+        int[] dem = new int[mucXepLoai.length];
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            String xl = laHocLuc ? arrHS[i].xepLoaiHocLuc() : arrHS[i].xepLoaiHanhKiem();
+            for (int k = 0; k < mucXepLoai.length; k++) {
+                if (mucXepLoai[k].equals(xl)) {
+                    dem[k]++;
+                    break;
+                }
+            }
+        }
+        return dem;
+    }
+
+    public void thongKeTheoHocLuc() {
+        System.out.println("\n--- THONG KE THEO HOC LUC (GPA) ---");
+        if (khongCoDuLieu()) return;
+        String[] muc = {"Gioi", "Kha", "Trung binh", "Yeu"};
+        String[] nhan = {"Gioi (>= 8.0)", "Kha (6.5 - 7.9)", "Trung binh (5.0 - 6.4)", "Yeu (< 5.0)"};
+        int[] dem = demTheoXepLoai(muc, true);
+        for (int k = 0; k < muc.length; k++) inDongThongKe(nhan[k], dem[k]);
+    }
+
+
+    public void thongKeTheoHanhKiem() {
+        System.out.println("\n--- THONG KE THEO HANH KIEM ---");
+        if (khongCoDuLieu()) return;
+        String[] muc = {"Tot", "Kha", "Trung binh", "Yeu"};
+        String[] nhan = {"Tot (>= 80)", "Kha (65 - 79)", "Trung binh (50 - 64)", "Yeu (< 50)"};
+        int[] dem = demTheoXepLoai(muc, false);
+        for (int k = 0; k < muc.length; k++) inDongThongKe(nhan[k], dem[k]);
+    }
+
+
+    public void thongKeHocBongVaNoHocPhi() {
+        System.out.println("\n--- THONG KE HOC BONG VA NO HOC PHI ---");
+        if (khongCoDuLieu()) return;
+        int hbChuyen = 0, hbDaiTra = 0, soNo = 0;
+        double tongNo = 0;
+        for (int i = 0; i < soLuong; i++) {
+            HocSinh hs = arrHS[i];
+            if (hs == null) continue;
+            if (hs.xetHocBong()) {
+                if (hs instanceof HocSinhChuyen) hbChuyen++;
+                else hbDaiTra++;
+            }
+            if (!hs.isDaDongHocPhi()) {
+                soNo++;
+                tongNo += hs.tinhHocPhi();
+            }
+        }
+        inDongThongKe("Hoc bong - Chuyen", hbChuyen);
+        inDongThongKe("Hoc bong - Dai tra", hbDaiTra);
+        inDongThongKe("Con no hoc phi", soNo);
+        System.out.printf("  %-22s: %,.0f VND%n", "Tong tien con no", tongNo);
     }
 
     public boolean ghiFile() {
@@ -669,5 +773,69 @@ public class DanhSachHocSinh implements IThongKe {
         if (monChuyen == null) return false;
         monChuyen = monChuyen.trim();
         return mh.getMaMon().equalsIgnoreCase(monChuyen) || mh.getTenMon().equalsIgnoreCase(monChuyen);
+    }
+
+// ================= BLOCK TÀI CHÍNH  =================
+
+    public void traCuuHocPhi(String mshs) {
+        HocSinh hs = timKiem(mshs);
+        if (hs == null) {
+            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+            return;
+        }
+        System.out.println("\n--- THÔNG TIN HỌC PHÍ CÁ NHÂN ---");
+        System.out.println("Mã HS: " + hs.getMshs() + " | Họ tên: " + hs.getHoTen());
+        System.out.println("Học phí phải đóng: " + hs.tinhHocPhi());
+        System.out.println("Trạng thái: " + (hs.isDaDongHocPhi() ? "Đã đóng" : "Chưa đóng"));
+    }
+
+    public void inDanhSachNoHocPhi() {
+        System.out.println("\n--- DANH SÁCH HỌC SINH CHƯA ĐÓNG HỌC PHÍ ---");
+        int count = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && !arrHS[i].isDaDongHocPhi()) {
+                System.out.printf("%d. MSHS: %s | Họ tên: %s | Lớp: %s | Số tiền: %.2f\n", 
+                    (count + 1), arrHS[i].getMshs(), arrHS[i].getHoTen(), arrHS[i].getTenLop(), arrHS[i].tinhHocPhi());
+                count++;
+            }
+        }
+        if (count == 0) {
+            System.out.println("Tuyệt vời! Không có học sinh nào nợ học phí.");
+        }
+    }
+
+    public double tongHocPhiPhaiThu() {
+        double tong = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null) {
+                tong += arrHS[i].tinhHocPhi();
+            }
+        }
+        return tong;
+    }
+
+    public double tongHocPhiDaThu() {
+        double tong = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && arrHS[i].isDaDongHocPhi()) {
+                tong += arrHS[i].tinhHocPhi();
+            }
+        }
+        return tong;
+    }
+
+    public void xetDuyetHocBong() {
+        System.out.println("\n--- XÉT DUYỆT HỌC BỔNG TOÀN TRƯỜNG ---");
+        int count = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && arrHS[i].xetHocBong()) {
+                count++;
+                System.out.printf("%d. MSHS: %s | Họ tên: %s | Lớp: %s | GPA: %.2f | Hạnh kiểm: %d\n",
+                    count, arrHS[i].getMshs(), arrHS[i].getHoTen(), arrHS[i].getTenLop(), arrHS[i].getGpa(), arrHS[i].getDiemHanhKiem());
+            }
+        }
+        if (count == 0) {
+            System.out.println("Không có học sinh nào đủ điều kiện nhận học bổng.");
+        }
     }
 }

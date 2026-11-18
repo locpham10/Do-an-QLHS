@@ -35,6 +35,11 @@ public class PhuHuynh {
     }
 
     public String toFileString() {
-        return hoTenBoMe + "," + sdtKhanCap + "," + (mshs != null ? mshs : "");
+        return hoTenBoMe + "," + sdtKhanCap + "," + (mshs != null && !mshs.isEmpty() ? mshs : "");
+    }
+    public void hienThiThongTin() {
+        System.out.println("Ho ten bo me   : " + hoTenBoMe);
+        System.out.println("SDT khan cap   : " + sdtKhanCap);
+        System.out.println("MSHS lien ket  : " + (mshs != null && !mshs.isEmpty() ? mshs : "Chua co"));
     }
 }
