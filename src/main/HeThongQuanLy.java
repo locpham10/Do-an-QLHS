@@ -737,6 +737,8 @@ public class HeThongQuanLy {
                     nhapDiemHocSinh();
                     break;
                 case 2:   // Linh (Li3, Li4): danh gia hanh kiem & ghi nhan hoat dong
+                    System.out.println(Color.YELLOW + "Chuc nang dang duoc xay dung." + Color.RESET);
+                    break;
                 case 3:
                     bangDiemLopHoc();
                     break;
