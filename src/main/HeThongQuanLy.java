@@ -1130,6 +1130,7 @@ public class HeThongQuanLy {
                 GiaoVien gvMoi = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, sdt, chucVu, luong, monChuyenMon, dsLopDay);
                 if(dsGiaoVien.them(gvMoi)){
                     System.out.println(Color.GREEN + "Them giao vien thanh cong!" + Color.RESET);
+                    dsGiaoVien.ghiFile();
                 }
                 else{
                     System.out.println(Color.RED + "Them giao vien that bai!" + Color.RESET);
@@ -1141,6 +1142,7 @@ public class HeThongQuanLy {
                 String maSua = sc.nextLine().trim();
                 if(dsGiaoVien.sua(maSua, sc)){
                     System.out.println(Color.GREEN + "Cap nhat thong tin giao vien thanh cong!" + Color.RESET);
+                    dsGiaoVien.ghiFile();
                 }else {
                     System.out.println(Color.RED + "Khong tim thay giao vien co ma " + maSua + "!" + Color.RESET);
                 }
@@ -1158,6 +1160,7 @@ public class HeThongQuanLy {
                 if(sc.nextLine().trim().equalsIgnoreCase("Y")){
                     if(dsGiaoVien.xoa(maXoa)){
                         System.out.println(Color.GREEN + "Da xoa giao vien thanh cong!" + Color.RESET);
+                        dsGiaoVien.ghiFile();
                     }
                 }
                 else{
@@ -1171,7 +1174,7 @@ public class HeThongQuanLy {
                 System.out.println("3. Tim theo mon");
                 System.out.println("4. Tim theo chuc vu");
                 System.out.println("0. Quay lai");
-                int loaiTim = nhapLuaChon(3);
+                int loaiTim = nhapLuaChon(4);
                 
                 if (loaiTim == 1) {
                     System.out.print("Nhap ma giao vien: ");
@@ -1301,8 +1304,118 @@ public class HeThongQuanLy {
                     dsPhuHuynh.hienThiDanhSach();
                     break;
                 case 2:
+                    System.out.println("THEM MOI PHU HUYNH");
+                    String sdtKhanCap = DataValidator.nhapSoDienThoai(sc,"Nhap so dien thoai khan cap: ");
+                    if(dsPhuHuynh.timKiem(sdtKhanCap) != null){
+                        System.out.println(Color.RED + "Loi: So dien thoai " + sdtKhanCap + " da ton tai!" + Color.RESET);
+                        break;
+                    }
+                    String hoTenBoMe = DataValidator.nhapChuoiKhongRong(sc, "Nhap ho ten phu huynh: ");
+                    String mshsMoi = "";
+                    while (true) {
+                        System.out.print("Nhap so luong MSHS lien ket (nhap 0 neu chua co): ");
+                        String s = sc.nextLine().trim();
+                        if (s.isEmpty()) {
+                            break;
+                        }
+                        try {
+                            int soLuongHS = Integer.parseInt(s);
+                            if (soLuongHS >= 0) {
+                                if (soLuongHS == 0) {
+                                    mshsMoi = "";
+                                    break;
+                                }
+                                boolean nhapThanhCong = true;
+                                String tempMshs = "";
+                                for (int i = 0; i < soLuongHS; i++) {
+                                    System.out.print("  + Nhap MSHS thu " + (i + 1) + ": ");
+                                    String maHS = sc.nextLine().trim();
+                                    if (maHS.isEmpty() || maHS.contains(",")) {
+                                        System.out.println(Color.RED + "Loi: MSHS khong duoc de trong hoac chua dau phay! Vui long nhap lai tu dau" + Color.RESET);
+                                        nhapThanhCong = false;
+                                        break;
+                                    }
+                                    if (tempMshs.isEmpty()) {
+                                        tempMshs = maHS;
+                                    } else {
+                                        tempMshs = tempMshs + ";" + maHS;
+                                    }
+                                }
+                                if (nhapThanhCong) {
+                                    mshsMoi = tempMshs;
+                                    break;
+                                }
+                            } else {
+                                System.out.println(Color.RED + "Loi: So luong khong duoc la so am" + Color.RESET);
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(Color.RED + "Loi: So luong phai la so nguyen hop le" + Color.RESET);
+                        }
+                    }
+                    PhuHuynh phMoi = new PhuHuynh(hoTenBoMe, sdtKhanCap, mshsMoi);
+                    if(dsPhuHuynh.them(phMoi)){
+                        System.out.println(Color.GREEN + "Them phu huynh moi thanh cong!" + Color.RESET);
+                        dsPhuHuynh.ghiFile();
+                    }
+                    else{
+                        System.out.println(Color.RED + "Them phu huynh moi that bai!" + Color.RESET);
+                    }
                     break;
-            }
+                case 3:
+                    System.out.print("Nhap so dien thoai khan cap cua phu huynh can sua: ");
+                    String sdtSua = sc.nextLine().trim();
+                    if(dsPhuHuynh.sua(sdtSua, sc)){
+                        System.out.println(Color.GREEN + "Cap nhat thong tin phu huynh thanh cong!" + Color.RESET);
+                        dsPhuHuynh.ghiFile();
+                    } else {
+                        System.out.println(Color.RED + "Khong tim thay phu huynh co SĐT nay!" + Color.RESET);
+                    }
+                    break;
+                case 4:
+                    System.out.println("Nhap so dien thoai khan cap cua phu huynh can xoa: ");
+                    String sdtXoa = sc.nextLine().trim();
+                    PhuHuynh phXoa = dsPhuHuynh.timKiem(sdtXoa);
+                    if(phXoa == null){
+                        System.out.println(Color.RED + "Khong tim thay phu huynh co SĐT nay!" + Color.RESET);
+                    }
+                    System.out.print(Color.YELLOW + "Xac nhan xoa phu huynh " + phXoa.getHoTenBoMe() + "? (Y/N): " + Color.RESET);
+                    if(sc.nextLine().trim().equalsIgnoreCase("Y")){
+                        if(dsPhuHuynh.xoa(sdtXoa)){
+                            System.out.println(Color.GREEN + "Da xoa phu huynh thanh cong!" + Color.RESET);
+                            dsPhuHuynh.ghiFile();
+                        }  
+                    } else{
+                        System.out.println(Color.YELLOW + "Da huy lenh xoa." + Color.RESET); 
+                    }
+                    break;
+                case 5:
+                    System.out.println("\n--- TIM KIEM PHU HUYNH ---");
+                    System.out.println("1. Tim chinh xac theo so dien thoai");
+                    System.out.println("2. Tim gan dung theo ten");
+                    System.out.println("0. Quay lai");
+                    int loaiTim = nhapLuaChon(2);
+
+                    if(loaiTim == 1){
+                        System.out.print("Nhap so dien thoai cua phu huynh can  tim: ");
+                        PhuHuynh ph = dsPhuHuynh.timKiem(sc.nextLine().trim());
+                        if(ph != null){
+                            ph.toFileString();
+                        }
+                        else{
+                            System.out.println(Color.RED + "Khong tim thay phu huynh nao co so dien thoai nay!" + Color.RESET);
+                        }
+                    }
+                    else if(loaiTim == 2){
+                        System.out.print("Nhap ten cua phu huynh can  tim: ");
+                        PhuHuynh[] arrPH = dsPhuHuynh.timKiemTheoTen(sc.nextLine().trim());
+                        if(arrPH.length > 0)
+                            for (int i = 0; i < arrPH.length; i++) {
+                                arrPH[i].toFileString();
+
+                            }
+                        }
+                    }
+                         
         }
     }
     private void menuTimKiem() {
