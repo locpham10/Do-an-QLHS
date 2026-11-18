@@ -1,6 +1,5 @@
 package models;
 
-import models.HoatDong;
 
 public abstract class HocSinh extends Nguoi {
     protected String mshs;
