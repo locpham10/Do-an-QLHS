@@ -15,11 +15,9 @@ public abstract class HocSinh extends Nguoi {
 
     // Hằng số tĩnh theo yêu cầu Li5
     public static final double HOC_PHI_CO_BAN = 150000.0;
-    protected static int tongSoHocSinh = 0;
 
     public HocSinh() {
         super();
-        tongSoHocSinh++;
     }
 
     // Constructor đầy đủ
@@ -36,7 +34,6 @@ public abstract class HocSinh extends Nguoi {
         this.danhSachDiem = danhSachDiem;
         this.soLuongMon = soLuongMon;
         this.lichSuHoatDong = lichSuHoatDong;
-        tongSoHocSinh++;
     }
 
     // Constructor rút gọn (overload) để docFile gọi không bị lỗi thiếu tham số
@@ -52,11 +49,6 @@ public abstract class HocSinh extends Nguoi {
         this.danhSachDiem = new DiemMonHoc[0];
         this.soLuongMon = 0;
         this.lichSuHoatDong = new HoatDong[0];
-        tongSoHocSinh++;
-    }
-
-    public static int getTongSoHocSinh() {
-        return tongSoHocSinh;
     }
 
     public String xepLoaiHocLuc() {
