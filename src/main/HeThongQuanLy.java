@@ -814,8 +814,33 @@ public class HeThongQuanLy {
                     nhapDiemHocSinh();
                     break;
                 case 2:   // Linh (Li3, Li4): danh gia hanh kiem & ghi nhan hoat dong
-                    System.out.println(Color.YELLOW + "Chuc nang dang duoc xay dung." + Color.RESET);
-                    break;
+                    System.out.print("Nhập MSHS học sinh cần ghi nhận hoạt động: ");
+String mshsHS = sc.nextLine().trim();
+HocSinh hs = dsHocSinh.timKiem(mshsHS);
+if (hs == null) {
+    System.out.println("Không tìm thấy học sinh!");
+} else {
+    System.out.print("Nhập tên hoạt động (KHÔNG được chứa dấu phẩy ','): ");
+    String tenHD = sc.nextLine().trim();
+    if (tenHD.contains(",")) {
+        System.out.println("Lỗi: Tên hoạt động không được chứa dấu phẩy!");
+        return;
+    }
+    System.out.print("Nhập điểm cộng/trừ (ví dụ: 5 hoặc -5): ");
+    int diemCT = Integer.parseInt(sc.nextLine().trim());
+    System.out.print("Nhập ngày ghi nhận (dd/MM/yyyy): ");
+    String ngay = sc.nextLine().trim();
+
+    HoatDong hd = new HoatDong(tenHD, diemCT, ngay);
+    hs.ghiNhanHoatDong(hd);
+    System.out.println("Đã ghi nhận thành công! Điểm hạnh kiểm mới: " + hs.getDiemHanhKiem() + " (" + hs.xepLoaiHanhKiem() + ")");
+    
+    System.out.print("Bạn có muốn xem lịch sử hoạt động của học sinh này không? (y/n): ");
+    String xem = sc.nextLine().trim();
+    if (xem.equalsIgnoreCase("y")) {
+        hs.hienThiLichSuHoatDong();
+    }
+}
                 case 3:
                     bangDiemLopHoc();
                     break;
