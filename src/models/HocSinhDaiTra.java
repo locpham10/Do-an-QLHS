@@ -30,8 +30,8 @@ public class HocSinhDaiTra extends HocSinh {
 
     @Override
     public String toFileString() {
-        return String.format(java.util.Locale.US,"DAITRA,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b",
-                getMshs(), getHoTen(), getNgaySinh(), isGioiTinh(), getDiaChi(), 
-                getSoDienThoai(), getTenLop(), getGpa(), getDiemHanhKiem(), isDaDongHocPhi());
+    return String.format("DaiTra,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b", 
+            getMshs(), getHoTen(), getNgaySinh(), isGioiTinh(), getDiaChi(), 
+            getSoDienThoai(), getTenLop(), getGpa(), getDiemHanhKiem(), isDaDongHocPhi());
     }
 }
