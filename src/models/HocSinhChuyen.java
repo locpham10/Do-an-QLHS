@@ -41,6 +41,15 @@ public class HocSinhChuyen extends HocSinh {
         return (this.gpa >= 8.5 && this.diemHanhKiem >= 80 && this.diemMonChuyen >= 8.0);
     }
 
+    @Override
+    public void hienThiThongTin() {
+    System.out.println("[Học sinh Chuyên]");
+    super.hienThiThongTin();
+    MonHoc mh = MonHoc.timTheoMa(monChuyen);
+    String tenMonStr = (mh != null) ? mh.getTenMon() : monChuyen;
+    System.out.println("Môn chuyên: " + tenMonStr + " | Điểm môn chuyên: " + diemMonChuyen + " | Phụ phí: " + phuPhiChuyenDe);
+    }
+
     public String getMonChuyen() { return monChuyen; }
     public void setMonChuyen(String monChuyen) { this.monChuyen = monChuyen; }
     public double getDiemMonChuyen() { return diemMonChuyen; }
