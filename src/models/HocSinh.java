@@ -20,9 +20,9 @@ public abstract class HocSinh extends Nguoi {
         super();
     }
 
-    // Constructor đầy đủ
-    public HocSinh(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, 
-                   String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
+    // Constructor đầy đủ (đã đưa mshs lên đầu)
+    public HocSinh(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
+                   String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
                    PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong){
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
         this.mshs = mshs;
@@ -34,6 +34,7 @@ public abstract class HocSinh extends Nguoi {
         this.danhSachDiem = danhSachDiem;
         this.soLuongMon = soLuongMon;
         this.lichSuHoatDong = lichSuHoatDong;
+        tongSoHocSinh++;
     }
 
     // Constructor rút gọn (overload) để docFile gọi không bị lỗi thiếu tham số

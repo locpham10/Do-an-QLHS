@@ -6,13 +6,15 @@ public class HocSinhDaiTra extends HocSinh {
         super();
     }
 
-    public HocSinhDaiTra(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, 
-                         String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
+    // Constructor đầy đủ (đã đưa mshs lên đầu)
+    public HocSinhDaiTra(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
+                         String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
                          PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong) {
-        super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, mshs, tenLop, gpa, diemHanhKiem, 
+        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, 
               daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
     }
 
+    // Constructor rút gọn phục vụ đọc file
     public HocSinhDaiTra(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
                          String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi) {
         super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem, daDongHocPhi);
