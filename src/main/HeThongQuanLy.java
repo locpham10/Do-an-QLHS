@@ -13,11 +13,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import models.*;
 import utils.Color;
 import utils.DataValidator;
+
 
 
 
@@ -50,7 +55,7 @@ public class HeThongQuanLy {
     }
 
     public void menu() {
-        taiDuLieuBanDau();
+        taiTatCa();
         int luaChon = -1;
         while (luaChon != 0) {
             try {
@@ -77,6 +82,10 @@ public class HeThongQuanLy {
                         menuQuanLyNhanSuVaPH();
                         break;
                     case 0:
+                        System.out.print(Color.YELLOW + "Luu du lieu truoc khi thoat? (Y/N): " + Color.RESET);
+                        if (sc.nextLine().trim().equalsIgnoreCase("Y")) {
+                            luuTatCa();
+                        }
                         System.out.println(Color.GREEN + "Cam on ban da su dung phan mem! Tam biet!" + Color.RESET);
                         break;
                     default:
@@ -93,13 +102,81 @@ public class HeThongQuanLy {
         }
     }
 
-    private void taiDuLieuBanDau() {   // sau này Liểu thay bằng taiTatCa(), vẫn giữ lớp try này
+    private void taiTatCa() {   // sau này Liểu thay bằng taiTatCa(), vẫn giữ lớp try này
+        System.out.println(Color.CYAN + "\n--- DANG TAI DU LIEU HE THONG ---" + Color.RESET);
         try { dsGiaoVien.docFile(); } catch (RuntimeException e) { baoLoiTai("giaovien.txt", e); }
-        try { dsLopHoc.docFile(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
         try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
-        try { dsHocSinh.docFile(); }  catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
+        try { dsLopHoc.docFile(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("lophoc.txt", e); }
+        try { dsHocSinh.docFile(); } catch (RuntimeException e) { baoLoiTai("hocsinh.txt", e); }
         try { dsLopHoc.phanHocSinhVaoLop(dsHocSinh); } catch (RuntimeException e) { baoLoiTai("lophoc.txt (phan hoc sinh vao lop)", e); }
+        try { lienKetPhuHuynhVoiHocSinh(); } catch (RuntimeException e) { baoLoiTai("lien ket phu huynh - hoc sinh", e); }
+        try { dsHocSinh.docDiem(); } catch (RuntimeException e) { baoLoiTai("diem.txt", e); }
+        try { dsHocSinh.docHoatDong(); } catch (RuntimeException e) { baoLoiTai("hoatdong.txt", e); }
         try { dsLopHoc.docThoiKhoaBieu(dsGiaoVien); } catch (RuntimeException e) { baoLoiTai("thoikhoabieu.txt", e); }
+    }
+    // Gan doi tuong PhuHuynh tu dsPhuHuynh vao tung HocSinh theo MSHS
+    private void lienKetPhuHuynhVoiHocSinh() {
+        if (dsHocSinh == null || dsPhuHuynh == null) return;
+        for (int i = 0; i < dsHocSinh.getSoLuong(); i++) {
+            HocSinh hs = dsHocSinh.getArrHS()[i];
+            if (hs == null) continue;
+            PhuHuynh ph = dsPhuHuynh.timtheoMSHS(hs.getMshs());
+            if (ph != null) {
+                hs.setPhuHuynh(ph);
+            }
+        }
+    }
+
+    // Le5: Hoi xac nhan, tao ban sao luu .bak va ghi toan bo du lieu xuong file
+    private void luuTatCa() {
+        if (dsHocSinh.getSoLuong() == 0 && dsGiaoVien.getSoLuong() == 0
+                && dsLopHoc.getSoLuong() == 0 && dsPhuHuynh.getSoLuong() == 0) {
+            System.out.println(Color.RED + "Bo nho dang trong, khong luu de tranh ghi de file bang du lieu rong. "
+                    + "Chon 5.2 de tai lai du lieu." + Color.RESET);
+            return;
+        }
+        System.out.print(Color.YELLOW + "Xac nhan ghi de du lieu hien tai xuong file (se tu dong sao luu .bak)? (Y/N): " + Color.RESET);
+        if (!sc.nextLine().trim().equalsIgnoreCase("Y")) {
+            System.out.println(Color.YELLOW + "Da huy thao tac luu du lieu." + Color.RESET);
+            return;
+        }
+
+        saoLuuFile(DanhSachGiaoVien.DUONG_DAN_FILE);
+        saoLuuFile(DanhSachPhuHuynh.DUONG_DAN_FILE);
+        saoLuuFile(DanhSachLopHoc.DUONG_DAN_FILE);
+        saoLuuFile(DanhSachHocSinh.DUONG_DAN_FILE);
+        saoLuuFile(DanhSachHocSinh.DUONG_DAN_DIEM);
+        saoLuuFile(DanhSachHocSinh.DUONG_DAN_HOAT_DONG);
+        saoLuuFile(DanhSachLopHoc.DUONG_DAN_TKB);
+
+        boolean okGV = dsGiaoVien.ghiFile();
+        boolean okPH = dsPhuHuynh.ghiFile();
+        boolean okLop = dsLopHoc.ghiFile();
+        boolean okHS = dsHocSinh.ghiFile();
+        boolean okDiem = dsHocSinh.ghiDiem();
+        boolean okHD = dsHocSinh.ghiHoatDong();
+        boolean okTKB = dsLopHoc.ghiThoiKhoaBieu();
+
+        if (okGV && okPH && okLop && okHS && okDiem && okHD && okTKB) {
+            System.out.println(Color.GREEN + "Da luu toan bo du lieu he thong thanh cong!" + Color.RESET);
+        } else {
+            System.out.println(Color.YELLOW + "Qua trinh luu hoan tat nhung co mot so file gap loi, vui long kiem tra thong bao phia tren." + Color.RESET);
+        }
+    }
+
+    // Tao ban sao luu <tenfile>.bak truoc khi ghi de
+    private void saoLuuFile(String duongDan) {
+        if (duongDan == null || duongDan.isEmpty()) return;
+        Path nguon = Paths.get(duongDan);
+        if (Files.exists(nguon)) {
+            try {
+                if (Files.size(nguon) == 0) return;   // file rong thi giu nguyen ban .bak cu
+                Path dich = Paths.get(duongDan + ".bak");
+                Files.copy(nguon, dich, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                System.out.println(Color.YELLOW + "Canh bao: Khong the sao luu " + duongDan + " (" + e.getMessage() + ")" + Color.RESET);
+            }
+        }
     }
 
     private void baoLoiTai(String tenFile, RuntimeException e) {
@@ -1211,11 +1288,18 @@ private void menuThongKeTheoKhoa() {
 
             if(chon == 0) break;
             switch (chon) {
-                case 1:   // Lieu (Le5): goi luuTatCa(), dung chung voi muc 0 khi thoat
-                case 2:   // Lieu (Le5): goi taiTatCa(), dung chung voi luc khoi dong
-                case 3:   // Lieu (Le6): xem tong quan (so HS, GV, lop, PH)
-                case 4:   // Lieu (Le6): xoa du lieu bo nho (hoi xac nhan)
-                    System.out.println(Color.YELLOW + "Chuc nang dang duoc xay dung." + Color.RESET);
+                case 1:   
+                luuTatCa();
+                break;
+                case 2:
+                    System.out.print(Color.YELLOW + "Tai lai se bo moi thay doi chua luu. Tiep tuc? (Y/N): " + Color.RESET);
+                    if (sc.nextLine().trim().equalsIgnoreCase("Y")) taiTatCa();
+                    break;
+                case 3:
+                xemDuLieuTongQuan();
+                break;
+                case 4:  
+                xoaDuLieuBoNho();
                     break;
                 case 5:
                     xuatBaoCaoRaFile();
@@ -1225,6 +1309,33 @@ private void menuThongKeTheoKhoa() {
                     break;
             }
         }
+    }
+
+    // Muc 5.3 (Lieu - Le6): xem tong quan so luong du lieu dang co trong bo nho
+    private void xemDuLieuTongQuan() {
+        System.out.println("\n" + Color.CYAN + "========================================");
+        System.out.println("    TONG QUAN DU LIEU TRONG BO NHO");
+        System.out.println("========================================" + Color.RESET);
+        System.out.println("- Tong so hoc sinh  : " + dsHocSinh.getSoLuong());
+        System.out.println("- Tong so giao vien : " + dsGiaoVien.getSoLuong());
+        System.out.println("- Tong so lop hoc   : " + dsLopHoc.getSoLuong());
+        System.out.println("- Tong so phu huynh : " + dsPhuHuynh.getSoLuong());
+        System.out.println("----------------------------------------");
+    }
+
+    // Muc 5.4 (Lieu - Le6): xoa toan bo du lieu tren RAM sau khi xac nhan
+    private void xoaDuLieuBoNho() {
+        System.out.print(Color.YELLOW + "Canh bao: Thao tac nay se xoa toan bo du lieu dang luu trong bo nho RAM "
+                + "(file tren o dia khong bi xoa tru khi ban chon Luu du lieu). Tiep tuc? (Y/N): " + Color.RESET);
+        if (!sc.nextLine().trim().equalsIgnoreCase("Y")) {
+            System.out.println(Color.YELLOW + "Da huy thao tac xoa du lieu bo nho." + Color.RESET);
+            return;
+        }
+        dsHocSinh = new DanhSachHocSinh();
+        dsGiaoVien = new DanhSachGiaoVien();
+        dsPhuHuynh = new DanhSachPhuHuynh();
+        dsLopHoc = new DanhSachLopHoc();
+        System.out.println(Color.GREEN + "Da xoa sach du lieu trong bo nho he thong!" + Color.RESET);
     }
 
     // Muc 5.5 (Lieu - Le8): ghi bao cao tong hop ra file baocao.txt

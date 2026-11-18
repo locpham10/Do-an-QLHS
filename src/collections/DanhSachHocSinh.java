@@ -679,6 +679,94 @@ public class DanhSachHocSinh implements IThongKe {
         System.out.println("Doc file diem thanh cong! " + soDiem + " diem, " + soLoi + " dong loi.");
         return true;
     }
+
+    public static final String DUONG_DAN_HOAT_DONG = "src/data/hoatdong.txt";
+
+    // Ghi lich su hoat dong cua tat ca hoc sinh: MSHS,tenHoatDong,diemCongTru,ngayGhiNhan
+    public boolean ghiHoatDong() {
+        File f = new File(DUONG_DAN_HOAT_DONG);
+        File thuMucCha = f.getParentFile();
+        if (thuMucCha != null && !thuMucCha.exists()) {
+            thuMucCha.mkdirs();
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+            for (int i = 0; i < soLuong; i++) {
+                if (arrHS[i] == null || arrHS[i].getLichSuHoatDong() == null) continue;
+                for (models.HoatDong hd : arrHS[i].getLichSuHoatDong()) {
+                    if (hd == null) continue;
+                    bw.write(arrHS[i].getMshs() + "," + hd.toFileString());
+                    bw.newLine();
+                }
+            }
+            System.out.println("Ghi file HoatDong thanh cong!");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file HoatDong: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Doc file hoatdong.txt: MSHS,tenHoatDong,diemCongTru,ngayGhiNhan
+    public boolean docHoatDong() {
+        if (soLuong == 0) {
+            System.out.println("Chua co hoc sinh nao, hay doc hocsinh.txt truoc khi doc hoat dong.");
+            return false;
+        }
+        File f = new File(DUONG_DAN_HOAT_DONG);
+        if (!f.exists()) {
+            System.out.println("Chua co file " + DUONG_DAN_HOAT_DONG + ", bo qua doc hoat dong.");
+            return false;
+        }
+        int soDong = 0, soLoi = 0, soHD = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            for (int i = 0; i < soLuong; i++) {
+                if (arrHS[i] != null) {
+                    arrHS[i].setLichSuHoatDong(new models.HoatDong[0]);
+                }
+            }
+            String line;
+            while ((line = br.readLine()) != null) {
+                soDong++;
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] p = line.split(",", -1);
+                if (p.length != 4) {
+                    System.out.println("Dong " + soDong + " (HoatDong): can dung 4 cot (MSHS,tenHD,diem,ngay), co " + p.length);
+                    soLoi++;
+                    continue;
+                }
+                HocSinh hs = timKiem(p[0].trim());
+                if (hs == null) {
+                    System.out.println("Dong " + soDong + " (HoatDong): khong tim thay MSHS '" + p[0].trim() + "'");
+                    soLoi++;
+                    continue;
+                }
+                try {
+                    String tenHD = p[1].trim();
+                    int diemCongTru = Integer.parseInt(p[2].trim());
+                    String ngay = p[3].trim();
+                    models.HoatDong hd = new models.HoatDong(tenHD, diemCongTru, ngay);
+
+                    models.HoatDong[] cu = hs.getLichSuHoatDong();
+                    if (cu == null) cu = new models.HoatDong[0];
+                    models.HoatDong[] moi = Arrays.copyOf(cu, cu.length + 1);
+                    moi[cu.length] = hd;
+                    hs.setLichSuHoatDong(moi);
+                    soHD++;
+                } catch (NumberFormatException e) {
+                    System.out.println("Dong " + soDong + " (HoatDong): diem cong/tru phai la so nguyen");
+                    soLoi++;
+                }
+            }
+            System.out.println("Doc file HoatDong thanh cong! " + soHD + " hoat dong, " + soLoi + " dong loi.");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file HoatDong: " + e.getMessage());
+            return false;
+        }
+    }
+
     private boolean laMonChuyenCua(HocSinh hs, MonHoc mh) {
         if (!(hs instanceof HocSinhChuyen) || mh == null) return false;
         String monChuyen = ((HocSinhChuyen) hs).getMonChuyen();
