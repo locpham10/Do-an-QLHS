@@ -838,4 +838,80 @@ public class DanhSachHocSinh implements IThongKe {
             System.out.println("Không có học sinh nào đủ điều kiện nhận học bổng.");
         }
     }
+    public void capNhatDongHocPhiChoHS(String mshs, boolean trangThai) {
+    HocSinh hs = timKiem(mshs);
+    if (hs != null) {
+        hs.setDaDongHocPhi(trangThai);
+        System.out.println("Đã cập nhật trạng thái học phí thành công cho học sinh " + hs.getHoTen());
+    } else {
+        System.out.println("Không tìm thấy học sinh mã: " + mshs);
+    }
+}
+
+public void baoCaoThuPhiToanTruong() {
+    int soHS = soLuong;
+    double phaiThu = tongHocPhiPhaiThu();
+    double daThu = tongHocPhiDaThu();
+    double conNo = phaiThu - daThu;
+    System.out.println("--- BÁO CÁO THU PHÍ TOÀN TRƯỜNG ---");
+    System.out.println("Tổng số học sinh: " + soHS);
+    System.out.printf("Tổng phải thu: %,.0f đ\n", phaiThu);
+    System.out.printf("Tổng đã thu: %,.0f đ\n", daThu);
+    System.out.printf("Tổng còn nợ: %,.0f đ\n", conNo);
+}
+
+public void baoCaoThuPhiTheoLop(String tenLop) {
+    int soHS = 0;
+    double phaiThu = 0, daThu = 0;
+    for (int i = 0; i < soLuong; i++) {
+        if (arrHS[i] != null && arrHS[i].getTenLop().equalsIgnoreCase(tenLop)) {
+            soHS++;
+            phaiThu += arrHS[i].tinhHocPhi();
+            if (arrHS[i].isDaDongHocPhi()) daThu += arrHS[i].tinhHocPhi();
+        }
+    }
+    System.out.println("--- BÁO CÁO THU PHÍ LỚP: " + tenLop + " ---");
+    System.out.println("Số học sinh: " + soHS);
+    System.out.printf("Phải thu: %,.0f đ\n", phaiThu);
+    System.out.printf("Đã thu: %,.0f đ\n", daThu);
+    System.out.printf("Còn nợ: %,.0f đ\n", (phaiThu - daThu));
+}
+
+public void baoCaoThuPhiTheoHe(String he) {
+    int soHS = 0;
+    double phaiThu = 0, daThu = 0;
+    boolean isChuyen = he.equalsIgnoreCase("Chuyen");
+    for (int i = 0; i < soLuong; i++) {
+        if (arrHS[i] != null) {
+            boolean match = isChuyen ? (arrHS[i] instanceof HocSinhChuyen) : (arrHS[i] instanceof HocSinhDaiTra);
+            if (match) {
+                soHS++;
+                phaiThu += arrHS[i].tinhHocPhi();
+                if (arrHS[i].isDaDongHocPhi()) daThu += arrHS[i].tinhHocPhi();
+            }
+        }
+    }
+    System.out.println("--- BÁO CÁO THU PHÍ HỆ: " + he.toUpperCase() + " ---");
+    System.out.println("Số học sinh: " + soHS);
+    System.out.printf("Phải thu: %,.0f đ\n", phaiThu);
+    System.out.printf("Đã thu: %,.0f đ\n", daThu);
+    System.out.printf("Còn nợ: %,.0f đ\n", (phaiThu - daThu));
+}
+
+public void traCuuHocPhi(String mshs) {
+    HocSinh hs = timKiem(mshs);
+    if (hs == null) {
+        System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+        return;
+    }
+    System.out.println("\n--- THÔNG TIN HỌC PHÍ CÁ NHÂN ---");
+    System.out.println("Mã HS: " + hs.getMshs() + " | Họ tên: " + hs.getHoTen());
+    if (hs instanceof HocSinhChuyen) {
+        HocSinhChuyen hsc = (HocSinhChuyen) hs;
+        System.out.printf("Học phí cơ bản: %,.0f đ\n", HocSinh.HOC_PHI_CO_BAN);
+        System.out.printf("Phụ phí chuyên đề: %,.0f đ\n", hsc.getPhuPhiChuyenDe());
+    }
+    System.out.printf("Tổng học phí phải đóng: %,.0f đ\n", hs.tinhHocPhi());
+    System.out.println("Trạng thái: " + (hs.isDaDongHocPhi() ? "Đã đóng" : "Chưa đóng"));
+}
 }
