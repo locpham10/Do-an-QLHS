@@ -339,7 +339,8 @@ public class DanhSachGiaoVien implements IThongKe {
                     MonHoc monChuyenMon = null;
                     String tenMonHoc = parts[8];
                     if(!tenMonHoc.equalsIgnoreCase("Không") && !tenMonHoc.isEmpty()){
-                        for(int i = 0; i < MonHoc.KHO_MON_HOC.length; i++){
+                        monChuyenMon = MonHoc.timTheoMa(tenMonHoc);
+                        for(int i = 0; monChuyenMon == null && i < MonHoc.KHO_MON_HOC.length; i++){
                             if(MonHoc.KHO_MON_HOC[i] != null && MonHoc.KHO_MON_HOC[i].getTenMon().equalsIgnoreCase(tenMonHoc)){
                                 monChuyenMon = MonHoc.KHO_MON_HOC[i];
                                 break;

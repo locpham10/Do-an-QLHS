@@ -1,5 +1,9 @@
-GV01,Trần Mỹ Duyên,12/03/1988,false,12 Trần Hưng Đạo,0911223344,Tổ trưởng,10000000,Toán,3,10A1,11A1,12A1
-GV02,Trần Minh Hiếu,20/09/1995,true,34 Nguyễn Huệ,0922334455,Giáo Viên,8000000,Ngữ Văn,2,10A2,11A2
-GV03,Khương Hoàn Mỹ,15/02/1991,false,45 An Dương Vương,0933445566,Giáo Viên,8000000,Ngoại Ngữ,2,10A1,10A2
-GV04,Trần Thị Phương Thảo,10/09/1992,false,56 Nguyễn Trãi,0944556677,Giáo Viên,8000000,Hóa học,2,11A1,11A2
-GV05,Bùi Anh Tú,03/10/1990,true,67 Lê Lai,0955667788,Tổ trưởng,10000000,Lịch sử,1,12A1
+GV01,Trần Mỹ Duyên,12/03/1988,false,12 Trần Hưng Đạo,0911223344,Tổ trưởng,10000000,TOAN,3,10A1,11A1,12A1
+GV02,Trần Minh Hiếu,20/09/1995,true,34 Nguyễn Huệ,0922334455,Giáo Viên,8000000,VAN,2,10A2,11A2
+GV03,Khương Hoàn Mỹ,15/02/1991,false,45 An Dương Vương,0933445566,Giáo Viên,8000000,ANH,2,10A1,10A2
+GV04,Trần Thị Phương Thảo,10/09/1992,false,56 Nguyễn Trãi,0944556677,Giáo Viên,8000000,HOA,2,11A1,11A2
+GV05,Bùi Anh Tú,03/10/1990,true,67 Lê Lai,0955667788,Tổ trưởng,10000000,SU,1,12A1
+GV06,Lê Hoàng Phúc,05/06/1989,true,78 Cách Mạng Tháng 8,0966778899,Giáo Viên,8000000,LY,2,10A1,11A1
+GV07,Nguyễn Ngọc Lan,22/11/1993,false,89 Võ Văn Tần,0977889900,Giáo Viên,8000000,SINH,2,10A2,12A1
+GV08,Phạm Quốc Huy,14/04/1994,true,90 Hai Bà Trưng,0988990011,Giáo Viên,8000000,DIA,2,11A2,12A1
+GV09,Đặng Minh Tuấn,30/08/1996,true,101 Nguyễn Đình Chiểu,0999001122,Giáo Viên,8000000,TD,3,10A1,10A2,11A1
