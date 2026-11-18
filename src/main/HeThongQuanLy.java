@@ -129,6 +129,12 @@ public class HeThongQuanLy {
 
     // Le5: Hoi xac nhan, tao ban sao luu .bak va ghi toan bo du lieu xuong file
     private void luuTatCa() {
+        if (dsHocSinh.getSoLuong() == 0 && dsGiaoVien.getSoLuong() == 0
+                && dsLopHoc.getSoLuong() == 0 && dsPhuHuynh.getSoLuong() == 0) {
+            System.out.println(Color.RED + "Bo nho dang trong, khong luu de tranh ghi de file bang du lieu rong. "
+                    + "Chon 5.2 de tai lai du lieu." + Color.RESET);
+            return;
+        }
         System.out.print(Color.YELLOW + "Xac nhan ghi de du lieu hien tai xuong file (se tu dong sao luu .bak)? (Y/N): " + Color.RESET);
         if (!sc.nextLine().trim().equalsIgnoreCase("Y")) {
             System.out.println(Color.YELLOW + "Da huy thao tac luu du lieu." + Color.RESET);
@@ -164,6 +170,7 @@ public class HeThongQuanLy {
         Path nguon = Paths.get(duongDan);
         if (Files.exists(nguon)) {
             try {
+                if (Files.size(nguon) == 0) return;   // file rong thi giu nguyen ban .bak cu
                 Path dich = Paths.get(duongDan + ".bak");
                 Files.copy(nguon, dich, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
@@ -1284,9 +1291,10 @@ private void menuThongKeTheoKhoa() {
                 case 1:   
                 luuTatCa();
                 break;
-                case 2:  
-                taiTatCa();
-                break;
+                case 2:
+                    System.out.print(Color.YELLOW + "Tai lai se bo moi thay doi chua luu. Tiep tuc? (Y/N): " + Color.RESET);
+                    if (sc.nextLine().trim().equalsIgnoreCase("Y")) taiTatCa();
+                    break;
                 case 3:
                 xemDuLieuTongQuan();
                 break;
