@@ -1002,17 +1002,6 @@ public class HeThongQuanLy {
         }
     }
 
-    // Ham dung chung cho muc 4.3 (in ra man hinh) va muc 5.5 (ghi ra file)
-    private void inBaoCaoTongHop() {
-        IThongKe[] dsThongKe = { dsHocSinh, dsGiaoVien, dsPhuHuynh };
-        for (int i = 0; i < dsThongKe.length; i++) {
-            if (dsThongKe[i] != null) {
-                dsThongKe[i].inBaoCaoThongKe();
-                System.out.println();
-            }
-        }
-    }
-
     // Muc 5.5 (Lieu - Le8): ghi bao cao tong hop ra file baocao.txt
     public static final String DUONG_DAN_BAO_CAO = "src/data/baocao.txt";
 
