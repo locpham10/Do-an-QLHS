@@ -777,18 +777,6 @@ public class DanhSachHocSinh implements IThongKe {
 
 // ================= BLOCK TÀI CHÍNH  =================
 
-    public void traCuuHocPhi(String mshs) {
-        HocSinh hs = timKiem(mshs);
-        if (hs == null) {
-            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
-            return;
-        }
-        System.out.println("\n--- THÔNG TIN HỌC PHÍ CÁ NHÂN ---");
-        System.out.println("Mã HS: " + hs.getMshs() + " | Họ tên: " + hs.getHoTen());
-        System.out.println("Học phí phải đóng: " + hs.tinhHocPhi());
-        System.out.println("Trạng thái: " + (hs.isDaDongHocPhi() ? "Đã đóng" : "Chưa đóng"));
-    }
-
     public void inDanhSachNoHocPhi() {
         System.out.println("\n--- DANH SÁCH HỌC SINH CHƯA ĐÓNG HỌC PHÍ ---");
         int count = 0;
@@ -837,5 +825,79 @@ public class DanhSachHocSinh implements IThongKe {
         if (count == 0) {
             System.out.println("Không có học sinh nào đủ điều kiện nhận học bổng.");
         }
+    }
+    public void capNhatDongHocPhiChoHS(String mshs, boolean trangThai) {
+        HocSinh hs = timKiem(mshs);
+        if (hs == null) {
+            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+            return;
+        }
+        hs.setDaDongHocPhi(trangThai);
+        System.out.println("Đã cập nhật học phí của " + hs.getHoTen() + ": "
+                + (trangThai ? "Đã đóng" : "Chưa đóng"));
+    }
+
+    public void baoCaoThuPhiToanTruong() {
+        inBaoCaoThuPhi("TOÀN TRƯỜNG", soLuong, tongHocPhiPhaiThu(), tongHocPhiDaThu());
+    }
+
+    public void baoCaoThuPhiTheoLop(String tenLop) {
+        int soHS = 0;
+        double phaiThu = 0, daThu = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] != null && arrHS[i].getTenLop().equalsIgnoreCase(tenLop)) {
+                soHS++;
+                phaiThu += arrHS[i].tinhHocPhi();
+                if (arrHS[i].isDaDongHocPhi()) daThu += arrHS[i].tinhHocPhi();
+            }
+        }
+        if (soHS == 0) {
+            System.out.println("Lớp " + tenLop + " không có học sinh nào (hoặc sai tên lớp).");
+            return;
+        }
+        inBaoCaoThuPhi("LỚP " + tenLop.toUpperCase(), soHS, phaiThu, daThu);
+    }
+
+    // laChuyen = true: hệ chuyên, false: hệ đại trà (giống hienThiTheoHe)
+    public void baoCaoThuPhiTheoHe(boolean laChuyen) {
+        int soHS = 0;
+        double phaiThu = 0, daThu = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (arrHS[i] == null) continue;
+            boolean dungHe = laChuyen ? (arrHS[i] instanceof HocSinhChuyen)
+                    : (arrHS[i] instanceof HocSinhDaiTra);
+            if (dungHe) {
+                soHS++;
+                phaiThu += arrHS[i].tinhHocPhi();   // đa hình: mỗi hệ tính học phí khác nhau
+                if (arrHS[i].isDaDongHocPhi()) daThu += arrHS[i].tinhHocPhi();
+            }
+        }
+        inBaoCaoThuPhi(laChuyen ? "HỆ CHUYÊN" : "HỆ ĐẠI TRÀ", soHS, phaiThu, daThu);
+    }
+
+    // in chung cho 3 báo cáo thu phí
+    private void inBaoCaoThuPhi(String tieuDe, int soHS, double phaiThu, double daThu) {
+        System.out.println("\n--- BÁO CÁO THU PHÍ " + tieuDe + " ---");
+        System.out.println("Số học sinh: " + soHS);
+        System.out.printf("Phải thu: %,.0f đ%n", phaiThu);
+        System.out.printf("Đã thu:   %,.0f đ%n", daThu);
+        System.out.printf("Còn nợ:   %,.0f đ%n", phaiThu - daThu);
+    }
+
+    public void traCuuHocPhi(String mshs) {
+        HocSinh hs = timKiem(mshs);
+        if (hs == null) {
+            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+            return;
+        }
+        System.out.println("\n--- THÔNG TIN HỌC PHÍ CÁ NHÂN ---");
+        System.out.println("Mã HS: " + hs.getMshs() + " | Họ tên: " + hs.getHoTen());
+        if (hs instanceof HocSinhChuyen) {
+            HocSinhChuyen hsc = (HocSinhChuyen) hs;
+            System.out.printf("Học phí cơ bản: %,.0f đ%n", HocSinh.HOC_PHI_CO_BAN);
+            System.out.printf("Phụ phí chuyên đề: %,.0f đ%n", hsc.getPhuPhiChuyenDe());
+        }
+        System.out.printf("Tổng học phí phải đóng: %,.0f đ%n", hs.tinhHocPhi());
+        System.out.println("Trạng thái: " + (hs.isDaDongHocPhi() ? "Đã đóng" : "Chưa đóng"));
     }
 }
