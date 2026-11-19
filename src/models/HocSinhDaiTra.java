@@ -29,6 +29,12 @@ public class HocSinhDaiTra extends HocSinh {
     }
 
     @Override
+    public void hienThiThongTin() {
+        System.out.println("[Học sinh Đại trà]");
+        super.hienThiThongTin();   // phần chung của HocSinh
+    }
+    
+    @Override
     public String toFileString() {
         return String.format(java.util.Locale.US,"DAITRA,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b",
                 getMshs(), getHoTen(), getNgaySinh(), isGioiTinh(), getDiaChi(), 
