@@ -43,11 +43,12 @@ public class HocSinhChuyen extends HocSinh {
 
     @Override
     public void hienThiThongTin() {
-    System.out.println("[Học sinh Chuyên]");
-    super.hienThiThongTin();
-    MonHoc mh = MonHoc.timTheoMa(monChuyen);
-    String tenMonStr = (mh != null) ? mh.getTenMon() : monChuyen;
-    System.out.println("Môn chuyên: " + tenMonStr + " | Điểm môn chuyên: " + diemMonChuyen + " | Phụ phí: " + phuPhiChuyenDe);
+        System.out.println("[Học sinh Chuyên]");
+        super.hienThiThongTin();   // phần chung của HocSinh
+        MonHoc mh = MonHoc.timTheoMa(monChuyen);
+        String tenMon = (mh != null) ? mh.getTenMon() : monChuyen;
+        System.out.printf("Môn chuyên: %s | Điểm môn chuyên: %.2f | Phụ phí: %,.0f đ%n",
+                tenMon, diemMonChuyen, phuPhiChuyenDe);
     }
 
     public String getMonChuyen() { return monChuyen; }

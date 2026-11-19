@@ -83,10 +83,11 @@ public abstract class HocSinh extends Nguoi {
 
     @Override
     public void hienThiThongTin() {
-    super.hienThiThongTin();
-    System.out.println("MSHS: " + mshs + " | Lớp: " + tenLop + " | GPA: " + String.format("%.2f", gpa) + " | Hạnh kiểm: " + diemHanhKiem + " (" + xepLoaiHanhKiem() + ")");
-    System.out.println("Đã đóng học phí: " + (daDongHocPhi ? "Rồi" : "Chưa"));
-}
+        System.out.println("Họ tên: " + hoTen + " | Ngày sinh: " + ngaySinh + " | SĐT: " + soDienThoai);
+        System.out.println("MSHS: " + mshs + " | Lớp: " + tenLop + " | GPA: " + String.format("%.2f", gpa)
+                + " (" + xepLoaiHocLuc() + ") | Hạnh kiểm: " + diemHanhKiem + " (" + xepLoaiHanhKiem() + ")");
+        System.out.println("Đã đóng học phí: " + (daDongHocPhi ? "Rồi" : "Chưa"));
+    }
 
     public void ghiNhanHoatDong(HoatDong hd) {
         if (hd == null) return;
