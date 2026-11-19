@@ -90,24 +90,27 @@ public abstract class HocSinh extends Nguoi {
     }
 
     public void ghiNhanHoatDong(HoatDong hd) {
-        if (this.lichSuHoatDong == null) {
-        this.lichSuHoatDong = new DanhSachHoatDong();
-    }
-    this.lichSuHoatDong.themHoatDong(hd);
-    // Cộng trừ trực tiếp vào điểm hạnh kiểm, giữ trong khoảng 0 - 100
-    this.diemHanhKiem += hd.getDiemCongTru();
-    if (this.diemHanhKiem > 100) this.diemHanhKiem = 100;
-    if (this.diemHanhKiem < 0) this.diemHanhKiem = 0;
+        if (hd == null) return;
+        if (lichSuHoatDong == null) lichSuHoatDong = new HoatDong[0];
+        lichSuHoatDong = java.util.Arrays.copyOf(lichSuHoatDong, lichSuHoatDong.length + 1);
+        lichSuHoatDong[lichSuHoatDong.length - 1] = hd;
+        // cộng / trừ điểm hạnh kiểm, giữ trong khoảng 0 - 100
+        diemHanhKiem += hd.getDiemCongTru();
+        if (diemHanhKiem > 100) diemHanhKiem = 100;
+        if (diemHanhKiem < 0) diemHanhKiem = 0;
     }
 
     public void hienThiLichSuHoatDong() {
-    System.out.println("\n--- LỊCH SỬ HOẠT ĐỘNG ---");
-    if (this.lichSuHoatDong != null) {
-        this.lichSuHoatDong.hienThiDSHoatDong();
-    } else {
-        System.out.println("Chưa có lịch sử hoạt động.");
+        System.out.println("\n--- LỊCH SỬ HOẠT ĐỘNG ---");
+        if (lichSuHoatDong == null || lichSuHoatDong.length == 0) {
+            System.out.println("Chưa có lịch sử hoạt động.");
+            return;
+        }
+        for (int i = 0; i < lichSuHoatDong.length; i++) {
+            System.out.print("  - ");
+            lichSuHoatDong[i].hienThiThongTin();
+        }
     }
-}
 
     public String xepLoaiHanhKiem() {
         if (diemHanhKiem >= 80) return "Tốt";
