@@ -1206,64 +1206,71 @@ public class HeThongQuanLy {
                 + "\" khong co trong bang diem, chua cap nhat diem mon chuyen." + Color.RESET);
     }
 
-    public void menuQuanLyTaiChinh(Scanner sc) {
-    int chon = 0;
-    do {
-        System.out.println("\n--- 3. QUẢN LÝ TÀI CHÍNH ---");
-        System.out.println("3.1. Tra cứu học phí cá nhân");
-        System.out.println("3.2. Xét duyệt học bổng toàn trường");
-        System.out.println("3.3. Xuất báo cáo thu phí");
-        System.out.println("3.4. Cập nhật trạng thái thu tiền");
-        System.out.println("3.5. Danh sách học sinh nợ học phí");
-        System.out.println("0. Quay lại menu chính");
-        System.out.print("Chọn chức năng (0-5): ");
-        chon = Integer.parseInt(sc.nextLine().trim());
+  private void menuQuanLyTaiChinh() {
+        int chon = -1;
+        while (chon != 0) {
+            System.out.println("\n---- 3. QUAN LY TAI CHINH ----");
+            System.out.println("1. Tra cuu hoc phi ca nhan");
+            System.out.println("2. Xet duyet hoc bong");
+            System.out.println("3. Xuat bao cao thu phi");
+            System.out.println("4. Cap nhat trang thai thu tien");
+            System.out.println("5. Danh sach hoc sinh no hoc phi");
+            System.out.println("0. Quay lai menu chinh");
+            chon = nhapLuaChon(5);
 
-        switch (chon) {
+            switch (chon) {
+                case 1:   // 3.1 - da hinh tinhHocPhi
+                    System.out.print("Nhap MSHS can tra cuu: ");
+                    dsHocSinh.traCuuHocPhi(sc.nextLine().trim());
+                    break;
+                case 2:   // 3.2 - da hinh xetHocBong (cho duy nhat xet hoc bong)
+                    dsHocSinh.xetDuyetHocBong();
+                    break;
+                case 3:   // 3.3
+                    baoCaoThuPhi();
+                    break;
+                case 4:   // 3.4
+                    System.out.print("Nhap MSHS can cap nhat hoc phi: ");
+                    String mshs = sc.nextLine().trim();
+                    int trangThai = DataValidator.nhapSoNguyen(sc,
+                            "Trang thai (1: Da dong / 2: Chua dong): ", 1, 2);
+                    dsHocSinh.capNhatDongHocPhiChoHS(mshs, trangThai == 1);
+                    break;
+                case 5:   // 3.5
+                    dsHocSinh.inDanhSachNoHocPhi();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println(Color.RED + "Lua chon khong hop le!" + Color.RESET);
+            }
+        }
+    }
+
+    // 3.3 - menu con: bao cao thu phi toan truong / theo lop / theo he
+    private void baoCaoThuPhi() {
+        System.out.println("\n--- BAO CAO THU PHI ---");
+        System.out.println("1. Toan truong");
+        System.out.println("2. Theo lop");
+        System.out.println("3. Theo he");
+        System.out.println("0. Quay lai");
+        int loai = nhapLuaChon(3);
+        switch (loai) {
             case 1:
-                System.out.print("Nhập MSHS cần tra cứu: ");
-                String mshs1 = sc.nextLine().trim();
-                dsHocSinh.traCuuHocPhi(mshs1);
+                dsHocSinh.baoCaoThuPhiToanTruong();
                 break;
             case 2:
-                dsHocSinh.xetDuyetHocBong();
+                String lop = DataValidator.nhapChuoiKhongRong(sc, "Nhap ten lop: ");
+                dsHocSinh.baoCaoThuPhiTheoLop(lop);
                 break;
             case 3:
-                System.out.println("\n--- BÁO CÁO THU PHÍ ---");
-                System.out.println("1. Toàn trường");
-                System.out.println("2. Theo lớp");
-                System.out.println("3. Theo hệ (DaiTra / Chuyen)");
-                System.out.print("Chọn loại báo cáo: ");
-                int loaiBC = Integer.parseInt(sc.nextLine().trim());
-                if (loaiBC == 1) {
-                    dsHocSinh.baoCaoThuPhiToanTruong();
-                } else if (loaiBC == 2) {
-                    System.out.print("Nhập tên lớp: ");
-                    String lop = sc.nextLine().trim();
-                    dsHocSinh.baoCaoThuPhiTheoLop(lop);
-                } else if (loaiBC == 3) {
-                    System.out.print("Nhập hệ (DaiTra / Chuyen): ");
-                    String he = sc.nextLine().trim();
-                    dsHocSinh.baoCaoThuPhiTheoHe(he);
-                }
-                break;
-            case 4:
-                System.out.print("Nhập MSHS cần cập nhật học phí: ");
-                String mshs4 = sc.nextLine().trim();
-                System.out.print("Đã đóng học phí chưa? (true/false): ");
-                boolean trangThai = Boolean.parseBoolean(sc.nextLine().trim());
-                dsHocSinh.capNhatDongHocPhiChoHS(mshs4, trangThai);
-                break;
-            case 5:
-                dsHocSinh.inDanhSachNoHocPhi();
-                break;
-            case 0:
+                int chonHe = DataValidator.nhapSoNguyen(sc, "Chon he (1: Chuyen / 2: Dai tra): ", 1, 2);
+                dsHocSinh.baoCaoThuPhiTheoHe(chonHe == 1);
                 break;
             default:
-                System.out.println("Lựa chọn không hợp lệ!");
+                break;
         }
-    } while (chon != 0);
-}
+    }
 
     private void menuThongKe(){
         int chon = -1;
