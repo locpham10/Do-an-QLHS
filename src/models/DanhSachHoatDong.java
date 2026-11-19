@@ -1,32 +1,30 @@
 package models;
 
+import java.util.Arrays;
+
 public class DanhSachHoatDong {
-    private HoatDong[] dsHoatDong = new HoatDong[100];
-    private int soLuong = 0;
+    private HoatDong[] danhSachHD = new HoatDong[0];
 
     public DanhSachHoatDong() {
     }
 
     public void themHoatDong(HoatDong hd) {
-        if (soLuong < dsHoatDong.length) {
-            dsHoatDong[soLuong] = hd;
-            soLuong++;
-        } else {
-            System.out.println("Danh sách hoạt động đã đầy!");
-        }
+        int n = danhSachHD.length;
+        danhSachHD = Arrays.copyOf(danhSachHD, n + 1);
+        danhSachHD[n] = hd;
     }
 
     public void hienThiDSHoatDong() {
-        if (soLuong == 0) {
+        if (danhSachHD.length == 0) {
             System.out.println("Chưa có lịch sử hoạt động nào.");
             return;
         }
-        for (int i = 0; i < soLuong; i++) {
+        for (int i = 0; i < danhSachHD.length; i++) {
             System.out.print("  - ");
-            dsHoatDong[i].hienThiThongTin();
+            danhSachHD[i].hienThiThongTin();
         }
     }
 
-    public HoatDong[] getDsHoatDong() { return dsHoatDong; }
-    public int getSoLuong() { return soLuong; }
+    public HoatDong[] getDanhSachHD() { return danhSachHD; }
+    public int getSoLuong() { return danhSachHD.length; }
 }
