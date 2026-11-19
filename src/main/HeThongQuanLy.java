@@ -814,8 +814,7 @@ public class HeThongQuanLy {
                     nhapDiemHocSinh();
                     break;
                 case 2:   // Linh (Li3, Li4): danh gia hanh kiem & ghi nhan hoat dong
-                    System.out.println(Color.YELLOW + "Chuc nang dang duoc xay dung." + Color.RESET);
-                    break;
+                    danhGiaHanhKiem();
                 case 3:
                     bangDiemLopHoc();
                     break;
@@ -919,6 +918,37 @@ public class HeThongQuanLy {
         System.out.println("\n" + Color.GREEN + "Da cap nhat bang diem thanh cong!" + Color.RESET);
         inBangDiem(bangDiem, soMon);
         System.out.println("=> GPA moi cua " + hs.getHoTen() + ": " + gpaMoi);
+    }
+
+    private void danhGiaHanhKiem() {
+        System.out.print("Nhap MSHS hoc sinh can ghi nhan hoat dong: ");
+        String mshs = sc.nextLine().trim();
+        HocSinh hs = dsHocSinh.timKiem(mshs);
+        if (hs == null) {
+            System.out.println(Color.RED + "Khong tim thay hoc sinh co MSHS: " + mshs + Color.RESET);
+            return;
+        }
+        System.out.println("Hoc sinh: " + hs.getHoTen() + " | Diem hanh kiem hien tai: "
+                + hs.getDiemHanhKiem() + " (" + hs.xepLoaiHanhKiem() + ")");
+
+        String tenHD = DataValidator.nhapChuoiKhongRong(sc, "Nhap ten hoat dong: ");
+        int diemCT = DataValidator.nhapSoNguyen(sc, "Nhap diem cong / tru (-100 den 100, vd 5 hoac -5): ", -100, 100);
+        String ngay;
+        while (true) {
+            System.out.print("Nhap ngay ghi nhan (dd/MM/yyyy): ");
+            ngay = sc.nextLine().trim();
+            if (DataValidator.ngaySinhHopLe(ngay)) break;
+            System.out.println(Color.RED + "Loi: Ngay phai dung dinh dang dd/MM/yyyy (vd 19/11/2026)!" + Color.RESET);
+        }
+
+        hs.ghiNhanHoatDong(new HoatDong(tenHD, diemCT, ngay));
+        System.out.println(Color.GREEN + "Da ghi nhan! Diem hanh kiem moi: " + hs.getDiemHanhKiem()
+                + " (" + hs.xepLoaiHanhKiem() + ")" + Color.RESET);
+
+        System.out.print("Xem lich su hoat dong cua hoc sinh nay? (y/n): ");
+        if (sc.nextLine().trim().equalsIgnoreCase("y")) {
+            hs.hienThiLichSuHoatDong();
+        }
     }
 
     private void bangDiemLopHoc() {
