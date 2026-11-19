@@ -815,6 +815,7 @@ public class HeThongQuanLy {
                     break;
                 case 2:   // Linh (Li3, Li4): danh gia hanh kiem & ghi nhan hoat dong
                     danhGiaHanhKiem();
+                    break;
                 case 3:
                     bangDiemLopHoc();
                     break;
