@@ -1282,7 +1282,7 @@ public class HeThongQuanLy {
             System.out.println("3. Bao cao thong ke tong hop");
             System.out.println("4. Thong ke theo khoa");
             System.out.println("0. Quay lai menu chinh");
-            chon = nhapLuaChon(3);
+            chon = nhapLuaChon(4);
 
             if(chon == 0) break;
             switch (chon) {
