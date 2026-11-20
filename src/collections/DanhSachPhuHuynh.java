@@ -18,7 +18,7 @@ public class DanhSachPhuHuynh implements IThongKe {
     public static final String DUONG_DAN_FILE = "src/data/phuhuynh.txt";
 
     public DanhSachPhuHuynh(){
-        this.arrPH = new PhuHuynh[100];
+        this.arrPH = new PhuHuynh[0];
         this.soLuong = 0;
     }
 
@@ -40,7 +40,7 @@ public class DanhSachPhuHuynh implements IThongKe {
             return false;
         }
         if (soLuong >= arrPH.length) {
-            arrPH = Arrays.copyOf(arrPH, arrPH.length * 2); 
+            arrPH = Arrays.copyOf(arrPH, arrPH.length + 1);
         }
         arrPH[soLuong] = ph;
         soLuong++;
@@ -193,6 +193,7 @@ public class DanhSachPhuHuynh implements IThongKe {
         int soDongLoi = 0;
         File f = new File(DUONG_DAN_FILE);
         if(!f.exists()){
+            System.out.println("Chua co file " + DUONG_DAN_FILE + ", danh sach phu huynh dang trong..");
             return false;
         }
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))){

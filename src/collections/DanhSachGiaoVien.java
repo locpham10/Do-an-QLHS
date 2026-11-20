@@ -21,7 +21,7 @@ public class DanhSachGiaoVien implements IThongKe {
     public static final String DUONG_DAN_FILE = "src/data/giaovien.txt";
 
     public DanhSachGiaoVien() {
-        this.arrGV = new GiaoVien[100];
+        this.arrGV = new GiaoVien[0];
         this.soLuong = 0;
     }
 
@@ -43,10 +43,11 @@ public class DanhSachGiaoVien implements IThongKe {
 
     public boolean them(GiaoVien gv){
         if( gv == null ){
+            System.out.println("Chua co file " + DUONG_DAN_FILE + ", danh sach giao vien dan trong.");
             return false; // Thêm thất bại (đầy/null)
         }
         if(soLuong >= arrGV.length){
-            arrGV = Arrays.copyOf(arrGV,arrGV.length * 2);
+            arrGV = Arrays.copyOf(arrGV,arrGV.length + 1);
         }
         this.arrGV[soLuong] = gv;
         soLuong ++;
