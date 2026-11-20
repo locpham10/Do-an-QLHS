@@ -82,13 +82,14 @@ public class DanhSachLopHoc
     public boolean docFile() {
         return docFile(null);
     }
-
+    private int soCanhBao;
     // đọc & gắn GVCN= dsGV.timKiem(maGV), tạo DanhSachHocSinh rỗng cho mỗi lớp
     public boolean docFile(DanhSachGiaoVien dsGV) {
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
             int soDong = 0;
             int soDongLoi = 0;
+            this.soCanhBao = 0;
             this.dsLop = new LopHoc[0];
             this.soLuong = 0;
             while ((line = br.readLine()) != null) {
@@ -124,7 +125,8 @@ public class DanhSachLopHoc
                     if (dsGV != null && !maGV.isEmpty()) {
                         gvcn = dsGV.timKiem(maGV);
                         if (gvcn == null) {
-                            System.out.println("Dong " + soDong + ": khong tim thay ma GV '" + maGV + "'");
+                            System.out.println("Dong " + soDong + ": khong tim thay ma GV '" + maGV + "', lop chua co GVCN");
+                            soCanhBao++;
                         }
                     }
 
@@ -144,7 +146,8 @@ public class DanhSachLopHoc
                 }
 
             }
-            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop, " + soDongLoi + " dong loi.");
+            System.out.println("Doc file LopHoc thanh cong! Tong so: " + soLuong + " lop, "
+                    + soDongLoi + " dong loi, " + soCanhBao + " canh bao.");
             return true;
         } catch (IOException e) {
             System.out.println("Loi khi doc file LopHoc: " + e.getMessage());
@@ -180,6 +183,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             MonHoc goc = MonHoc.timTheoMa(maMon);
             if (goc == null) {
                 System.out.println("Dong " + soDong + ": khong tim thay ma mon '" + maMon + "'");
+                soCanhBao++;
                 continue;
             }
 

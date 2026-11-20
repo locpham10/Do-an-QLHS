@@ -43,7 +43,6 @@ public class DanhSachGiaoVien implements IThongKe {
 
     public boolean them(GiaoVien gv){
         if( gv == null ){
-            System.out.println("Chua co file " + DUONG_DAN_FILE + ", danh sach giao vien dan trong.");
             return false; // Thêm thất bại (đầy/null)
         }
         if(soLuong >= arrGV.length){
@@ -306,6 +305,7 @@ public class DanhSachGiaoVien implements IThongKe {
         int soDongLoi = 0;
         File f = new File(DUONG_DAN_FILE);
         if(!f.exists()){
+            System.out.println("Chua co file " + DUONG_DAN_FILE + ", danh sach giao vien dang trong.");
             return false;
         }
 
