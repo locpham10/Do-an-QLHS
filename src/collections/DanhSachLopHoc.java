@@ -526,6 +526,33 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
     }
 
     public LopHoc[] getDsLop() { return dsLop; }
+    public String lyDoGiaoVienDangDung(GiaoVien gv) {
+        String lyDo = "";
+        int soTiet = 0;
+        for (int i = 0; i < soLuong; i++) {
+            LopHoc lop = dsLop[i];
+            if (lop == null) continue;
+
+            // 1. Dang chu nhiem lop nay?
+            GiaoVien cn = lop.getGiaoVienChuNhiem();
+            if (cn != null && cn.getMaGV().equalsIgnoreCase(gv.getMaGV())) {
+                lyDo += "chu nhiem lop " + lop.getTenLop() + "; ";
+            }
+
+            // 2. Dem so tiet giao vien day trong thoi khoa bieu cua lop
+            for (int n = 0; n < LopHoc.SO_NGAY; n++) {
+                for (int t = 0; t < LopHoc.SO_TIET; t++) {
+                    TietHoc th = lop.getLichHoc()[n][t];
+                    if (th != null && th.getGv() != null
+                            && th.getGv().getMaGV().equalsIgnoreCase(gv.getMaGV())) {
+                        soTiet++;
+                    }
+                }
+            }
+        }
+        if (soTiet > 0) lyDo += "dang co " + soTiet + " tiet trong thoi khoa bieu; ";
+        return lyDo.isEmpty() ? null : lyDo;
+    }
 
     // THOI KHOA BIEU
     public static final String DUONG_DAN_TKB = "src/data/thoikhoabieu.txt";
