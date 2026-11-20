@@ -52,10 +52,10 @@ public abstract class HocSinh extends Nguoi {
     }
 
     public String xepLoaiHocLuc() {
-        if (gpa >= 8.0) return "Giỏi";
-        if (gpa >= 6.5) return "Khá";
-        if (gpa >= 5.0) return "Trung bình";
-        return "Yếu";
+        if (gpa >= 8.0) return "Gioi";
+        if (gpa >= 6.5) return "Kha";
+        if (gpa >= 5.0) return "Trung binh";
+        return "Yeu";
     }
 
     // Getters & Setters cơ bản
@@ -102,15 +102,15 @@ public abstract class HocSinh extends Nguoi {
     }
 
     public void hienThiLichSuHoatDong() {
-        System.out.println("\n--- LỊCH SỬ HOẠT ĐỘNG ---");
+        System.out.println("\n--- LICH SU HOAT DONG ---");
         new DanhSachHoatDong(lichSuHoatDong).hienThiDSHoatDong();
     }
 
     public String xepLoaiHanhKiem() {
-        if (diemHanhKiem >= 80) return "Tốt";
-        else if (diemHanhKiem >= 65) return "Khá";
-        else if (diemHanhKiem >= 50) return "Trung bình";
-        else return "Yếu";
+        if (diemHanhKiem >= 80) return "Tot";
+        else if (diemHanhKiem >= 65) return "Kha";
+        else if (diemHanhKiem >= 50) return "Trung binh";
+        else return "Yeu";
     }
 
     public void capNhatDongHocPhi(boolean daDong) {
