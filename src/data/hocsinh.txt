@@ -1,7 +1,7 @@
 Chuyen,HS001,Nguyen Thi Hoang Linh,12/05/2011,false,10 Ly Tu Trong,0901112233,10A1,8.8,100,true,TOAN,9.2,250000.0
 Chuyen,HS002,Nguyen Thi Hong Lieu,18/08/2011,false,25 Le Loi,0902223344,10A1,9.1,95,true,TOAN,9.5,250000.0
 Chuyen,HS003,Pham Doan Ba Loc,02/04/2011,true,88 Hai Ba Trưng,0902221122,10A1,8.5,90,false,TOAN,8.9,250000.0
-DaiTra,HS004,Nguyen van An,22/01/2011,true,14 Nguyen Trai,0903334455,10A2,7.5,90,false
+DaiTra,HS004,Nguyen Van An,22/01/2011,true,14 Nguyen Trai,0903334455,10A2,7.5,90,false
 DaiTra,HS005,Do Hoang Long,11/11/2011,true,50 Pasteur,0903335566,10A2,8.0,100,true
 DaiTra,HS006,Vu Thu Trang,05/09/2011,false,12 Nguyen Du,0903337788,10A2,7.8,95,true
 Chuyen,HS007,Bui Ngoc Mai,14/03/2010,false,120 Dien Bien Phu,0905556677,11A1,9.3,90,true,HOA,9.0,200000.0
