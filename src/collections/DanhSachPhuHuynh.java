@@ -193,7 +193,7 @@ public class DanhSachPhuHuynh implements IThongKe {
         int soDongLoi = 0;
         File f = new File(DUONG_DAN_FILE);
         if(!f.exists()){
-            System.out.println("Chua co file " + DUONG_DAN_FILE + ", danh sach phu huynh dang trong..");
+            System.out.println("Chua co file " + DUONG_DAN_FILE + ", danh sach phu huynh dang trong.");
             return false;
         }
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))){
