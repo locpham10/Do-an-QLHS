@@ -140,13 +140,17 @@ public class DanhSachPhuHuynh implements IThongKe {
             s= sc.nextLine().trim().replaceAll("[\\s.]", "");
             if(s.isEmpty()){break;}
             if(s.matches("^0\\d{9}$")){
+                if(!s.equals(ph.getSdtKhanCap()) && timKiem(s) != null){
+                    System.out.println(Color.RED + "Loi: SDT " + s + " da thuoc phu huynh khac!" + Color.RESET);
+                    continue;
+                }
                 ph.setSdtKhanCap(s);
                 break;
             }
-            System.out.println(Color.RED + "Lỗi: Số điện thoại phải có 10 số và bắt đầu từ số 0" + Color.RESET);
+            System.out.println(Color.RED + "Loi: SDT phai co 10 so va bat dau bang so 0!" + Color.RESET);
         }
         while (true) { 
-            System.out.println("Nhập số lượng MSHS mới: ");
+            System.out.println("Nhap so luong MSHS moi: ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             try {
@@ -159,7 +163,7 @@ public class DanhSachPhuHuynh implements IThongKe {
                     String mshsMoi = "";
                     boolean nhapThanhCong = true;
                     for (int i = 0; i < soLuongHS; i++) {
-                        System.out.print("  + Nhập MSHS thứ " + (i + 1) + ": ");
+                        System.out.print("  + Nhap MSHS thu " + (i + 1) + ": ");
                         String maHS = sc.nextLine().trim();
                         if(maHS.isEmpty() || maHS.contains(",")){
                             System.out.println(Color.RED + "Lỗi: MSHS không được để trống hoặc chứa dấu phẩy! Vui lòng nhập lại từ đầu" + Color.RESET);
