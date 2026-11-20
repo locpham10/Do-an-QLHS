@@ -778,17 +778,17 @@ public class DanhSachHocSinh implements IThongKe {
 // ================= BLOCK TÀI CHÍNH  =================
 
     public void inDanhSachNoHocPhi() {
-        System.out.println("\n--- DANH SÁCH HỌC SINH CHƯA ĐÓNG HỌC PHÍ ---");
+        System.out.println("\n--- DANH SACH HOC SINH CHUA DONG HOC PHI ---");
         int count = 0;
         for (int i = 0; i < soLuong; i++) {
             if (arrHS[i] != null && !arrHS[i].isDaDongHocPhi()) {
-                System.out.printf("%d. MSHS: %s | Họ tên: %s | Lớp: %s | Số tiền: %.2f\n", 
+                System.out.printf("%d. MSHS: %s | Ho ten: %s | Lop: %s | So tien: %,.0f VND\n",
                     (count + 1), arrHS[i].getMshs(), arrHS[i].getHoTen(), arrHS[i].getTenLop(), arrHS[i].tinhHocPhi());
                 count++;
             }
         }
         if (count == 0) {
-            System.out.println("Tuyệt vời! Không có học sinh nào nợ học phí.");
+            System.out.println("Khong co hoc sinh nao no hoc phi.");
         }
     }
 
@@ -832,7 +832,7 @@ public class DanhSachHocSinh implements IThongKe {
             System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
             return;
         }
-        hs.setDaDongHocPhi(trangThai);
+        hs.capNhatDongHocPhi(trangThai);
         System.out.println("Đã cập nhật học phí của " + hs.getHoTen() + ": "
                 + (trangThai ? "Đã đóng" : "Chưa đóng"));
     }

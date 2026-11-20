@@ -609,8 +609,8 @@ public class HeThongQuanLy {
                     phuHuynhMoi, dsDiemBanDau, 0, lichSuHDBanDau,
                     lop.getMonChuyenCuaLop(), 0.0, lop.getPhuPhiChung());
         }
-        return new HocSinhDaiTra(hoTen, ngaySinh, gioiTinh, diaChi, sdt,
-                mshs, lop.getTenLop(), 0.0, 100, false,
+        return new HocSinhDaiTra(mshs, hoTen, ngaySinh, gioiTinh, diaChi, sdt,
+                lop.getTenLop(), 0.0, 100, false,
                 phuHuynhMoi, dsDiemBanDau, 0, lichSuHDBanDau);
     }
 

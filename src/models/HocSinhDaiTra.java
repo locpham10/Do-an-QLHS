@@ -6,11 +6,11 @@ public class HocSinhDaiTra extends HocSinh {
         super();
     }
 
-    public HocSinhDaiTra(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, 
-                         String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
+    public HocSinhDaiTra(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi,
+                         String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
                          PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong) {
-        super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, mshs, tenLop, gpa, diemHanhKiem, 
-              daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
+        super(mshs, hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai, tenLop, gpa, diemHanhKiem,
+                daDongHocPhi, phuHuynh, danhSachDiem, soLuongMon, lichSuHoatDong);
     }
 
     public HocSinhDaiTra(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
@@ -36,7 +36,7 @@ public class HocSinhDaiTra extends HocSinh {
     
     @Override
     public String toFileString() {
-        return String.format(java.util.Locale.US,"DAITRA,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b",
+        return String.format(java.util.Locale.US,"DaiTra,%s,%s,%s,%b,%s,%s,%s,%.2f,%d,%b",
                 getMshs(), getHoTen(), getNgaySinh(), isGioiTinh(), getDiaChi(), 
                 getSoDienThoai(), getTenLop(), getGpa(), getDiemHanhKiem(), isDaDongHocPhi());
     }
