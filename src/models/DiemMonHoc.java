@@ -16,15 +16,15 @@ public class DiemMonHoc
         this.diemCK = diemCK;
     }
 
-    //Công thức 1: Tính điểm Trung bình môn học theo hệ số (TX:1) (GK:2) (CK:3)
-    // Công thức: ĐTB\_Môn = (ĐTX * 1 + ĐGK * 2 + ĐCK * 3) / 6
+    //Cong thuc 1: Tinh diem Trung binh mon hoc theo he so (TX:1) (GK:2) (CK:3)
+    // Cong thuc: DTB\_Mon = (DTX * 1 + DGK * 2 + DCK * 3) / 6
     public double tinhDiemTBMon() {
         double dtb = (this.diemTX*1.0 + this.diemGK * 2.0 + this.diemCK * 3.0) / 6.0;
         return Math.round(dtb * 100.0) / 100.0;
     }
 
-    //Công thức 2: Tính GPA Tổng hợp Toàn bộ Môn học (Trung Bình Học Kì)
-    // Công thức: GPA = Tổng(ĐTB_Môn_i * HệSố_i) / Tổng(HệSố_i) 
+    //Cong thuc 2: Tinh GPA Tong hop Toan bo Mon hoc (Trung Binh Hoc Ki)
+    // Cong thuc: GPA = Tong(DTB_Mon_i * HeSo_i) / Tong(HeSo_i) 
 
     public static double tinhGPATongHop(DiemMonHoc[] dsDiem) {
         if(dsDiem == null || dsDiem.length == 0)
@@ -38,13 +38,13 @@ public class DiemMonHoc
             if(diem != null && diem.getMonHoc() != null)
             {
                 MonHoc mh = diem.getMonHoc();
-                //Bước 1: Lọc môn học có tính vào GPA
+                //Buoc 1: Loc mon hoc co tinh vao GPA
                 if(mh.isTinhVaoGPA())
                 {
-                    double diemTBM = diem.tinhDiemTBMon(); //Lấy điểm TBM
-                    double heSo = mh.getHeSo(); //Lấy hệ số môn
+                    double diemTBM = diem.tinhDiemTBMon(); //Lay diem TBM
+                    double heSo = mh.getHeSo(); //Lay he so mon
 
-                    //Bước 2: Tích lũy Điểm nhân hệ số và Tổng hệ số
+                    //Buoc 2: Tich luy Diem nhan he so va Tong he so
                     tongDiemNhanHeSo += diemTBM * heSo;
                     tongHeSo += heSo;
                 }
@@ -52,7 +52,7 @@ public class DiemMonHoc
         }
         if(tongHeSo == 0) return 0.0;
 
-        //Bước 3: Chia lấy trung bình & Làm tròn 2 chữ số sau dấu phẩy
+        //Buoc 3: Chia lay trung binh & Lam tron 2 chu so sau dau phay
         double gpa = tongDiemNhanHeSo / tongHeSo;
         return Math.round(gpa * 100.0) / 100.0;
     }
@@ -71,8 +71,8 @@ public class DiemMonHoc
 
     @Override
     public String toString()  {
-        String tenMonHoc = (monHoc != null) ? monHoc.getTenMon() : "Chưa xác định.";
-        return String.format("%s | TX: %.1f | GK: %.1f | CK: %.1f => ĐTB: %.2f", tenMonHoc, diemTX, diemGK, diemCK, tinhDiemTBMon());
+        String tenMonHoc = (monHoc != null) ? monHoc.getTenMon() : "Chua xac dinh.";
+        return String.format("%s | TX: %.1f | GK: %.1f | CK: %.1f => DTB: %.2f", tenMonHoc, diemTX, diemGK, diemCK, tinhDiemTBMon());
     }
 
     public String toFileString() {
@@ -82,12 +82,12 @@ public class DiemMonHoc
 
     public static DiemMonHoc tuChuoi(String dong) {
         if(dong == null || dong.trim().isEmpty())
-            throw new IllegalArgumentException("Dòng điểm rỗng!");
+            throw new IllegalArgumentException("Dong diem rong!");
 
         String[] p = dong.split(",", -1);
         if(p.length != 4 && p.length != 5)
-            throw new IllegalArgumentException("Dòng điểm phải có 4 hoặc 5 cột: " + dong);
-        int dau = (p.length == 5) ? 1 : 0; //5 cột thì bỏ cột MSHS
+            throw new IllegalArgumentException("Dong diem phai co 4 hoac 5 cot: " + dong);
+        int dau = (p.length == 5) ? 1 : 0; //5 cot thi bo cot MSHS
 
         String maMon = p[dau].trim().toUpperCase();
         MonHoc mh = null;
@@ -97,7 +97,7 @@ public class DiemMonHoc
                 break; 
             }
         }
-        if(mh == null) throw new IllegalArgumentException("Không tồn tại môn có mã '" + maMon + "'.");
+        if(mh == null) throw new IllegalArgumentException("Khong ton tai mon co ma '" + maMon + "'.");
         
         double tx, gk, ck;
         try {
@@ -105,10 +105,10 @@ public class DiemMonHoc
             gk = Double.parseDouble(p[dau + 2].trim());
             ck = Double.parseDouble(p[dau + 3].trim());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Điểm không phải số hoặc không đúng định dạng: " + dong);
+            throw new IllegalArgumentException("Diem khong phai so hoac khong dung dinh dang: " + dong);
         }
         if (tx < 0 || tx > 10 || gk < 0 || gk > 10 || ck < 0 || ck > 10)
-            throw new IllegalArgumentException("Điểm phải nằm trong [0,10]: " + dong);
+            throw new IllegalArgumentException("Diem phai nam trong [0,10]: " + dong);
 
         return new DiemMonHoc(mh, tx, gk, ck);
     }

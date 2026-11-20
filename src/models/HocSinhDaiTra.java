@@ -30,8 +30,8 @@ public class HocSinhDaiTra extends HocSinh {
 
     @Override
     public void hienThiThongTin() {
-        System.out.println("[Học sinh Đại trà]");
-        super.hienThiThongTin();   // phần chung của HocSinh
+        System.out.println("[Hoc sinh Dai tra]");
+        super.hienThiThongTin();   // phan chung cua HocSinh
     }
     
     @Override

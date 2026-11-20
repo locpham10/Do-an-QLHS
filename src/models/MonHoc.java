@@ -21,17 +21,17 @@ public class MonHoc
         return new MonHoc(this.maMon, this.tenMon, heSoMoi, this.tinhVaoGPA);
     }
 
-    // KHO MÔN HỌC CỦA TRƯỜNG (Để hiển thị menu cho người dùng chọn môn cho lớp)
+    // KHO MON HOC CUA TRUONG (De hien thi menu cho nguoi dung chon mon cho lop)
     public static final MonHoc[] KHO_MON_HOC = {
-            new MonHoc("TOAN", "Toán", 1, true),
-            new MonHoc("VAN", "Ngữ Văn", 1, true),
-            new MonHoc("ANH", "Tiếng Anh", 1, true),
-            new MonHoc("LY", "Vật Lý", 1, true),
-            new MonHoc("HOA", "Hóa Học", 1, true),
-            new MonHoc("SINH", "Sinh Học", 1, true),
-            new MonHoc("SU", "Lịch Sử", 1, true),
-            new MonHoc("DIA", "Địa Lý", 1, true),
-            new MonHoc("TD", "Thể Dục", 1, false)
+            new MonHoc("TOAN", "Toan", 1, true),
+            new MonHoc("VAN", "Ngu Van", 1, true),
+            new MonHoc("ANH", "Tieng Anh", 1, true),
+            new MonHoc("LY", "Vat Ly", 1, true),
+            new MonHoc("HOA", "Hoa Hoc", 1, true),
+            new MonHoc("SINH", "Sinh Hoc", 1, true),
+            new MonHoc("SU", "Lich Su", 1, true),
+            new MonHoc("DIA", "Dia Ly", 1, true),
+            new MonHoc("TD", "The Duc", 1, false)
     };
 
     public static MonHoc timTheoMa(String maMon) {
@@ -56,6 +56,6 @@ public class MonHoc
 
     @Override
     public String toString() {
-        return "Môn: " + tenMon + " (" + maMon + ") | Hệ số: " + heSo + " | Tính GPA: " + (tinhVaoGPA ? "Có" : "Không");
+        return "Mon: " + tenMon + " (" + maMon + ") | He so: " + heSo + " | Tinh GPA: " + (tinhVaoGPA ? "Co" : "Khong");
     }
 }

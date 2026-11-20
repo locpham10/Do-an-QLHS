@@ -96,13 +96,13 @@ public class HeThongQuanLy {
                 System.out.println(Color.RED + "\nKhong con du lieu nhap, thoat chuong trinh." + Color.RESET);
                 return;
             } catch (RuntimeException e){
-                // Lỗi ngoài dự kiến trong menu con: báo rồi quay về menu chính
+                // Loi ngoai du kien trong menu con: bao roi quay ve menu chinh
                 System.out.println(Color.RED + "Loi khong mong muon: " + e + Color.RESET);
             }
         }
     }
 
-    private void taiTatCa() {   // sau này Liểu thay bằng taiTatCa(), vẫn giữ lớp try này
+    private void taiTatCa() {   // sau nay Lieu thay bang taiTatCa(), van giu lop try nay
         System.out.println(Color.CYAN + "\n--- DANG TAI DU LIEU HE THONG ---" + Color.RESET);
         try { dsGiaoVien.docFile(); } catch (RuntimeException e) { baoLoiTai("giaovien.txt", e); }
         try { dsPhuHuynh.docFile(); } catch (RuntimeException e) { baoLoiTai("phuhuynh.txt", e); }
@@ -387,7 +387,7 @@ public class HeThongQuanLy {
         System.out.println("\n--- THIET LAP CHUONG TRINH HOC LOP " + tenLop.toUpperCase() + " ---");
         for (int i = 0; i < MonHoc.KHO_MON_HOC.length; i++) {
             MonHoc m = MonHoc.KHO_MON_HOC[i];
-            System.out.println((i + 1) + ". " + m.getTenMon() + " (Mã: " + m.getMaMon() + ")");
+            System.out.println((i + 1) + ". " + m.getTenMon() + " (Ma: " + m.getMaMon() + ")");
         }
 
         int soMonCuaLop = 0;
@@ -633,7 +633,7 @@ public class HeThongQuanLy {
         PhuHuynh daCo = dsPhuHuynh.timKiem(ph.getSdtKhanCap());
         if (daCo != null) {
             hs.setPhuHuynh(daCo);
-            daCo.themMSHS(hs.getMshs());   // thêm: ghi con moi vao phu huynh da co
+            daCo.themMSHS(hs.getMshs());   // them: ghi con moi vao phu huynh da co
             System.out.println(Color.YELLOW + "SDT " + ph.getSdtKhanCap() + " da co (phu huynh "
                     + daCo.getHoTenBoMe() + "), dung lai phu huynh nay." + Color.RESET);
         } else if (!dsPhuHuynh.them(ph)) {
@@ -1686,7 +1686,7 @@ private void menuThongKeTheoKhoa() {
             }
         }
         else{
-            System.out.println(Color.RED + "Khong tìm thay giao vien nao phu hop!" + Color.RESET);
+            System.out.println(Color.RED + "Khong tim thay giao vien nao phu hop!" + Color.RESET);
         }
     }
     private void menuQuanLyPhuHuynh() {
@@ -1770,7 +1770,7 @@ private void menuThongKeTheoKhoa() {
                     if(dsPhuHuynh.sua(sdtSua, sc)){
                         System.out.println(Color.GREEN + "Cap nhat thong tin phu huynh thanh cong!" + Color.RESET);
                     } else {
-                        System.out.println(Color.RED + "Khong tim thay phu huynh co SĐT nay!" + Color.RESET);
+                        System.out.println(Color.RED + "Khong tim thay phu huynh co SDT nay!" + Color.RESET);
                     }
                     break;
                 case 4:
@@ -1778,7 +1778,7 @@ private void menuThongKeTheoKhoa() {
                     String sdtXoa = sc.nextLine().trim();
                     PhuHuynh phXoa = dsPhuHuynh.timKiem(sdtXoa);
                     if(phXoa == null){
-                        System.out.println(Color.RED + "Khong tim thay phu huynh co SĐT nay!" + Color.RESET);
+                        System.out.println(Color.RED + "Khong tim thay phu huynh co SDT nay!" + Color.RESET);
                         break;
                     }
                     System.out.print(Color.YELLOW + "Xac nhan xoa phu huynh " + phXoa.getHoTenBoMe() + "? (Y/N): " + Color.RESET);

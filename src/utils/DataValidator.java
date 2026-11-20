@@ -91,7 +91,7 @@ public class DataValidator {
             if (sdt.matches("^0\\d{9}$")) {
                 break;
             }
-            System.out.println(Color.RED + "Loi: So dien thoai phai co 10 so và bat dau bang 0 (VD: 0911122233!" + Color.RESET);
+            System.out.println(Color.RED + "Loi: So dien thoai phai co 10 so va bat dau bang 0 (VD: 0911122233!" + Color.RESET);
         }
         return sdt;
     }

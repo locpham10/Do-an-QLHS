@@ -48,11 +48,11 @@ public class DanhSachLopHoc
     {
         if(soLuong == 0)
         {
-            System.out.println("Danh sách lớp học đang trống.");
+            System.out.println("Danh sach lop hoc dang trong.");
             return;
         }
 
-        System.out.println("| DANH SÁCH CÁC LỚP HỌC |");
+        System.out.println("| DANH SACH CAC LOP HOC |");
         for(int i = 0; i < soLuong; i++)
             System.out.println((i+1) + ". " + dsLop[i]);
     }
@@ -78,12 +78,12 @@ public class DanhSachLopHoc
         }
     }
 
-    // đọc & không gắn GVCN
+    // doc & khong gan GVCN
     public boolean docFile() {
         return docFile(null);
     }
     private int soCanhBao;
-    // đọc & gắn GVCN= dsGV.timKiem(maGV), tạo DanhSachHocSinh rỗng cho mỗi lớp
+    // doc & gan GVCN= dsGV.timKiem(maGV), tao DanhSachHocSinh rong cho moi lop
     public boolean docFile(DanhSachGiaoVien dsGV) {
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_FILE))) {
             String line;
@@ -220,10 +220,10 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return java.util.Arrays.copyOf(tam, n);
     }
 
-    // ================= b. SỬA =================
-    // Sửa: tên lớp, khóa học, GVCN. Enter = giữ nguyên.
-    // Hệ chuyên/đại trà, môn chuyên, phụ phí, chương trình học KHÔNG sửa ở đây
-    // vì ảnh hưởng tới điểm và học phí của học sinh trong lớp.
+    // ================= b. SUA =================
+    // Sua: ten lop, khoa hoc, GVCN. Enter = giu nguyen.
+    // He chuyen/dai tra, mon chuyen, phu phi, chuong trinh hoc KHONG sua o day
+    // vi anh huong toi diem va hoc phi cua hoc sinh trong lop.
     public boolean sua(String tenLop, Scanner sc, DanhSachGiaoVien dsGV, DanhSachHocSinh dsTruong) {
         LopHoc lop = timKiemLopTheoTen(tenLop);
         if(lop == null)
@@ -236,7 +236,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         System.out.println("Luu y: Nhan Enter de bo qua neu khong muon doi truong do.");
         boolean daDoi = false;
 
-        // 1. Tên lớp: không rỗng, không có dấu phẩy (file CSV), không trùng lớp khác
+        // 1. Ten lop: khong rong, khong co dau phay (file CSV), khong trung lop khac
         while(true)
         {
             System.out.print("Nhap ten lop moi (hien tai " + lop.getTenLop() + "): ");
@@ -256,7 +256,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             if(!tenMoi.equals(lop.getTenLop()))
             {
                 String tenCu = lop.getTenLop();
-                // Học sinh lưu tên lớp dạng chuỗi nên phải đổi theo, nếu không sẽ "mồ côi"
+                // Hoc sinh luu ten lop dang chuoi nen phai doi theo, neu khong se "mo coi"
                 HocSinh[] dsHs = (dsTruong != null) ? dsTruong.timKiemTheoLop(tenCu) : new HocSinh[0];
                 lop.setTenLop(tenMoi);
                 for(HocSinh hs : dsHs)
@@ -268,7 +268,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             break;
         }
 
-        // 2. Khóa học dạng yyyy-yyyy, năm sau lớn hơn năm đầu
+        // 2. Khoa hoc dang yyyy-yyyy, nam sau lon hon nam dau
         while(true)
         {
             System.out.print("Nhap khoa hoc moi (hien tai " + lop.getKhoaHoc() + ", VD: 2026-2029): ");
@@ -288,7 +288,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             System.out.println("Loi: Khoa hoc phai dung dang nam-nam (VD: 2026-2029)!");
         }
 
-        // 3. Giáo viên chủ nhiệm: nhập mã GV, "-" để bỏ GVCN
+        // 3. Giao vien chu nhiem: nhap ma GV, "-" de bo GVCN
         while(true)
         {
             GiaoVien hienTai = lop.getGiaoVienChuNhiem();
@@ -322,9 +322,9 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return daDoi;
     }
 
-    // ================= c. XÓA =================
-    // Lớp trống: xóa luôn. Lớp còn học sinh: phải xác nhận, và các học sinh đó bị xóa theo
-    // (học sinh không thể không thuộc lớp nào).
+    // ================= c. XOA =================
+    // Lop trong: xoa luon. Lop con hoc sinh: phai xac nhan, va cac hoc sinh do bi xoa theo
+    // (hoc sinh khong the khong thuoc lop nao).
     public boolean xoa(String tenLop, Scanner sc, DanhSachHocSinh dsTruong) {
         int viTri = -1;
         for(int i = 0; i < soLuong; i++)
@@ -358,7 +358,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 dsTruong.xoa(hs.getMshs());
         }
 
-        // Dồn các phần tử phía sau lên rồi co mảng lại đúng soLuong - 1
+        // Don cac phan tu phia sau len roi co mang lai dung soLuong - 1
         for(int i = viTri; i < soLuong - 1; i++)
             dsLop[i] = dsLop[i + 1];
         soLuong--;
@@ -368,8 +368,8 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return true;
     }
 
-    // ================= d. TÌM KIẾM =================
-    // Tìm gần đúng theo khóa học (VD: "2026" ra mọi lớp có khóa chứa 2026)
+    // ================= d. TIM KIEM =================
+    // Tim gan dung theo khoa hoc (VD: "2026" ra moi lop co khoa chua 2026)
     public LopHoc[] timKiemTheoKhoaHoc(String tuKhoa) {
         String key = chuanHoa(tuKhoa);
         boolean[] khop = new boolean[soLuong];
@@ -378,7 +378,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return gom(khop);
     }
 
-    // Tìm theo hệ: true = lớp chuyên, false = lớp đại trà
+    // Tim theo he: true = lop chuyen, false = lop dai tra
     public LopHoc[] timKiemTheoHe(boolean laChuyen) {
         boolean[] khop = new boolean[soLuong];
         for(int i = 0; i < soLuong; i++)
@@ -386,7 +386,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return gom(khop);
     }
 
-    // Tìm gần đúng theo họ tên GVCN, gõ không dấu cũng ra ("duyen" khớp "Trần Mỹ Duyên")
+    // Tim gan dung theo ho ten GVCN, go khong dau cung ra ("duyen" khop "Tran My Duyen")
     public LopHoc[] timKiemTheoTenGVCN(String tuKhoa) {
         String key = chuanHoa(tuKhoa);
         boolean[] khop = new boolean[soLuong];
@@ -398,8 +398,8 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return gom(khop);
     }
 
-    // ================= e. THỐNG KÊ =================
-    // Sĩ số lấy từ danh sách học sinh toàn trường (theo tên lớp của từng học sinh)
+    // ================= e. THONG KE =================
+    // Si so lay tu danh sach hoc sinh toan truong (theo ten lop cua tung hoc sinh)
     public int demSiSo(String tenLop, DanhSachHocSinh dsTruong) {
         if(dsTruong == null) return 0;
         return dsTruong.timKiemTheoLop(tenLop).length;
@@ -454,11 +454,11 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 System.out.println("- " + l.getTenLop());
     }
 
-    // ================= f. CHUYỂN LỚP =================
-    // Chuyển học sinh (theo MSHS) sang lớp mới. ds = danh sách học sinh toàn trường.
-    // - Chỉ chuyển trong cùng hệ (chuyên <-> chuyên, đại trà <-> đại trà), vì học sinh chuyên
-    //   có thêm môn chuyên và phụ phí mà học sinh đại trà không có.
-    // - Bảng điểm cũ được giữ nguyên; muốn tính theo chương trình lớp mới thì nhập lại điểm.
+    // ================= f. CHUYEN LOP =================
+    // Chuyen hoc sinh (theo MSHS) sang lop moi. ds = danh sach hoc sinh toan truong.
+    // - Chi chuyen trong cung he (chuyen <-> chuyen, dai tra <-> dai tra), vi hoc sinh chuyen
+    //   co them mon chuyen va phu phi ma hoc sinh dai tra khong co.
+    // - Bang diem cu duoc giu nguyen; muon tinh theo chuong trinh lop moi thi nhap lai diem.
     public boolean chuyenLop(String mshs, String tenLopMoi, DanhSachHocSinh ds) {
         if(ds == null) return false;
 
@@ -492,12 +492,12 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             return false;
         }
 
-        // Rút khỏi danh sách của lớp cũ (nếu có)
+        // Rut khoi danh sach cua lop cu (neu co)
         LopHoc lopCu = timKiemLopTheoTen(tenLopCu);
         if(lopCu != null && lopCu.getDsHocSinh() != null && lopCu.getDsHocSinh().timKiem(hs.getMshs()) != null)
             lopCu.getDsHocSinh().xoa(hs.getMshs());
 
-        // Thêm vào danh sách của lớp mới
+        // Them vao danh sach cua lop moi
         if(lopMoi.getDsHocSinh() == null)
             lopMoi.setDsHocSinh(new DanhSachHocSinh());
         if(lopMoi.getDsHocSinh().timKiem(hs.getMshs()) == null)
@@ -505,14 +505,14 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
 
         hs.setTenLop(lopMoi.getTenLop());
 
-        // Học sinh chuyên: cập nhật môn chuyên và phụ phí theo lớp mới
+        // Hoc sinh chuyen: cap nhat mon chuyen va phu phi theo lop moi
         if(laHsChuyen)
         {
             HocSinhChuyen hsc = (HocSinhChuyen) hs;
             String monMoi = (lopMoi.getMonChuyenCuaLop() != null) ? lopMoi.getMonChuyenCuaLop() : "";
             if(!chuanHoa(monMoi).equals(chuanHoa(hsc.getMonChuyen())))
             {
-                hsc.setDiemMonChuyen(0.0); // đổi môn chuyên thì điểm môn chuyên cũ không còn đúng
+                hsc.setDiemMonChuyen(0.0); // doi mon chuyen thi diem mon chuyen cu khong con dung
                 System.out.println("Luu y: doi mon chuyen " + hsc.getMonChuyen() + " -> " + monMoi
                         + ", diem mon chuyen duoc dat ve 0.0, can nhap lai.");
             }
@@ -557,7 +557,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
     // THOI KHOA BIEU
     public static final String DUONG_DAN_TKB = "src/data/thoikhoabieu.txt";
  
-    // Trả về lớp KHÁC (không tính boQua) đang có chính GV này dạy ở thu/tiet đó; không có thì null
+    // Tra ve lop KHAC (khong tinh boQua) dang co chinh GV nay day o thu/tiet do; khong co thi null
     public LopHoc kiemTraTrungTiet(GiaoVien gv, int thu, int tiet, LopHoc boQua) {
         if (gv == null || !LopHoc.hopLeViTri(thu, tiet)) return null;
         for (int i = 0; i < soLuong; i++) {
@@ -571,7 +571,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return null;
     }
  
-    // Xếp tiết cho lớp tenLop, kiểm tra đủ ràng buộc (ném IllegalArgumentException nếu sai)
+    // Xep tiet cho lop tenLop, kiem tra du rang buoc (nem IllegalArgumentException neu sai)
     public void xepTiet(String tenLop, int thu, int tiet, MonHoc mon, GiaoVien gv) {
         LopHoc lop = timKiemLopTheoTen(tenLop);
         if (lop == null)
@@ -586,7 +586,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         lop.xepTiet(thu, tiet, mon, gv);
     }
  
-    // In lịch dạy trong tuần của một giáo viên (tổng hợp từ thời khóa biểu mọi lớp)
+    // In lich day trong tuan cua mot giao vien (tong hop tu thoi khoa bieu moi lop)
     public void inLichDay(String maGV) {
         String[][] o = new String[LopHoc.SO_NGAY][LopHoc.SO_TIET];
         String tenGV = null;
@@ -630,7 +630,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         System.out.println("Tong so tiet day trong tuan: " + dem);
     }
  
-    // Ghi thoikhoabieu.txt: mỗi dòng  tenLop,thu,tiet,maMon,maGV
+    // Ghi thoikhoabieu.txt: moi dong  tenLop,thu,tiet,maMon,maGV
     public boolean ghiThoiKhoaBieu() {
         File f = new File(DUONG_DAN_TKB);
         File thuMucCha = f.getParentFile();
@@ -656,8 +656,8 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         }
     }
  
-    // Đọc thoikhoabieu.txt (phải đọc lophoc.txt và giaovien.txt trước). Mỗi dòng đi qua xepTiet()
-    // nên cũng bị kiểm tra đủ ràng buộc; dòng sai chỉ báo lỗi rồi bỏ qua.
+    // Doc thoikhoabieu.txt (phai doc lophoc.txt va giaovien.txt truoc). Moi dong di qua xepTiet()
+    // nen cung bi kiem tra du rang buoc; dong sai chi bao loi roi bo qua.
     public boolean docThoiKhoaBieu(DanhSachGiaoVien dsGV) {
         if (soLuong == 0) {
             System.out.println("Chua co lop nao, hay doc lophoc.txt truoc khi doc thoi khoa bieu.");
@@ -718,8 +718,8 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
 
     public int getSoLuong() { return soLuong; }
 
-    // ================= HÀM PHỤ (private) =================
-    // Gom các lớp có khop[i] = true thành mảng kết quả vừa khít
+    // ================= HAM PHU (private) =================
+    // Gom cac lop co khop[i] = true thanh mang ket qua vua khit
     private LopHoc[] gom(boolean[] khop) {
         int dem = 0;
         for(boolean b : khop)
@@ -731,10 +731,10 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
         return kq;
     }
 
-    // Bỏ dấu + chữ thường để so sánh gần đúng ("Duyên" và "duyen" là một)
+    // Bo dau + chu thuong de so sanh gan dung ("Duyen" va "duyen" la mot)
     private static String chuanHoa(String s) {
         if(s == null) return "";
         String t = Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
-        return t.replace('đ', 'd').replace('Đ', 'D').toLowerCase().trim();
+        return t.replace('d', 'd').replace('D', 'D').toLowerCase().trim();
     }
 }

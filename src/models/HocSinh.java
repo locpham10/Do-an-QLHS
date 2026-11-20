@@ -13,14 +13,14 @@ public abstract class HocSinh extends Nguoi {
     protected int soLuongMon;
     protected HoatDong[] lichSuHoatDong;
 
-    // Hằng số tĩnh theo yêu cầu Li5
+    // Hang so tinh theo yeu cau Li5
     public static final double HOC_PHI_CO_BAN = 150000.0;
 
     public HocSinh() {
         super();
     }
 
-    // Constructor đầy đủ
+    // Constructor day du
     public HocSinh(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi,
                    String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
                    PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong){
@@ -36,7 +36,7 @@ public abstract class HocSinh extends Nguoi {
         this.lichSuHoatDong = lichSuHoatDong;
     }
 
-    // Constructor rút gọn (overload) để docFile gọi không bị lỗi thiếu tham số
+    // Constructor rut gon (overload) de docFile goi khong bi loi thieu tham so
     public HocSinh(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
                    String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi) {
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
@@ -58,7 +58,7 @@ public abstract class HocSinh extends Nguoi {
         return "Yeu";
     }
 
-    // Getters & Setters cơ bản
+    // Getters & Setters co ban
     public String getMshs() { return mshs; }
     public void setMshs(String mshs) { this.mshs = mshs; }
     public String getTenLop() { return tenLop; }
@@ -84,10 +84,10 @@ public abstract class HocSinh extends Nguoi {
 
     @Override
     public void hienThiThongTin() {
-        System.out.println("Họ tên: " + hoTen + " | Ngày sinh: " + ngaySinh + " | SĐT: " + soDienThoai);
-        System.out.println("MSHS: " + mshs + " | Lớp: " + tenLop + " | GPA: " + String.format("%.2f", gpa)
-                + " (" + xepLoaiHocLuc() + ") | Hạnh kiểm: " + diemHanhKiem + " (" + xepLoaiHanhKiem() + ")");
-        System.out.println("Đã đóng học phí: " + (daDongHocPhi ? "Rồi" : "Chưa"));
+        System.out.println("Ho ten: " + hoTen + " | Ngay sinh: " + ngaySinh + " | SDT: " + soDienThoai);
+        System.out.println("MSHS: " + mshs + " | Lop: " + tenLop + " | GPA: " + String.format("%.2f", gpa)
+                + " (" + xepLoaiHocLuc() + ") | Hanh kiem: " + diemHanhKiem + " (" + xepLoaiHanhKiem() + ")");
+        System.out.println("Da dong hoc phi: " + (daDongHocPhi ? "Roi" : "Chua"));
     }
 
     public void ghiNhanHoatDong(HoatDong hd) {
@@ -95,7 +95,7 @@ public abstract class HocSinh extends Nguoi {
         if (lichSuHoatDong == null) lichSuHoatDong = new HoatDong[0];
         lichSuHoatDong = java.util.Arrays.copyOf(lichSuHoatDong, lichSuHoatDong.length + 1);
         lichSuHoatDong[lichSuHoatDong.length - 1] = hd;
-        // cộng / trừ điểm hạnh kiểm, giữ trong khoảng 0 - 100
+        // cong / tru diem hanh kiem, giu trong khoang 0 - 100
         diemHanhKiem += hd.getDiemCongTru();
         if (diemHanhKiem > 100) diemHanhKiem = 100;
         if (diemHanhKiem < 0) diemHanhKiem = 0;

@@ -21,7 +21,7 @@ public class HocSinhChuyen extends HocSinh {
         this.phuPhiChuyenDe = phuPhiChuyenDe;
     }
 
-    // Constructor ngắn gọn tương thích cho docFile
+    // Constructor ngan gon tuong thich cho docFile
     public HocSinhChuyen(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, 
                          String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
                          String monChuyen, double diemMonChuyen, double phuPhiChuyenDe) {
@@ -43,11 +43,11 @@ public class HocSinhChuyen extends HocSinh {
 
     @Override
     public void hienThiThongTin() {
-        System.out.println("[Học sinh Chuyên]");
-        super.hienThiThongTin();   // phần chung của HocSinh
+        System.out.println("[Hoc sinh Chuyen]");
+        super.hienThiThongTin();   // phan chung cua HocSinh
         MonHoc mh = MonHoc.timTheoMa(monChuyen);
         String tenMon = (mh != null) ? mh.getTenMon() : monChuyen;
-        System.out.printf("Môn chuyên: %s | Điểm môn chuyên: %.2f | Phụ phí: %,.0f đ%n",
+        System.out.printf("Mon chuyen: %s | Diem mon chuyen: %.2f | Phu phi: %,.0f d%n",
                 tenMon, diemMonChuyen, phuPhiChuyenDe);
     }
 
