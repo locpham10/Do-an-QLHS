@@ -1542,7 +1542,6 @@ private void menuThongKeTheoKhoa() {
                 GiaoVien gvMoi = new GiaoVien(maGV, hoTen, ngaySinh, gioiTinh, diaChi, sdt, chucVu, luong, monChuyenMon, dsLopDay);
                 if(dsGiaoVien.them(gvMoi)){
                     System.out.println(Color.GREEN + "Them giao vien thanh cong!" + Color.RESET);
-                    dsGiaoVien.ghiFile();
                 }
                 else{
                     System.out.println(Color.RED + "Them giao vien that bai!" + Color.RESET);
@@ -1554,7 +1553,6 @@ private void menuThongKeTheoKhoa() {
                 String maSua = sc.nextLine().trim();
                 if(dsGiaoVien.sua(maSua, sc)){
                     System.out.println(Color.GREEN + "Cap nhat thong tin giao vien thanh cong!" + Color.RESET);
-                    dsGiaoVien.ghiFile();
                 }else {
                     System.out.println(Color.RED + "Khong tim thay giao vien co ma " + maSua + "!" + Color.RESET);
                 }
@@ -1568,11 +1566,16 @@ private void menuThongKeTheoKhoa() {
                     System.out.println(Color.RED + "Khong tim thay giao vien co ma " + maXoa + "!" + Color.RESET);
                     break;
                 }
+                String lyDo = dsLopHoc.lyDoGiaoVienDangDung(gvXoa);
+                if (lyDo != null) {
+                    System.out.println(Color.RED + "Khong the xoa " + gvXoa.getHoTen() + ": " + lyDo
+                            + "hay phan cong lai (muc 7) hoac xoa tiet (muc 2.5) truoc." + Color.RESET);
+                    break;
+                }
                 System.out.print(Color.YELLOW + "Xac nhan xoa giao vien " + gvXoa.getHoTen() + "? (Y/N): " + Color.RESET);
                 if(sc.nextLine().trim().equalsIgnoreCase("Y")){
                     if(dsGiaoVien.xoa(maXoa)){
                         System.out.println(Color.GREEN + "Da xoa giao vien thanh cong!" + Color.RESET);
-                        dsGiaoVien.ghiFile();
                     }
                 }
                 else{
@@ -1756,7 +1759,6 @@ private void menuThongKeTheoKhoa() {
                     PhuHuynh phMoi = new PhuHuynh(hoTenBoMe, sdtKhanCap, mshsMoi);
                     if(dsPhuHuynh.them(phMoi)){
                         System.out.println(Color.GREEN + "Them phu huynh moi thanh cong!" + Color.RESET);
-                        dsPhuHuynh.ghiFile();
                     }
                     else{
                         System.out.println(Color.RED + "Them phu huynh moi that bai!" + Color.RESET);
@@ -1767,7 +1769,6 @@ private void menuThongKeTheoKhoa() {
                     String sdtSua = sc.nextLine().trim();
                     if(dsPhuHuynh.sua(sdtSua, sc)){
                         System.out.println(Color.GREEN + "Cap nhat thong tin phu huynh thanh cong!" + Color.RESET);
-                        dsPhuHuynh.ghiFile();
                     } else {
                         System.out.println(Color.RED + "Khong tim thay phu huynh co SĐT nay!" + Color.RESET);
                     }
@@ -1784,7 +1785,6 @@ private void menuThongKeTheoKhoa() {
                     if(sc.nextLine().trim().equalsIgnoreCase("Y")){
                         if(dsPhuHuynh.xoa(sdtXoa)){
                             System.out.println(Color.GREEN + "Da xoa phu huynh thanh cong!" + Color.RESET);
-                            dsPhuHuynh.ghiFile();
                         }  
                     } else{
                         System.out.println(Color.YELLOW + "Da huy lenh xoa." + Color.RESET); 
