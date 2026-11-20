@@ -1,5 +1,6 @@
 package models;
 
+import collections.DanhSachHoatDong;
 
 public abstract class HocSinh extends Nguoi {
     protected String mshs;
@@ -20,8 +21,8 @@ public abstract class HocSinh extends Nguoi {
     }
 
     // Constructor đầy đủ
-    public HocSinh(String hoTen, String ngaySinh, boolean gioiTinh, String diaChi, String soDienThoai, 
-                   String mshs, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi, 
+    public HocSinh(String mshs, String hoTen, String ngaySinh, boolean gioiTinh, String diaChi,
+                   String soDienThoai, String tenLop, double gpa, int diemHanhKiem, boolean daDongHocPhi,
                    PhuHuynh phuHuynh, DiemMonHoc[] danhSachDiem, int soLuongMon, HoatDong[] lichSuHoatDong){
         super(hoTen, ngaySinh, gioiTinh, diaChi, soDienThoai);
         this.mshs = mshs;
@@ -102,14 +103,7 @@ public abstract class HocSinh extends Nguoi {
 
     public void hienThiLichSuHoatDong() {
         System.out.println("\n--- LỊCH SỬ HOẠT ĐỘNG ---");
-        if (lichSuHoatDong == null || lichSuHoatDong.length == 0) {
-            System.out.println("Chưa có lịch sử hoạt động.");
-            return;
-        }
-        for (int i = 0; i < lichSuHoatDong.length; i++) {
-            System.out.print("  - ");
-            lichSuHoatDong[i].hienThiThongTin();
-        }
+        new DanhSachHoatDong(lichSuHoatDong).hienThiDSHoatDong();
     }
 
     public String xepLoaiHanhKiem() {
@@ -117,5 +111,9 @@ public abstract class HocSinh extends Nguoi {
         else if (diemHanhKiem >= 65) return "Khá";
         else if (diemHanhKiem >= 50) return "Trung bình";
         else return "Yếu";
+    }
+
+    public void capNhatDongHocPhi(boolean daDong) {
+        this.daDongHocPhi = daDong;
     }
 }
