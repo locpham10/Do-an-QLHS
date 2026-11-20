@@ -296,4 +296,20 @@ public class DanhSachPhuHuynh implements IThongKe {
         System.out.println("So phu huynh da lien ket hoc sinh: " + daLienKet);
         System.out.println("So phu huynh chua lien ket hoc sinh: " + (soLuong - daLienKet));
     }
+    public void donLienKet(DanhSachHocSinh dsHS) {
+        for (int i = 0; i < soLuong; i++) {
+            PhuHuynh ph = arrPH[i];
+            if (ph == null || ph.getMshs() == null || ph.getMshs().isEmpty()) continue;
+
+            String[] dsMa = ph.getMshs().split(";");
+            String conLai = "";
+            for (int j = 0; j < dsMa.length; j++) {
+                String ma = dsMa[j].trim();
+                if (!ma.isEmpty() && dsHS.timKiem(ma) != null) {      // hoc sinh con ton tai thi giu
+                    conLai = conLai.isEmpty() ? ma : conLai + ";" + ma;
+                }
+            }
+            ph.setMshs(conLai);
+        }
+    }
 }

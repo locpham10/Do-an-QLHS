@@ -102,14 +102,14 @@ public abstract class HocSinh extends Nguoi {
     }
 
     public void hienThiLichSuHoatDong() {
-        System.out.println("\n--- LỊCH SỬ HOẠT ĐỘNG ---");
+        System.out.println("\n--- LICH SU HOAT DONG ---");
         new DanhSachHoatDong(lichSuHoatDong).hienThiDSHoatDong();
     }
 
     public String xepLoaiHanhKiem() {
-        if (diemHanhKiem >= 80) return "Tốt";
-        else if (diemHanhKiem >= 65) return "Khá";
-        else if (diemHanhKiem >= 50) return "Trung bình";
+        if (diemHanhKiem >= 80) return "Tot";
+        else if (diemHanhKiem >= 65) return "Kha";
+        else if (diemHanhKiem >= 50) return "Trung binh";
         else return "Yếu";
     }
 

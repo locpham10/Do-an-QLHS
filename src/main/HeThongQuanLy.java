@@ -264,6 +264,7 @@ public class HeThongQuanLy {
                             if (lopCuaHs != null && lopCuaHs.getDsHocSinh() != null) {
                                 lopCuaHs.getDsHocSinh().xoa(hsTimThay.getMshs());
                             }
+                            dsPhuHuynh.donLienKet(dsHocSinh);
 
                             if (xoaTruong) {
                                 System.out.println(Color.GREEN + "Da xoa hoc sinh " + hsTimThay.getHoTen() + "!" + Color.RESET);
@@ -323,7 +324,9 @@ public class HeThongQuanLy {
                     System.out.print("Nhap ten lop can xoa (0 = quay lai): ");
                     String tenXoa = sc.nextLine().trim();
                     if (tenXoa.equals("0")) break;
-                    dsLopHoc.xoa(tenXoa, sc, dsHocSinh);
+                    if (dsLopHoc.xoa(tenXoa, sc, dsHocSinh)) {
+                        dsPhuHuynh.donLienKet(dsHocSinh);
+                    }
                     break;
                 case 5:
                     chuyenHocSinhSangLop();
@@ -630,6 +633,7 @@ public class HeThongQuanLy {
         PhuHuynh daCo = dsPhuHuynh.timKiem(ph.getSdtKhanCap());
         if (daCo != null) {
             hs.setPhuHuynh(daCo);
+            daCo.themMSHS(hs.getMshs());   // thêm: ghi con moi vao phu huynh da co
             System.out.println(Color.YELLOW + "SDT " + ph.getSdtKhanCap() + " da co (phu huynh "
                     + daCo.getHoTenBoMe() + "), dung lai phu huynh nay." + Color.RESET);
         } else if (!dsPhuHuynh.them(ph)) {
@@ -696,6 +700,7 @@ public class HeThongQuanLy {
                 LopHoc l = dsLopHoc.getDsLop()[i];
                 if (l != null && l.getDsHocSinh() != null) l.getDsHocSinh().lamRong();
             }
+            dsPhuHuynh.donLienKet(dsHocSinh);
         }
 
         int n;
