@@ -14,9 +14,9 @@ public class DanhSachHoatDong {
         this.soLuong = 0;
     }
 
-    // Tạo danh sách từ lịch sử hoạt động có sẵn của một học sinh
+    // Tao danh sach tu lich su hoat dong co san cua mot hoc sinh
     public DanhSachHoatDong(HoatDong[] lichSu) {
-        this();                          // gọi constructor ở trên: mảng rỗng, soLuong = 0
+        this();                          // goi constructor o tren: mang rong, soLuong = 0
         if (lichSu == null) return;
         for (int i = 0; i < lichSu.length; i++) {
             themHoatDong(lichSu[i]);
@@ -25,14 +25,14 @@ public class DanhSachHoatDong {
 
     public void themHoatDong(HoatDong hd) {
         if (hd == null) return;
-        danhSachHD = Arrays.copyOf(danhSachHD, soLuong + 1);   // nới mảng thêm 1 ô
+        danhSachHD = Arrays.copyOf(danhSachHD, soLuong + 1);   // noi mang them 1 o
         danhSachHD[soLuong] = hd;
         soLuong++;
     }
 
     public void hienThiDSHoatDong() {
         if (soLuong == 0) {
-            System.out.println("Chưa có lịch sử hoạt động.");
+            System.out.println("Chua co lich su hoat dong.");
             return;
         }
         for (int i = 0; i < soLuong; i++) {

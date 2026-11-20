@@ -43,14 +43,14 @@ public class DanhSachGiaoVien implements IThongKe {
 
     public boolean them(GiaoVien gv){
         if( gv == null ){
-            return false; // Thêm thất bại (đầy/null)
+            return false; // Them that bai (day/null)
         }
         if(soLuong >= arrGV.length){
             arrGV = Arrays.copyOf(arrGV,arrGV.length + 1);
         }
         this.arrGV[soLuong] = gv;
         soLuong ++;
-        return true; // Thêm thành công
+        return true; // Them thanh cong
     }
 
     private int timKiemViTri(String maGV){
@@ -124,7 +124,7 @@ public class DanhSachGiaoVien implements IThongKe {
     public boolean xoa(String maGV){
         int index = timKiemViTri(maGV);
         if(index == -1){
-            return false; // Không tìm thấy
+            return false; // Khong tim thay
         }
         for(int i = index ; i < soLuong - 1; i++){
             arrGV[i] = arrGV[i+1];
@@ -141,80 +141,80 @@ public class DanhSachGiaoVien implements IThongKe {
         }
         GiaoVien gv = arrGV[index];
 
-        System.out.println("Cập nhật thông tin cho giáo viên có mã là " + maGV);
-        System.out.println("Lưu ý nếu không muốn đổi thông tin mục nào vui lòng nhấn ENTER!");
+        System.out.println("Cap nhat thong tin cho giao vien co ma la " + maGV);
+        System.out.println("Luu y neu khong muon doi thong tin muc nao vui long nhan ENTER!");
 
         String s;
         
         while (true) { 
-            System.out.print("Nhập họ tên mới: ");
+            System.out.print("Nhap ho ten moi: ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){ break;}
             if( !s.contains(",")){
             gv.setHoTen(s);
             break;
             }
-        System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+        System.out.println(Color.RED + "Loi: Khong duoc chua dau phay" + Color.RESET);
         }
 
         while (true) { 
-            System.out.print("Nhập ngày sinh mới (DD/MM/YYYY): ");
+            System.out.print("Nhap ngay sinh moi (DD/MM/YYYY): ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             if(DataValidator.ngaySinhHopLe(s)){
                 gv.setNgaySinh(s);
                 break;
             }
-            System.out.println(Color.RED + "Lỗi: Ngày sinh phải đúng định dạng DD/MM/YYYY" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Ngay sinh phai dung dinh dang DD/MM/YYYY" + Color.RESET);
         }
         
         while (true) { 
-            System.out.print("Nhập giới tính mới (1-Nam / 0-Nữ): ");
+            System.out.print("Nhap gioi tinh moi (1-Nam / 0-Nu): ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             if(s.equals("1") || s.equals("0")){
                 gv.setGioiTinh(s.equals("1"));
                 break;
             }
-            System.out.println(Color.RED + "Lỗi: Chỉ nhập 1 hoặc 0" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Chi nhap 1 hoac 0" + Color.RESET);
         }
 
         
         while (true) { 
-            System.out.print("Nhập địa chỉ mới: ");
+            System.out.print("Nhap dia chi moi: ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             if( !s.contains(",")){
                 gv.setDiaChi(s);
                 break;
             }
-            System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Khong duoc chua dau phay" + Color.RESET);
         }
 
         while (true) { 
-            System.out.print("Nhập số điện thoại mới: ");
+            System.out.print("Nhap so dien thoai moi: ");
             s= sc.nextLine().trim().replaceAll("[\\s.]", "");
             if(s.isEmpty()){break;}
             if(s.matches("^0\\d{9}$")){
                 gv.setSoDienThoai(s);
                 break;
             }
-            System.out.println(Color.RED + "Lỗi: Số điện thoại phải có 10 số và bắt đầu từ số 0" + Color.RESET);
+            System.out.println(Color.RED + "Loi: So dien thoai phai co 10 so va bat dau tu so 0" + Color.RESET);
         }
 
         while (true) { 
-            System.out.print("Nhập chức vụ mới: ");
+            System.out.print("Nhap chuc vu moi: ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             if( !s.contains(",")){
                 gv.setChucVu(s);
                 break;
             }
-            System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Khong duoc chua dau phay" + Color.RESET);
         }
 
         while (true) { 
-            System.out.print("Nhập lương mới: ");
+            System.out.print("Nhap luong moi: ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             try {
@@ -224,15 +224,15 @@ public class DanhSachGiaoVien implements IThongKe {
                     break;
                 }
                 else{
-                    System.out.println(Color.RED + "Lỗi: Lương không được là số âm" + Color.RESET);
+                    System.out.println(Color.RED + "Loi: Luong khong duoc la so am" + Color.RESET);
                 }
             } catch (NumberFormatException e ) {
-                System.out.println(Color.RED + "Lỗi: Lương phải là số thực hợp lệ" + Color.RESET);
+                System.out.println(Color.RED + "Loi: Luong phai la so thuc hop le" + Color.RESET);
             }
         }
 
         while (true) { 
-            System.out.print("Nhập tên môn chuyên môn mới:");
+            System.out.print("Nhap ten mon chuyen mon moi:");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             if(!s.contains(",")){
@@ -248,14 +248,14 @@ public class DanhSachGiaoVien implements IThongKe {
                     break;
                 }
                 else{
-                    System.out.println(Color.RED + "Lỗi: Không tìm thấy môn này trong kho môn học!" + Color.RESET);
+                    System.out.println(Color.RED + "Loi: Khong tim thay mon nay trong kho mon hoc!" + Color.RESET);
                 }
             }
-            System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+            System.out.println(Color.RED + "Loi: Khong duoc chua dau phay" + Color.RESET);
         }
         
         while (true) { 
-            System.out.print("Nhập số lượng lớp dạy mới:");
+            System.out.print("Nhap so luong lop day moi:");
             s = sc.nextLine().trim();
             if(s.isEmpty()){break;}
             try {
@@ -263,7 +263,7 @@ public class DanhSachGiaoVien implements IThongKe {
                 if(soLop >= 0){
                     models.LopHoc[] dsLopMoi = new models.LopHoc[soLop];
                     for (int i = 0; i < soLop; i++) {
-                        System.out.println("Nhập thông tin lớp thứ " + (i+1) + " - Nhập tên lớp: ");
+                        System.out.println("Nhap thong tin lop thu " + (i+1) + " - Nhap ten lop: ");
                         String tenLop = sc.nextLine().trim();
                         dsLopMoi[i] = new models.LopHoc(tenLop, "", gv, null, false, "", 0.0);
                     }
@@ -271,10 +271,10 @@ public class DanhSachGiaoVien implements IThongKe {
                     break;
                 }
                 else{
-                    System.out.println(Color.RED + "Lỗi: Số lớp không được là số âm" + Color.RESET);
+                    System.out.println(Color.RED + "Loi: So lop khong duoc la so am" + Color.RESET);
                 }
             } catch (NumberFormatException e ) {
-                System.out.println(Color.RED + "Lỗi: Số lớp phải là số nguyên hợp lệ" + Color.RESET);
+                System.out.println(Color.RED + "Loi: So lop phai la so nguyen hop le" + Color.RESET);
             }
         }
         return true;
@@ -292,10 +292,10 @@ public class DanhSachGiaoVien implements IThongKe {
                 bw.newLine();
             }
             }
-            System.out.println("Ghi file GiaoVien thành công!");
+            System.out.println("Ghi file GiaoVien thanh cong!");
             return true;
         } catch (IOException e) {
-            System.out.println("Lỗi khi ghi file GiaoVien: " + e.getMessage());
+            System.out.println("Loi khi ghi file GiaoVien: " + e.getMessage());
             return false;
         }
     }
@@ -320,7 +320,7 @@ public class DanhSachGiaoVien implements IThongKe {
                 if(line.isEmpty()) continue;
                 String[] parts = line.split(",",-1);
                 if(parts.length < 10){
-                    System.out.println("Dòng " + soDong + ": Thiếu cột dữ liệu (cần ít nhất 10, có " + parts.length + ")");
+                    System.out.println("Dong " + soDong + ": Thieu cot du lieu (can it nhat 10, co " + parts.length + ")");
                     soDongLoi++;
                     continue;
                 }
@@ -339,7 +339,7 @@ public class DanhSachGiaoVien implements IThongKe {
 
                     MonHoc monChuyenMon = null;
                     String tenMonHoc = parts[8];
-                    if(!tenMonHoc.equalsIgnoreCase("Không") && !tenMonHoc.isEmpty()){
+                    if(!tenMonHoc.equalsIgnoreCase("Khong") && !tenMonHoc.isEmpty()){
                         monChuyenMon = MonHoc.timTheoMa(tenMonHoc);
                         for(int i = 0; monChuyenMon == null && i < MonHoc.KHO_MON_HOC.length; i++){
                             if(MonHoc.KHO_MON_HOC[i] != null && MonHoc.KHO_MON_HOC[i].getTenMon().equalsIgnoreCase(tenMonHoc)){
@@ -368,17 +368,17 @@ public class DanhSachGiaoVien implements IThongKe {
                     }
                     them(gv);
                 } catch (NumberFormatException e) {
-                    System.out.println("Dòng " + soDong + ": Lỗi định dạng số (lương/số lớp): " + line);
+                    System.out.println("Dong " + soDong + ": Loi dinh dang so (luong/so lop): " + line);
                     soDongLoi++;
                 } catch (Exception e) {
-                    System.out.println("Dòng " + soDong + ": " + e.getMessage());
+                    System.out.println("Dong " + soDong + ": " + e.getMessage());
                     soDongLoi++;
                 }
             }
-            System.out.println("Đọc file GiaoVien thành công! Tổng số: " + soLuong + " giáo viên, " + soDongLoi + " dòng lỗi.");
+            System.out.println("Doc file GiaoVien thanh cong! Tong so: " + soLuong + " giao vien, " + soDongLoi + " dong loi.");
             return true;
         } catch (IOException e) {
-            System.out.println("Lỗi khi đọc file GiaoVien: " + e.getMessage());
+            System.out.println("Loi khi doc file GiaoVien: " + e.getMessage());
             return false;
         }
     }
@@ -391,12 +391,12 @@ public class DanhSachGiaoVien implements IThongKe {
             return;
         }
         System.out.printf("%-10s | %-20s | %-12s | %-10s | %-15s | %-18s | %-15s\n", 
-                "Mã GV", "Họ tên", "Ngày sinh", "Giới tính", "SĐT", "Môn chuyên môn", "Chức vụ");
+                "Ma GV", "Ho ten", "Ngay sinh", "Gioi tinh", "SDT", "Mon chuyen mon", "Chuc vu");
         System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
         for (int i = 0; i < soLuong; i++) {
             if (arrGV[i] != null) {
-                String tenMon = (arrGV[i].getMonChuyenMon() != null) ? arrGV[i].getMonChuyenMon().getTenMon() : "Không";
-                String gioiTinhStr = arrGV[i].isGioiTinh() ? "Nam" : "Nữ";
+                String tenMon = (arrGV[i].getMonChuyenMon() != null) ? arrGV[i].getMonChuyenMon().getTenMon() : "Khong";
+                String gioiTinhStr = arrGV[i].isGioiTinh() ? "Nam" : "Nu";
                 
                 System.out.printf("%-10s | %-20s | %-12s | %-10s | %-15s | %-18s | %-15s\n",
                         arrGV[i].getMaGV(),

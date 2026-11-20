@@ -150,8 +150,8 @@ public class LopHoc
 
     @Override
     public String toString() {
-        String tenGV = (giaoVienChuNhiem != null) ? giaoVienChuNhiem.getHoTen() : "Chưa phân công.";
-        return "Lớp: " + tenLop + "| Khóa: "+ khoaHoc + "| GVCN: " + tenGV;
+        String tenGV = (giaoVienChuNhiem != null) ? giaoVienChuNhiem.getHoTen() : "Chua phan cong.";
+        return "Lop: " + tenLop + "| Khoa: "+ khoaHoc + "| GVCN: " + tenGV;
     }
 
     public String toFileString() {

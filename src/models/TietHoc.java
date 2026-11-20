@@ -17,8 +17,8 @@ public class TietHoc {
 
     @Override
     public String toString() {
-        String tenMon = (mon != null) ? mon.getTenMon() : "Chưa xác định";
-        String tenGV = (gv != null) ? gv.getHoTen() + " (" + gv.getMaGV() + ")" : "Chưa phân công";
+        String tenMon = (mon != null) ? mon.getTenMon() : "Chua xac dinh";
+        String tenGV = (gv != null) ? gv.getHoTen() + " (" + gv.getMaGV() + ")" : "Chua phan cong";
         return tenMon + " - " + tenGV;
     }
 }

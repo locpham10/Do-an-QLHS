@@ -22,7 +22,7 @@ public class HoatDong {
     public void setNgayGhiNhan(String ngayGhiNhan) { this.ngayGhiNhan = ngayGhiNhan; }
 
     public void hienThiThongTin() {
-        System.out.println("Hoạt động: " + tenHoatDong + " | Điểm cộng/trừ: " + diemCongTru + " | Ngày: " + ngayGhiNhan);
+        System.out.println("Hoat dong: " + tenHoatDong + " | Diem cong/tru: " + diemCongTru + " | Ngay: " + ngayGhiNhan);
     }
 
     public String toFileString() {

@@ -36,7 +36,7 @@ public class GiaoVien extends Nguoi{
                 kq = kq + "," + dsLopDay[i].getTenLop();
                }
                else{
-                kq = kq + ",Không";
+                kq = kq + ",Khong";
                } 
             }
         }
@@ -80,26 +80,26 @@ public class GiaoVien extends Nguoi{
 
     @Override 
     public void hienThiThongTin(){
-        System.out.println("THÔNG TIN GIÁO VIÊN");
-        System.out.println("Mã giáo viên: " + this.maGV);
-        System.out.println("Họ tên: " + getHoTen());
-        System.out.println("Chức vụ: " + this.chucVu);
-        System.out.println("Lương: " + this.luong);
-        System.out.println("Ngày sinh: " + getNgaySinh());
-        System.out.println("Giới tính: " + (isGioiTinh() ? "Nam" : "Nữ"));
-        System.out.println("Địa chỉ: " + getDiaChi());
-        System.out.println("Số điện thoại: " + getSoDienThoai());
-        System.out.println("Môn chuyên môn: " + (monChuyenMon != null ? monChuyenMon.getTenMon()+ " - Mã: " + monChuyenMon.getMaMon() : "Chưa phân môn"));
+        System.out.println("THONG TIN GIAO VIEN");
+        System.out.println("Ma giao vien: " + this.maGV);
+        System.out.println("Ho ten: " + getHoTen());
+        System.out.println("Chuc vu: " + this.chucVu);
+        System.out.println("Luong: " + this.luong);
+        System.out.println("Ngay sinh: " + getNgaySinh());
+        System.out.println("Gioi tinh: " + (isGioiTinh() ? "Nam" : "Nu"));
+        System.out.println("Dia chi: " + getDiaChi());
+        System.out.println("So dien thoai: " + getSoDienThoai());
+        System.out.println("Mon chuyen mon: " + (monChuyenMon != null ? monChuyenMon.getTenMon()+ " - Ma: " + monChuyenMon.getMaMon() : "Chua phan mon"));
         if (dsLopDay != null && dsLopDay.length > 0){
-            System.out.println("Danh sách lớp dạy");
+            System.out.println("Danh sach lop day");
             for (int i = 0; i < dsLopDay.length; i ++){
                 if (dsLopDay[i] != null){
-                    System.out.println("- Tên lớp: " + dsLopDay[i].getTenLop() + " || Khóa: " + dsLopDay[i].getKhoaHoc());
+                    System.out.println("- Ten lop: " + dsLopDay[i].getTenLop() + " || Khoa: " + dsLopDay[i].getKhoaHoc());
                 }
             }
         }
         else {
-            System.out.println("Danh sách lớp dạy: Chưa có lớp");
+            System.out.println("Danh sach lop day: Chua co lop");
         }
     }
     

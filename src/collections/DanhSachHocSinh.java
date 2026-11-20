@@ -340,8 +340,8 @@ public class DanhSachHocSinh implements IThongKe {
 
         System.out.println("--- BAO CAO THONG KE TONG HOP HOC SINH ---");
         System.out.println(" Tong so hoc sinh toan truong: " + soLuong);
-        System.out.println(" Phan loai he đao tao: " + chuyen + " Chuyen, " + daitra + " Dai tra");
-        System.out.println(" So luong hoc sinh đat hoc bong: " + datHocBong);
+        System.out.println(" Phan loai he dao tao: " + chuyen + " Chuyen, " + daitra + " Dai tra");
+        System.out.println(" So luong hoc sinh dat hoc bong: " + datHocBong);
         System.out.println(" So luong hoc sinh con no hoc phi: " + noHocPhi);
  
         this.tinhTyLeDat();
@@ -577,7 +577,7 @@ public class DanhSachHocSinh implements IThongKe {
 
         public static final String DUONG_DAN_DIEM = "src/data/diem.txt";
 
-    // Ghi bảng điểm của mọi học sinh, mỗi dòng: MSHS,maMon,TX,GK,CK
+    // Ghi bang diem cua moi hoc sinh, moi dong: MSHS,maMon,TX,GK,CK
     public boolean ghiDiem() {
         File f = new File(DUONG_DAN_DIEM);
         File thuMucCha = f.getParentFile();
@@ -601,16 +601,16 @@ public class DanhSachHocSinh implements IThongKe {
         }
     }
 
-    // đọc diem.txt vào bảng điểm từng hs
+    // doc diem.txt vao bang diem tung hs
     public boolean docDiem() {
-        // phải đọc hocsinh.txt trước thì mới có học sinh để gắn điểm
+        // phai doc hocsinh.txt truoc thi moi co hoc sinh de gan diem
         if (soLuong == 0) {
             System.out.println("Chua co hoc sinh nao, hay doc hocsinh.txt truoc khi doc diem.");
             return false;
         }
         int soDong = 0, soLoi = 0, soDiem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(DUONG_DAN_DIEM))) {
-            // làm mới để k bị nhân đôi
+            // lam moi de k bi nhan doi
             for (int i = 0; i < soLuong; i++) {
                 if (arrHS[i] != null) {
                     arrHS[i].setDanhSachDiem(new DiemMonHoc[0]);
@@ -775,7 +775,7 @@ public class DanhSachHocSinh implements IThongKe {
         return mh.getMaMon().equalsIgnoreCase(monChuyen) || mh.getTenMon().equalsIgnoreCase(monChuyen);
     }
 
-// ================= BLOCK TÀI CHÍNH  =================
+// ================= BLOCK TAI CHINH  =================
 
     public void inDanhSachNoHocPhi() {
         System.out.println("\n--- DANH SACH HOC SINH CHUA DONG HOC PHI ---");
@@ -813,32 +813,32 @@ public class DanhSachHocSinh implements IThongKe {
     }
 
     public void xetDuyetHocBong() {
-        System.out.println("\n--- XÉT DUYỆT HỌC BỔNG TOÀN TRƯỜNG ---");
+        System.out.println("\n--- XET DUYET HOC BONG TOAN TRUONG ---");
         int count = 0;
         for (int i = 0; i < soLuong; i++) {
             if (arrHS[i] != null && arrHS[i].xetHocBong()) {
                 count++;
-                System.out.printf("%d. MSHS: %s | Họ tên: %s | Lớp: %s | GPA: %.2f | Hạnh kiểm: %d\n",
+                System.out.printf("%d. MSHS: %s | Ho ten: %s | Lop: %s | GPA: %.2f | Hanh kiem: %d\n",
                     count, arrHS[i].getMshs(), arrHS[i].getHoTen(), arrHS[i].getTenLop(), arrHS[i].getGpa(), arrHS[i].getDiemHanhKiem());
             }
         }
         if (count == 0) {
-            System.out.println("Không có học sinh nào đủ điều kiện nhận học bổng.");
+            System.out.println("Khong co hoc sinh nao du dieu kien nhan hoc bong.");
         }
     }
     public void capNhatDongHocPhiChoHS(String mshs, boolean trangThai) {
         HocSinh hs = timKiem(mshs);
         if (hs == null) {
-            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+            System.out.println("Khong tim thay hoc sinh co MSHS: " + mshs);
             return;
         }
         hs.capNhatDongHocPhi(trangThai);
-        System.out.println("Đã cập nhật học phí của " + hs.getHoTen() + ": "
-                + (trangThai ? "Đã đóng" : "Chưa đóng"));
+        System.out.println("Da cap nhat hoc phi cua " + hs.getHoTen() + ": "
+                + (trangThai ? "Da dong" : "Chua dong"));
     }
 
     public void baoCaoThuPhiToanTruong() {
-        inBaoCaoThuPhi("TOÀN TRƯỜNG", soLuong, tongHocPhiPhaiThu(), tongHocPhiDaThu());
+        inBaoCaoThuPhi("TOAN TRUONG", soLuong, tongHocPhiPhaiThu(), tongHocPhiDaThu());
     }
 
     public void baoCaoThuPhiTheoLop(String tenLop) {
@@ -852,13 +852,13 @@ public class DanhSachHocSinh implements IThongKe {
             }
         }
         if (soHS == 0) {
-            System.out.println("Lớp " + tenLop + " không có học sinh nào (hoặc sai tên lớp).");
+            System.out.println("Lop " + tenLop + " khong co hoc sinh nao (hoac sai ten lop).");
             return;
         }
-        inBaoCaoThuPhi("LỚP " + tenLop.toUpperCase(), soHS, phaiThu, daThu);
+        inBaoCaoThuPhi("LOP " + tenLop.toUpperCase(), soHS, phaiThu, daThu);
     }
 
-    // laChuyen = true: hệ chuyên, false: hệ đại trà (giống hienThiTheoHe)
+    // laChuyen = true: he chuyen, false: he dai tra (giong hienThiTheoHe)
     public void baoCaoThuPhiTheoHe(boolean laChuyen) {
         int soHS = 0;
         double phaiThu = 0, daThu = 0;
@@ -868,36 +868,36 @@ public class DanhSachHocSinh implements IThongKe {
                     : (arrHS[i] instanceof HocSinhDaiTra);
             if (dungHe) {
                 soHS++;
-                phaiThu += arrHS[i].tinhHocPhi();   // đa hình: mỗi hệ tính học phí khác nhau
+                phaiThu += arrHS[i].tinhHocPhi();   // da hinh: moi he tinh hoc phi khac nhau
                 if (arrHS[i].isDaDongHocPhi()) daThu += arrHS[i].tinhHocPhi();
             }
         }
-        inBaoCaoThuPhi(laChuyen ? "HỆ CHUYÊN" : "HỆ ĐẠI TRÀ", soHS, phaiThu, daThu);
+        inBaoCaoThuPhi(laChuyen ? "HE CHUYEN" : "HE DAI TRA", soHS, phaiThu, daThu);
     }
 
-    // in chung cho 3 báo cáo thu phí
+    // in chung cho 3 bao cao thu phi
     private void inBaoCaoThuPhi(String tieuDe, int soHS, double phaiThu, double daThu) {
-        System.out.println("\n--- BÁO CÁO THU PHÍ " + tieuDe + " ---");
-        System.out.println("Số học sinh: " + soHS);
-        System.out.printf("Phải thu: %,.0f đ%n", phaiThu);
-        System.out.printf("Đã thu:   %,.0f đ%n", daThu);
-        System.out.printf("Còn nợ:   %,.0f đ%n", phaiThu - daThu);
+        System.out.println("\n--- BAO CAO THU PHI " + tieuDe + " ---");
+        System.out.println("So hoc sinh: " + soHS);
+        System.out.printf("Phai thu: %,.0f d%n", phaiThu);
+        System.out.printf("Da thu:   %,.0f d%n", daThu);
+        System.out.printf("Con no:   %,.0f d%n", phaiThu - daThu);
     }
 
     public void traCuuHocPhi(String mshs) {
         HocSinh hs = timKiem(mshs);
         if (hs == null) {
-            System.out.println("Không tìm thấy học sinh có MSHS: " + mshs);
+            System.out.println("Khong tim thay hoc sinh co MSHS: " + mshs);
             return;
         }
-        System.out.println("\n--- THÔNG TIN HỌC PHÍ CÁ NHÂN ---");
-        System.out.println("Mã HS: " + hs.getMshs() + " | Họ tên: " + hs.getHoTen());
+        System.out.println("\n--- THONG TIN HOC PHI CA NHAN ---");
+        System.out.println("Ma HS: " + hs.getMshs() + " | Ho ten: " + hs.getHoTen());
         if (hs instanceof HocSinhChuyen) {
             HocSinhChuyen hsc = (HocSinhChuyen) hs;
-            System.out.printf("Học phí cơ bản: %,.0f đ%n", HocSinh.HOC_PHI_CO_BAN);
-            System.out.printf("Phụ phí chuyên đề: %,.0f đ%n", hsc.getPhuPhiChuyenDe());
+            System.out.printf("Hoc phi co ban: %,.0f d%n", HocSinh.HOC_PHI_CO_BAN);
+            System.out.printf("Phu phi chuyen de: %,.0f d%n", hsc.getPhuPhiChuyenDe());
         }
-        System.out.printf("Tổng học phí phải đóng: %,.0f đ%n", hs.tinhHocPhi());
-        System.out.println("Trạng thái: " + (hs.isDaDongHocPhi() ? "Đã đóng" : "Chưa đóng"));
+        System.out.printf("Tong hoc phi phai dong: %,.0f d%n", hs.tinhHocPhi());
+        System.out.println("Trang thai: " + (hs.isDaDongHocPhi() ? "Da dong" : "Chua dong"));
     }
 }

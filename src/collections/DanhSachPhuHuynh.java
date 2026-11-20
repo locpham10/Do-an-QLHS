@@ -119,24 +119,24 @@ public class DanhSachPhuHuynh implements IThongKe {
             return false;
         }
         PhuHuynh ph = arrPH[index];
-        System.out.println("Cập nhật thông tin cho phụ huynh có SĐT khẩn cấp: " + sdt);
-        System.out.println("Lưu ý nếu không muốn đổi thông tin mục nào vui lòng nhấn ENTER!");
+        System.out.println("Cap nhat thong tin cho phu huynh co SDT khan cap: " + sdt);
+        System.out.println("Luu y neu khong muon doi thong tin muc nao vui long nhan ENTER!");
 
         String s;
         
         while (true) { 
-            System.out.print("Nhập họ tên mới: ");
+            System.out.print("Nhap ho ten moi: ");
             s = sc.nextLine().trim();
             if(s.isEmpty()){ break;}
             if( !s.contains(",")){
             ph.setHoTenBoMe(s);
             break;
             }
-        System.out.println(Color.RED + "Lỗi: Không được chứa dấu phẩy" + Color.RESET);
+        System.out.println(Color.RED + "Loi: Khong duoc chua dau phay" + Color.RESET);
         }
 
         while (true) { 
-            System.out.print("Nhập số điện thoại khẩn cấp mới: ");
+            System.out.print("Nhap so dien thoai khan cap moi: ");
             s= sc.nextLine().trim().replaceAll("[\\s.]", "");
             if(s.isEmpty()){break;}
             if(s.matches("^0\\d{9}$")){
@@ -166,7 +166,7 @@ public class DanhSachPhuHuynh implements IThongKe {
                         System.out.print("  + Nhap MSHS thu " + (i + 1) + ": ");
                         String maHS = sc.nextLine().trim();
                         if(maHS.isEmpty() || maHS.contains(",")){
-                            System.out.println(Color.RED + "Lỗi: MSHS không được để trống hoặc chứa dấu phẩy! Vui lòng nhập lại từ đầu" + Color.RESET);
+                            System.out.println(Color.RED + "Loi: MSHS khong duoc de trong hoac chua dau phay! Vui long nhap lai tu dau" + Color.RESET);
                             nhapThanhCong = false;
                             break;
                         }
@@ -183,10 +183,10 @@ public class DanhSachPhuHuynh implements IThongKe {
                     }
                 }
                 else{
-                        System.out.println(Color.RED + "Lỗi: Số lượng không được là số âm" + Color.RESET);
+                        System.out.println(Color.RED + "Loi: So luong khong duoc la so am" + Color.RESET);
                     }
             } catch (NumberFormatException e) {
-                System.out.println(Color.RED + "Lỗi: Số lượng phải là số nguyên hợp lệ" + Color.RESET);
+                System.out.println(Color.RED + "Loi: So luong phai la so nguyen hop le" + Color.RESET);
             }
         }
         return true;
@@ -211,7 +211,7 @@ public class DanhSachPhuHuynh implements IThongKe {
                 if(line.isEmpty()) continue;
                 String[] parts = line.split(",",-1);
                 if(parts.length < 3){
-                    System.out.println("Dòng " + soDong + ": Thiếu cột dữ liệu (cần ít nhất 3, có " + parts.length + ")");
+                    System.out.println("Dong " + soDong + ": Thieu cot du lieu (can it nhat 3, co " + parts.length + ")");
                     soDongLoi++;
                     continue;
                 }
@@ -224,7 +224,7 @@ public class DanhSachPhuHuynh implements IThongKe {
                     String mshs = ((parts.length >= 3) ? parts[2].trim() : "");
 
                     if(hoTenBoMe.isEmpty() || sdtKhanCap.isEmpty()){
-                        System.out.println("Dòng " + soDong + ": Họ tên hoặc SĐT không được để trống!");
+                        System.out.println("Dong " + soDong + ": Ho ten hoac SDT khong duoc de trong!");
                         soDongLoi++;
                         continue;
                     }
@@ -232,14 +232,14 @@ public class DanhSachPhuHuynh implements IThongKe {
                     PhuHuynh ph = new PhuHuynh(hoTenBoMe, sdtKhanCap, mshs);
                     them(ph);
                 } catch (Exception e) {
-                    System.out.println("Dòng " + soDong + ": " + e.getMessage());
+                    System.out.println("Dong " + soDong + ": " + e.getMessage());
                     soDongLoi++;
                 }
             }
-            System.out.println("Đọc file PhuHuynh thành công! Tổng số: " + soLuong + " phụ huynh, " + soDongLoi + " dòng lỗi.");
+            System.out.println("Doc file PhuHuynh thanh cong! Tong so: " + soLuong + " phu huynh, " + soDongLoi + " dong loi.");
             return true;
         } catch (IOException e) {
-            System.out.println("Lỗi khi đọc file PhuHuynh: " + e.getMessage());
+            System.out.println("Loi khi doc file PhuHuynh: " + e.getMessage());
             return false;
         }
     } 
@@ -256,10 +256,10 @@ public class DanhSachPhuHuynh implements IThongKe {
                     bw.newLine();
                 }
             }
-            System.out.println("Ghi file PhuHuynh thành công!");
+            System.out.println("Ghi file PhuHuynh thanh cong!");
             return true;
         } catch (IOException e) {
-            System.out.println("Lỗi khi ghi file PhuHuynh: " + e.getMessage());
+            System.out.println("Loi khi ghi file PhuHuynh: " + e.getMessage());
             return false;
         }
     }
