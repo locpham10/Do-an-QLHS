@@ -177,6 +177,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             String[] kv = item.split(":");
             if (kv.length != 2) {
                 System.out.println("Dong " + soDong + ": chuong trinh hoc sai dinh dang '" + item + "'");
+                soCanhBao++;          // thêm
                 continue;
             }
             String maMon = kv[0].trim();
@@ -192,10 +193,12 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
                 heSo = Integer.parseInt(kv[1].trim());
             } catch (NumberFormatException e) {
                 System.out.println("Dong " + soDong + ": he so khong hop le '" + kv[1] + "'");
+                soCanhBao++;          // thêm
                 continue;
             }
             if (heSo < 1) {
                 System.out.println("Dong " + soDong + ": he so cua mon '" + maMon + "' phai >= 1 (dang la " + heSo + ")");
+                soCanhBao++;          // thêm
                 continue;
             }
 
@@ -208,6 +211,7 @@ public void phanHocSinhVaoLop(DanhSachHocSinh dsHS) {
             }
             if (lap) {
                 System.out.println("Dong " + soDong + ": ma mon '" + maMon + "' bi lap trong lop, bo qua");
+                soCanhBao++;
                 continue;
             }
 
